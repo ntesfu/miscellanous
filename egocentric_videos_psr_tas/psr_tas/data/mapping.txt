@@ -1,0 +1,11 @@
+0 background
+1 front_chassis
+2 front_chassis_pin
+3 rear_chassis
+4 short_rear_chassis
+5 front_rear_chassis_pin
+6 rear_rear_chassis_pin
+7 front_bracket
+8 front_bracket_screw
+9 front_wheel_assy
+10 rear_wheel_assy

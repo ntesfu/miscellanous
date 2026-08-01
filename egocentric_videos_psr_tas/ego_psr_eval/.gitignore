@@ -1,0 +1,9 @@
+# generated evaluation outputs (regenerate with ./run.sh)
+results/results.json
+results/gpu_usage.csv
+results/logs/
+results/charts/
+
+# python
+__pycache__/
+*.pyc
