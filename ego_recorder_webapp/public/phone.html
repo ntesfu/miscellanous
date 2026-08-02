@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <title>Ego Recorder · Camera</title>
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+  <div class="phone">
+    <video id="local" playsinline autoplay muted></video>
+    <div class="scrim"></div>
+
+    <div class="top">
+      <div class="chip"><span id="dot" class="dot"></span><span id="stateText">Connecting…</span></div>
+      <div class="rec-pill" id="recPill"><span class="d"></span><span id="recTime">00:00</span></div>
+    </div>
+
+    <div class="info">
+      <div id="camLabel">Rear camera</div>
+      <div class="row2" id="resLabel">—</div>
+    </div>
+
+    <div class="lensbar" id="lensbar"></div>
+
+    <div class="dock" style="background:rgba(16,18,26,.55);border:1px solid var(--panel-brd);padding:10px;border-radius:999px;display:flex;gap:10px;backdrop-filter:blur(16px)">
+      <button class="ctl" id="btnSwitch"><span class="ico">🔄</span><span class="txt">Flip</span></button>
+      <button class="recbtn" id="btnRec"><span class="ring"></span><span class="label">Record</span></button>
+      <button class="ctl" id="btnTorch"><span class="ico">🔦</span><span class="txt">Torch</span></button>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+  <script type="module" src="/static/phone.js"></script>
+</body>
+</html>
