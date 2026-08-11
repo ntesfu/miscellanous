@@ -1,0 +1,4 @@
+0 none
+1 correct
+2 incorrect
+3 remove

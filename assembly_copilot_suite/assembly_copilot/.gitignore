@@ -1,0 +1,58 @@
+# ---- large data: never committed ----
+*.mp4
+*.mov
+*.avi
+*.mkv
+*.webm
+
+# model weights / checkpoints
+*.pt
+*.pth
+*.ckpt
+*.bin
+*.model
+events.out.tfevents.*
+
+# extracted features / caches
+*.npy
+*.cache
+labels.cache
+
+# third-party clones (see psr_tas/extern/README.md)
+psr_tas/extern/DiffAct/
+psr_tas/extern/InternVideo/
+psr_tas/extern/VideoMAEv2/
+psr_tas/extern/IndustReal/
+psr_tas/extern/ASFormer/
+
+# weights dirs (symlinks to local HF cache on the training machine)
+psr_tas/weights/
+psr_tas/fusion/weights/
+
+# generated / runtime
+__pycache__/
+*.pyc
+*.log
+*.pid
+labelenv/
+.venv/
+runs/
+uploads/
+proxies/
+recordings/**/*.jpg
+frames_to_annotate/images/
+frames_to_annotate/optional_extra/
+aiops_parts_detection_frames/images/
+detector/negatives/images/
+psr_tas/data_v2/
+psr_tas/fusion/data/
+live/logs/*
+!live/logs/grid_results.txt
+!live/logs/grid2_results.txt
+live_app/logs/
+detection/
+certs/
+
+# OS / editors
+.DS_Store
+.ipynb_checkpoints/

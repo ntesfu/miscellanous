@@ -1,0 +1,25 @@
+# Corrected config for the aiops parts dataset.
+#
+# Two fixes versus the shipped data.yaml:
+#   path:  pointed at /media/lm-ciss/LM_4TB/aiops/... which does not exist on this
+#          machine -- the dataset lives under assembly_copilot/.
+#   split: the shipped splits/*.txt hold "./images/..." relative paths, which
+#          Ultralytics resolves against the SPLIT FILE dir -> it looked for
+#          splits/labels/ and found nothing. Rewritten as absolute paths.
+#   val:   shipped file set train==val==images, so any reported mAP was measured on
+#          the training set and meant nothing. Now uses the held-out 85/15 split
+#          (81 train / 14 val, zero overlap, all 10 classes present in val).
+path: /media/lm-ciss/LM_4TB/assembly_copilot/aiops_parts_detection
+train: /media/lm-ciss/LM_4TB/assembly_copilot/detector/cfg/train_abs.txt
+val: /media/lm-ciss/LM_4TB/assembly_copilot/detector/cfg/val_abs.txt
+names:
+  0: Main Drive Planet Gear
+  1: Pop Control Ring Gear
+  2: Pop Control Sun Gear
+  3: Compressor Casing
+  4: Exhaust
+  5: Exhaust Casing
+  6: Cowling Bracket
+  7: Frame Subassembly
+  8: Propeller Cone plate
+  9: Propeller Cone Tip

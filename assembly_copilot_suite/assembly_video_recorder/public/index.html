@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Ego Recorder</title>
+  <link rel="stylesheet" href="/static/style.css" />
+  <style>
+    body { overflow: auto; display: grid; place-items: center; min-height: 100vh; }
+    .land { width: min(760px, 92vw); padding: 40px 0; }
+    .hero { text-align: center; margin-bottom: 34px; }
+    .hero h1 { font-size: 30px; margin: 0 0 8px; letter-spacing: -.3px; }
+    .hero p { color: var(--muted); margin: 0; }
+    .cards { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    @media (max-width: 620px) { .cards { grid-template-columns: 1fr; } }
+    .card {
+      background: var(--panel); border: 1px solid var(--panel-brd); border-radius: var(--radius);
+      padding: 22px; box-shadow: var(--shadow); text-decoration: none; color: var(--txt);
+      transition: transform .12s, border-color .12s;
+    }
+    .card:hover { transform: translateY(-3px); border-color: rgba(91,140,255,.4); }
+    .card .ic { font-size: 30px; }
+    .card h2 { margin: 12px 0 6px; font-size: 18px; }
+    .card p { color: var(--muted); margin: 0; font-size: 13.5px; }
+    .url {
+      display: flex; align-items: center; gap: 10px; margin-top: 14px;
+      background: rgba(0,0,0,.35); border: 1px solid var(--panel-brd); border-radius: 10px;
+      padding: 10px 12px; font-size: 13px; font-variant-numeric: tabular-nums;
+    }
+    .url code { color: var(--accent-2); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .url button { margin-left: auto; }
+    .steps { margin-top: 28px; color: var(--muted); font-size: 13.5px; line-height: 1.7; }
+    .steps b { color: var(--txt); }
+  </style>
+</head>
+<body>
+  <div class="land">
+    <div class="hero">
+      <h1>🎥 Ego Recorder</h1>
+      <p>Turn your iPhone into a wireless, first-person camera for your Mac.</p>
+    </div>
+
+    <div class="cards">
+      <a class="card" href="/viewer">
+        <div class="ic">🖥️</div>
+        <h2>Open Viewer</h2>
+        <p>On this Mac — live display, Start/Stop recording, and your library.</p>
+      </a>
+      <a class="card" href="/phone" id="phoneCard">
+        <div class="ic">📱</div>
+        <h2>Open Camera</h2>
+        <p>On your iPhone (Safari) — becomes the streaming camera.</p>
+        <div class="url"><code id="phoneUrl">…</code><button class="mini" id="copyBtn">Copy</button></div>
+      </a>
+    </div>
+
+    <div class="steps">
+      <b>Setup</b><br />
+      1. On this Mac, open <b>Viewer</b> above.<br />
+      2. On your iPhone (same Wi-Fi), open the Camera URL in <b>Safari</b> and tap through the certificate warning once.<br />
+      3. Allow camera access. The live feed appears in the Viewer — hit <b>Record</b>.<br />
+      <span style="color:var(--muted)">Recordings save to the <code style="color:var(--accent-2)">recordings/</code> folder next to <code style="color:var(--accent-2)">server.py</code>.</span>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+  <script>
+    fetch("/api/config").then(r => r.json()).then(cfg => {
+      const url = `https://${cfg.ip}:${cfg.port}/phone`;
+      document.getElementById("phoneUrl").textContent = url;
+      document.getElementById("phoneCard").setAttribute("href", url);
+      document.getElementById("copyBtn").addEventListener("click", (e) => {
+        e.preventDefault();
+        navigator.clipboard?.writeText(url);
+        const t = document.getElementById("toast");
+        t.textContent = "Copied " + url; t.classList.add("show");
+        setTimeout(() => t.classList.remove("show"), 1800);
+      });
+    }).catch(() => {});
+  </script>
+</body>
+</html>

@@ -1,0 +1,14 @@
+# Runtime data — never committed
+videos/
+videos_proxy/
+labels_out/
+labeler.log
+.labeler.pid
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# OS
+.DS_Store

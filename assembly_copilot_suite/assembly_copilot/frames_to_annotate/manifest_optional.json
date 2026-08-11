@@ -1,0 +1,602 @@
+[
+ {
+  "file": "DA-Assembled-1__f001656__progress15.jpg",
+  "rec": "DA-Assembled-1",
+  "split": "test",
+  "frame": 1656,
+  "kind": "progress15",
+  "near_part": "",
+  "subject": "DA",
+  "direction": "assembly"
+ },
+ {
+  "file": "DA-Assembled-1__f004969__progress45.jpg",
+  "rec": "DA-Assembled-1",
+  "split": "test",
+  "frame": 4969,
+  "kind": "progress45",
+  "near_part": "",
+  "subject": "DA",
+  "direction": "assembly"
+ },
+ {
+  "file": "DA-Assembled-2__f001727__progress15.jpg",
+  "rec": "DA-Assembled-2",
+  "split": "test",
+  "frame": 1727,
+  "kind": "progress15",
+  "near_part": "",
+  "subject": "DA",
+  "direction": "assembly"
+ },
+ {
+  "file": "DA-disAssembled-3__f002983__progress45.jpg",
+  "rec": "DA-disAssembled-3",
+  "split": "test",
+  "frame": 2983,
+  "kind": "progress45",
+  "near_part": "",
+  "subject": "DA",
+  "direction": "disassembly"
+ },
+ {
+  "file": "DA-disAssembled-7__f003138__progress45.jpg",
+  "rec": "DA-disAssembled-7",
+  "split": "test",
+  "frame": 3138,
+  "kind": "progress45",
+  "near_part": "",
+  "subject": "DA",
+  "direction": "disassembly"
+ },
+ {
+  "file": "Ketan-Assembled-7__f001666__progress15.jpg",
+  "rec": "Ketan-Assembled-7",
+  "split": "test",
+  "frame": 1666,
+  "kind": "progress15",
+  "near_part": "",
+  "subject": "Ketan",
+  "direction": "assembly"
+ },
+ {
+  "file": "Ketan-Assembled-7__f005000__progress45.jpg",
+  "rec": "Ketan-Assembled-7",
+  "split": "test",
+  "frame": 5000,
+  "kind": "progress45",
+  "near_part": "",
+  "subject": "Ketan",
+  "direction": "assembly"
+ },
+ {
+  "file": "Ketan-Assembled-9__f001497__progress15.jpg",
+  "rec": "Ketan-Assembled-9",
+  "split": "test",
+  "frame": 1497,
+  "kind": "progress15",
+  "near_part": "",
+  "subject": "Ketan",
+  "direction": "assembly"
+ },
+ {
+  "file": "Ketan-Assembled-9__f007988__progress80.jpg",
+  "rec": "Ketan-Assembled-9",
+  "split": "test",
+  "frame": 7988,
+  "kind": "progress80",
+  "near_part": "",
+  "subject": "Ketan",
+  "direction": "assembly"
+ },
+ {
+  "file": "Nahom-Assembled-5__f004377__progress45.jpg",
+  "rec": "Nahom-Assembled-5",
+  "split": "test",
+  "frame": 4377,
+  "kind": "progress45",
+  "near_part": "",
+  "subject": "Nahom",
+  "direction": "assembly"
+ },
+ {
+  "file": "Nahom-Assembled-7__f001543__progress15.jpg",
+  "rec": "Nahom-Assembled-7",
+  "split": "test",
+  "frame": 1543,
+  "kind": "progress15",
+  "near_part": "",
+  "subject": "Nahom",
+  "direction": "assembly"
+ },
+ {
+  "file": "Nahom-Assembled-7__f008233__progress80.jpg",
+  "rec": "Nahom-Assembled-7",
+  "split": "test",
+  "frame": 8233,
+  "kind": "progress80",
+  "near_part": "",
+  "subject": "Nahom",
+  "direction": "assembly"
+ },
+ {
+  "file": "Nahom-disAssembled-11__f001332__progress15.jpg",
+  "rec": "Nahom-disAssembled-11",
+  "split": "test",
+  "frame": 1332,
+  "kind": "progress15",
+  "near_part": "",
+  "subject": "Nahom",
+  "direction": "disassembly"
+ },
+ {
+  "file": "Nahom-disAssembled-11__f007108__progress80.jpg",
+  "rec": "Nahom-disAssembled-11",
+  "split": "test",
+  "frame": 7108,
+  "kind": "progress80",
+  "near_part": "",
+  "subject": "Nahom",
+  "direction": "disassembly"
+ },
+ {
+  "file": "Nahom-disAssembled-13__f001575__progress15.jpg",
+  "rec": "Nahom-disAssembled-13",
+  "split": "test",
+  "frame": 1575,
+  "kind": "progress15",
+  "near_part": "",
+  "subject": "Nahom",
+  "direction": "disassembly"
+ },
+ {
+  "file": "Nahom-disAssembled-13__f004725__progress45.jpg",
+  "rec": "Nahom-disAssembled-13",
+  "split": "test",
+  "frame": 4725,
+  "kind": "progress45",
+  "near_part": "",
+  "subject": "Nahom",
+  "direction": "disassembly"
+ },
+ {
+  "file": "DA-Assembled-5__f003423__progress45.jpg",
+  "rec": "DA-Assembled-5",
+  "split": "train",
+  "frame": 3423,
+  "kind": "progress45",
+  "near_part": "",
+  "subject": "DA",
+  "direction": "assembly"
+ },
+ {
+  "file": "DA-Assembled-5__f006086__progress80.jpg",
+  "rec": "DA-Assembled-5",
+  "split": "train",
+  "frame": 6086,
+  "kind": "progress80",
+  "near_part": "",
+  "subject": "DA",
+  "direction": "assembly"
+ },
+ {
+  "file": "DA-Assembled-6__f003829__progress45.jpg",
+  "rec": "DA-Assembled-6",
+  "split": "train",
+  "frame": 3829,
+  "kind": "progress45",
+  "near_part": "",
+  "subject": "DA",
+  "direction": "assembly"
+ },
+ {
+  "file": "DA-Assembled-7__f003813__progress45.jpg",
+  "rec": "DA-Assembled-7",
+  "split": "train",
+  "frame": 3813,
+  "kind": "progress45",
+  "near_part": "",
+  "subject": "DA",
+  "direction": "assembly"
+ },
+ {
+  "file": "DA-Assembled-7__f006779__progress80.jpg",
+  "rec": "DA-Assembled-7",
+  "split": "train",
+  "frame": 6779,
+  "kind": "progress80",
+  "near_part": "",
+  "subject": "DA",
+  "direction": "assembly"
+ },
+ {
+  "file": "DA-disAssembled-1__f001258__progress15.jpg",
+  "rec": "DA-disAssembled-1",
+  "split": "train",
+  "frame": 1258,
+  "kind": "progress15",
+  "near_part": "",
+  "subject": "DA",
+  "direction": "disassembly"
+ },
+ {
+  "file": "DA-disAssembled-10__f001192__progress15.jpg",
+  "rec": "DA-disAssembled-10",
+  "split": "train",
+  "frame": 1192,
+  "kind": "progress15",
+  "near_part": "",
+  "subject": "DA",
+  "direction": "disassembly"
+ },
+ {
+  "file": "DA-disAssembled-10__f003578__progress45.jpg",
+  "rec": "DA-disAssembled-10",
+  "split": "train",
+  "frame": 3578,
+  "kind": "progress45",
+  "near_part": "",
+  "subject": "DA",
+  "direction": "disassembly"
+ },
+ {
+  "file": "DA-disAssembled-10__f006362__progress80.jpg",
+  "rec": "DA-disAssembled-10",
+  "split": "train",
+  "frame": 6362,
+  "kind": "progress80",
+  "near_part": "",
+  "subject": "DA",
+  "direction": "disassembly"
+ },
+ {
+  "file": "DA-disAssembled-11__f001284__progress15.jpg",
+  "rec": "DA-disAssembled-11",
+  "split": "train",
+  "frame": 1284,
+  "kind": "progress15",
+  "near_part": "",
+  "subject": "DA",
+  "direction": "disassembly"
+ },
+ {
+  "file": "DA-disAssembled-11__f003854__progress45.jpg",
+  "rec": "DA-disAssembled-11",
+  "split": "train",
+  "frame": 3854,
+  "kind": "progress45",
+  "near_part": "",
+  "subject": "DA",
+  "direction": "disassembly"
+ },
+ {
+  "file": "DA-disAssembled-11__f006852__progress80.jpg",
+  "rec": "DA-disAssembled-11",
+  "split": "train",
+  "frame": 6852,
+  "kind": "progress80",
+  "near_part": "",
+  "subject": "DA",
+  "direction": "disassembly"
+ },
+ {
+  "file": "DA-disAssembled-12__f001240__progress15.jpg",
+  "rec": "DA-disAssembled-12",
+  "split": "train",
+  "frame": 1240,
+  "kind": "progress15",
+  "near_part": "",
+  "subject": "DA",
+  "direction": "disassembly"
+ },
+ {
+  "file": "DA-disAssembled-12__f003720__progress45.jpg",
+  "rec": "DA-disAssembled-12",
+  "split": "train",
+  "frame": 3720,
+  "kind": "progress45",
+  "near_part": "",
+  "subject": "DA",
+  "direction": "disassembly"
+ },
+ {
+  "file": "DA-disAssembled-12__f006613__progress80.jpg",
+  "rec": "DA-disAssembled-12",
+  "split": "train",
+  "frame": 6613,
+  "kind": "progress80",
+  "near_part": "",
+  "subject": "DA",
+  "direction": "disassembly"
+ },
+ {
+  "file": "DA-disAssembled-5__f000994__progress15.jpg",
+  "rec": "DA-disAssembled-5",
+  "split": "train",
+  "frame": 994,
+  "kind": "progress15",
+  "near_part": "",
+  "subject": "DA",
+  "direction": "disassembly"
+ },
+ {
+  "file": "DA-disAssembled-5__f002984__progress45.jpg",
+  "rec": "DA-disAssembled-5",
+  "split": "train",
+  "frame": 2984,
+  "kind": "progress45",
+  "near_part": "",
+  "subject": "DA",
+  "direction": "disassembly"
+ },
+ {
+  "file": "DA-disAssembled-6__f004153__progress80.jpg",
+  "rec": "DA-disAssembled-6",
+  "split": "train",
+  "frame": 4153,
+  "kind": "progress80",
+  "near_part": "",
+  "subject": "DA",
+  "direction": "disassembly"
+ },
+ {
+  "file": "DA-disAssembled-8__f003250__progress45.jpg",
+  "rec": "DA-disAssembled-8",
+  "split": "train",
+  "frame": 3250,
+  "kind": "progress45",
+  "near_part": "",
+  "subject": "DA",
+  "direction": "disassembly"
+ },
+ {
+  "file": "DA-disAssembled-9__f006532__progress80.jpg",
+  "rec": "DA-disAssembled-9",
+  "split": "train",
+  "frame": 6532,
+  "kind": "progress80",
+  "near_part": "",
+  "subject": "DA",
+  "direction": "disassembly"
+ },
+ {
+  "file": "Ketan-Assembled-1__f010502__progress80.jpg",
+  "rec": "Ketan-Assembled-1",
+  "split": "train",
+  "frame": 10502,
+  "kind": "progress80",
+  "near_part": "",
+  "subject": "Ketan",
+  "direction": "assembly"
+ },
+ {
+  "file": "Ketan-Assembled-2__f007580__progress45.jpg",
+  "rec": "Ketan-Assembled-2",
+  "split": "train",
+  "frame": 7580,
+  "kind": "progress45",
+  "near_part": "",
+  "subject": "Ketan",
+  "direction": "assembly"
+ },
+ {
+  "file": "Ketan-Assembled-2__f013476__progress80.jpg",
+  "rec": "Ketan-Assembled-2",
+  "split": "train",
+  "frame": 13476,
+  "kind": "progress80",
+  "near_part": "",
+  "subject": "Ketan",
+  "direction": "assembly"
+ },
+ {
+  "file": "Ketan-Assembled-3__f001611__progress15.jpg",
+  "rec": "Ketan-Assembled-3",
+  "split": "train",
+  "frame": 1611,
+  "kind": "progress15",
+  "near_part": "",
+  "subject": "Ketan",
+  "direction": "assembly"
+ },
+ {
+  "file": "Ketan-Assembled-3__f008594__progress80.jpg",
+  "rec": "Ketan-Assembled-3",
+  "split": "train",
+  "frame": 8594,
+  "kind": "progress80",
+  "near_part": "",
+  "subject": "Ketan",
+  "direction": "assembly"
+ },
+ {
+  "file": "Ketan-Assembled-5__f001838__progress15.jpg",
+  "rec": "Ketan-Assembled-5",
+  "split": "train",
+  "frame": 1838,
+  "kind": "progress15",
+  "near_part": "",
+  "subject": "Ketan",
+  "direction": "assembly"
+ },
+ {
+  "file": "Ketan-Assembled-5__f005515__progress45.jpg",
+  "rec": "Ketan-Assembled-5",
+  "split": "train",
+  "frame": 5515,
+  "kind": "progress45",
+  "near_part": "",
+  "subject": "Ketan",
+  "direction": "assembly"
+ },
+ {
+  "file": "Ketan-Assembled-8__f001956__progress15.jpg",
+  "rec": "Ketan-Assembled-8",
+  "split": "train",
+  "frame": 1956,
+  "kind": "progress15",
+  "near_part": "",
+  "subject": "Ketan",
+  "direction": "assembly"
+ },
+ {
+  "file": "Ketan-Assembled-8__f010436__progress80.jpg",
+  "rec": "Ketan-Assembled-8",
+  "split": "train",
+  "frame": 10436,
+  "kind": "progress80",
+  "near_part": "",
+  "subject": "Ketan",
+  "direction": "assembly"
+ },
+ {
+  "file": "Nahom-Assembled-1__f001877__progress15.jpg",
+  "rec": "Nahom-Assembled-1",
+  "split": "train",
+  "frame": 1877,
+  "kind": "progress15",
+  "near_part": "",
+  "subject": "Nahom",
+  "direction": "assembly"
+ },
+ {
+  "file": "Nahom-Assembled-1__f005633__progress45.jpg",
+  "rec": "Nahom-Assembled-1",
+  "split": "train",
+  "frame": 5633,
+  "kind": "progress45",
+  "near_part": "",
+  "subject": "Nahom",
+  "direction": "assembly"
+ },
+ {
+  "file": "Nahom-Assembled-3__f001864__progress15.jpg",
+  "rec": "Nahom-Assembled-3",
+  "split": "train",
+  "frame": 1864,
+  "kind": "progress15",
+  "near_part": "",
+  "subject": "Nahom",
+  "direction": "assembly"
+ },
+ {
+  "file": "Nahom-Assembled-4__f004898__progress45.jpg",
+  "rec": "Nahom-Assembled-4",
+  "split": "train",
+  "frame": 4898,
+  "kind": "progress45",
+  "near_part": "",
+  "subject": "Nahom",
+  "direction": "assembly"
+ },
+ {
+  "file": "Nahom-Assembled-4__f008708__progress80.jpg",
+  "rec": "Nahom-Assembled-4",
+  "split": "train",
+  "frame": 8708,
+  "kind": "progress80",
+  "near_part": "",
+  "subject": "Nahom",
+  "direction": "assembly"
+ },
+ {
+  "file": "Nahom-Assembled-6__f001733__progress15.jpg",
+  "rec": "Nahom-Assembled-6",
+  "split": "train",
+  "frame": 1733,
+  "kind": "progress15",
+  "near_part": "",
+  "subject": "Nahom",
+  "direction": "assembly"
+ },
+ {
+  "file": "Nahom-Assembled-6__f005200__progress45.jpg",
+  "rec": "Nahom-Assembled-6",
+  "split": "train",
+  "frame": 5200,
+  "kind": "progress45",
+  "near_part": "",
+  "subject": "Nahom",
+  "direction": "assembly"
+ },
+ {
+  "file": "Nahom-Assembled-6__f009245__progress80.jpg",
+  "rec": "Nahom-Assembled-6",
+  "split": "train",
+  "frame": 9245,
+  "kind": "progress80",
+  "near_part": "",
+  "subject": "Nahom",
+  "direction": "assembly"
+ },
+ {
+  "file": "Nahom-Assembled-8__f001698__progress15.jpg",
+  "rec": "Nahom-Assembled-8",
+  "split": "train",
+  "frame": 1698,
+  "kind": "progress15",
+  "near_part": "",
+  "subject": "Nahom",
+  "direction": "assembly"
+ },
+ {
+  "file": "Nahom-disAssembled-2__f003783__progress45.jpg",
+  "rec": "Nahom-disAssembled-2",
+  "split": "train",
+  "frame": 3783,
+  "kind": "progress45",
+  "near_part": "",
+  "subject": "Nahom",
+  "direction": "disassembly"
+ },
+ {
+  "file": "Nahom-disAssembled-2__f006726__progress80.jpg",
+  "rec": "Nahom-disAssembled-2",
+  "split": "train",
+  "frame": 6726,
+  "kind": "progress80",
+  "near_part": "",
+  "subject": "Nahom",
+  "direction": "disassembly"
+ },
+ {
+  "file": "Nahom-disAssembled-3__f001219__progress15.jpg",
+  "rec": "Nahom-disAssembled-3",
+  "split": "train",
+  "frame": 1219,
+  "kind": "progress15",
+  "near_part": "",
+  "subject": "Nahom",
+  "direction": "disassembly"
+ },
+ {
+  "file": "Nahom-disAssembled-6__f006686__progress80.jpg",
+  "rec": "Nahom-disAssembled-6",
+  "split": "train",
+  "frame": 6686,
+  "kind": "progress80",
+  "near_part": "",
+  "subject": "Nahom",
+  "direction": "disassembly"
+ },
+ {
+  "file": "Nahom-disAssembled-8__f005347__progress80.jpg",
+  "rec": "Nahom-disAssembled-8",
+  "split": "train",
+  "frame": 5347,
+  "kind": "progress80",
+  "near_part": "",
+  "subject": "Nahom",
+  "direction": "disassembly"
+ },
+ {
+  "file": "Nahom-disAssembled-9__f006369__progress80.jpg",
+  "rec": "Nahom-disAssembled-9",
+  "split": "train",
+  "frame": 6369,
+  "kind": "progress80",
+  "near_part": "",
+  "subject": "Nahom",
+  "direction": "disassembly"
+ }
+]

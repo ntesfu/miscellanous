@@ -1,0 +1,361 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Assembly Labeler</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#070b12;--card:rgba(255,255,255,.045);--card2:rgba(255,255,255,.025);--stroke:rgba(255,255,255,.10);
+  --ink:#eef3f8;--mut:#93a4b8;--dim:#5a6b81;--teal:#19e3c0;--blue:#4d8dff;--amber:#ffb64d;--red:#ff6b7a;}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:var(--bg);color:var(--ink);font-family:Inter,system-ui,sans-serif;overflow:hidden}
+h1,h2,h3,.gk{font-family:'Space Grotesk',Inter,sans-serif}
+.mono{font-family:'JetBrains Mono',ui-monospace,monospace}
+.app{display:grid;grid-template-rows:auto auto 1fr;height:100vh}
+/* topbar */
+.top{display:flex;align-items:center;gap:14px;padding:10px 16px;border-bottom:1px solid var(--stroke);background:#0a1019}
+.logo{width:30px;height:30px;border-radius:8px;background:linear-gradient(120deg,#19e3c0,#4d8dff 62%,#a06bff);display:grid;place-items:center;font-size:16px}
+.brand{font-family:'Space Grotesk';font-weight:700}.brand small{color:var(--dim);font-weight:500;margin-left:8px;font-size:11px;text-transform:uppercase;letter-spacing:.4px}
+select,input,button{font-family:inherit;color:var(--ink);background:var(--card);border:1px solid var(--stroke);border-radius:9px;padding:7px 11px;font-size:13px}
+select{min-width:230px}
+input.fps{width:64px;text-align:center}
+#speed{min-width:72px}
+.top .sp{flex:1}
+.tag{font-size:11px;color:var(--dim)}
+.save{background:linear-gradient(120deg,#19e3c0,#12b39a);color:#05231f;font-weight:700;border:0;cursor:pointer;padding:8px 16px}
+.save:hover{filter:brightness(1.07)}
+.ghost{background:var(--card);cursor:pointer}.ghost:hover{border-color:var(--teal)}
+.ghost.warn:hover{border-color:var(--red);color:var(--red)}
+.who{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;color:var(--mut);cursor:pointer;padding:7px 10px;border:1px solid var(--stroke);border-radius:9px;background:var(--card2)}
+.who b{color:var(--teal)}.who:hover{border-color:var(--teal)}
+.subbar{display:flex;align-items:center;gap:14px;padding:8px 16px;border-bottom:1px solid var(--stroke);background:#0a1019}
+.prog{display:flex;align-items:center;gap:11px;flex:0 1 470px;min-width:0}
+.progbar{flex:1;height:9px;min-width:120px;border-radius:6px;background:var(--card2);border:1px solid var(--stroke);overflow:hidden}
+.progfill{height:100%;width:0;background:linear-gradient(90deg,#19e3c0,#4d8dff);transition:width .5s}
+.progtxt{font-size:12px;color:var(--mut);white-space:nowrap}
+.chk{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;color:var(--mut);cursor:pointer}
+.chk input{width:14px;height:14px;accent-color:var(--teal)}
+.seg{display:inline-flex;border:1px solid var(--stroke);border-radius:9px;overflow:hidden}
+.segb{background:var(--card2);border:0;color:var(--mut);padding:7px 15px;font-size:12.5px;cursor:pointer}
+.segb+.segb{border-left:1px solid var(--stroke)}
+.segb.active{background:rgba(25,227,192,.14);color:var(--teal);font-weight:600}
+#status{font-size:12px;color:var(--teal);min-width:60px}
+/* main */
+.main{display:grid;grid-template-columns:1fr 340px;gap:14px;padding:14px;min-height:0}
+.left{display:flex;flex-direction:column;min-height:0}
+.stage{position:relative;background:#000;border:1px solid var(--stroke);border-radius:14px;overflow:hidden;flex:1;display:grid;place-items:center;min-height:0}
+video{max-width:100%;max-height:100%;display:block}
+.empty{color:var(--dim);font-size:14px;text-align:center;padding:40px}
+/* transport */
+.trans{display:flex;align-items:center;gap:10px;margin-top:11px}
+.tbtn{width:40px;height:40px;display:grid;place-items:center;font-size:15px;background:var(--card);border:1px solid var(--stroke);border-radius:10px;cursor:pointer;color:var(--ink)}
+.tbtn:hover{border-color:var(--teal);color:var(--teal)}
+.readout{font-size:13px;color:var(--mut);margin-left:4px}
+.readout b{color:var(--ink);font-weight:600}
+.readout .fr{color:var(--teal)}
+/* timeline */
+.tl{position:relative;height:58px;margin-top:11px;border:1px solid var(--stroke);border-radius:10px;background:var(--card2);overflow:hidden;cursor:pointer}
+.tl .seg{position:absolute;top:0;bottom:0;opacity:.32;border-right:1px solid rgba(255,255,255,.25)}
+.tl .seglab{position:absolute;bottom:3px;font-size:8.5px;color:#fff;white-space:nowrap;padding:0 4px;text-shadow:0 1px 2px #000;pointer-events:none}
+.tl .tick{position:absolute;top:0;bottom:0;width:2px;background:#fff;box-shadow:0 0 6px rgba(255,255,255,.6)}
+.tl .ph{position:absolute;top:0;bottom:0;width:2px;background:var(--teal);box-shadow:0 0 8px var(--teal);z-index:3;pointer-events:none}
+.axis{display:flex;justify-content:space-between;color:var(--dim);font-size:10.5px;margin-top:5px}
+/* sidebar */
+.side{display:flex;flex-direction:column;gap:12px;min-height:0}
+.panel{background:var(--card);border:1px solid var(--stroke);border-radius:13px;padding:13px}
+.panel h3{margin:0 0 10px;font-size:12px;letter-spacing:.5px;text-transform:uppercase;color:var(--mut)}
+.parts{display:flex;flex-direction:column;gap:7px}
+.pbtn{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:9px;border:1px solid var(--stroke);background:var(--card2);cursor:pointer;transition:.15s;text-align:left}
+.pbtn:hover{border-color:var(--c);background:rgba(255,255,255,.05)}
+.pbtn .kbd{width:22px;height:22px;flex:0 0 22px;display:grid;place-items:center;border-radius:6px;background:#0a1019;border:1px solid var(--stroke);font-size:11px;color:var(--mut);font-family:'JetBrains Mono'}
+.pbtn .dot{width:11px;height:11px;border-radius:50%;background:var(--c);flex:0 0 11px}
+.pbtn .nm{flex:1;font-size:13px}
+.pbtn .cnt{font-size:11px;color:var(--dim);font-family:'JetBrains Mono'}
+.pbtn.has .cnt{color:var(--c)}
+.marks{flex:1;overflow:auto;display:flex;flex-direction:column;gap:6px}
+.marks .none{color:var(--dim);font-size:12px;padding:8px 2px}
+.mrow{display:flex;align-items:center;gap:9px;padding:7px 9px;border-radius:8px;background:var(--card2);border:1px solid var(--stroke);font-size:12px;cursor:pointer}
+.mrow:hover{border-color:var(--teal)}
+.mrow .md{width:9px;height:9px;border-radius:50%;flex:0 0 9px}
+.mrow .mt{font-family:'JetBrains Mono';color:var(--teal);flex:0 0 78px}
+.mrow .mn{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mrow .del{color:var(--dim);cursor:pointer;padding:0 4px;font-size:14px}
+.mrow .del:hover{color:var(--red)}
+.help{font-size:11.5px;color:var(--dim);line-height:1.9}
+.help b{color:var(--mut);font-family:'JetBrains Mono';background:#0a1019;border:1px solid var(--stroke);border-radius:5px;padding:1px 6px;font-weight:500}
+.err{color:#ffd3d8;background:rgba(255,107,122,.12);border:1px solid rgba(255,107,122,.4);border-radius:9px;padding:9px 12px;font-size:12.5px}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="top">
+    <div class="logo">🏷️</div>
+    <div class="brand">Assembly Labeler<small>IndustReal-style PSR annotation</small></div>
+    <span class="who" id="who" title="click to change your name">👤 <b id="uname">…</b></span>
+    <select id="vsel"><option value="">— choose a video —</option></select>
+    <span class="tag">fps</span><input class="fps mono" id="fps" value="30">
+    <div class="sp"></div>
+    <span id="status"></span>
+    <button class="ghost" id="reset" title="clear all marks for this video">↺ Reset</button>
+    <button class="ghost warn" id="discard" title="mark this video as not-to-be-labelled">⨯ Discard</button>
+    <button class="ghost" id="dl">⬇ CSV</button>
+    <button class="save" id="save">💾 Save</button>
+  </div>
+
+  <div class="subbar">
+    <div class="prog">
+      <div class="progbar"><div class="progfill" id="progfill"></div></div>
+      <span class="progtxt" id="progtxt">—</span>
+    </div>
+    <div style="flex:1"></div>
+    <label class="chk"><input type="checkbox" id="hidedone" checked> hide done</label>
+    <span class="tag">this video is</span>
+    <div class="seg" id="dirseg">
+      <button class="segb active" data-dir="assembly">▲ Assembly</button>
+      <button class="segb" data-dir="disassembly">▼ Disassembly</button>
+    </div>
+  </div>
+
+  <div class="main">
+    <div class="left">
+      <div class="stage" id="stage">
+        <video id="vid" preload="auto"></video>
+        <div class="empty" id="empty">Pick a video above.<br><span style="font-size:12px">Drop your recordings in the <span class="mono" id="vdir">label_videos/</span> folder.</span></div>
+      </div>
+      <div class="trans">
+        <div class="tbtn" id="back10" title="−1 s (Shift+←)">⏪</div>
+        <div class="tbtn" id="back1" title="−1 frame (←)">◀</div>
+        <div class="tbtn" id="play" title="Play / pause (Space)">▶</div>
+        <div class="tbtn" id="fwd1" title="+1 frame (→)">▶</div>
+        <div class="tbtn" id="fwd10" title="+1 s (Shift+→)">⏩</div>
+        <div class="readout">frame <b class="fr" id="rfr">0</b> · <b id="rt">0:00.0</b> / <span id="rdur">0:00.0</span></div>
+        <div style="flex:1"></div>
+        <span class="tag">speed</span>
+        <select id="speed" title="playback speed  ( [ slower · ] faster )">
+          <option>0.25</option><option>0.5</option><option selected>1</option><option>1.5</option><option>2</option><option>3</option><option>4</option>
+        </select>
+      </div>
+      <div class="tl" id="tl"><div class="ph" id="ph" style="left:0"></div></div>
+      <div class="axis"><span>0:00</span><span id="axmid"></span><span id="axend"></span></div>
+    </div>
+
+    <div class="side">
+      <div class="panel">
+        <h3>Parts — click or press its number when the step is done</h3>
+        <div class="parts" id="parts"></div>
+      </div>
+      <div class="panel" style="flex:1;display:flex;flex-direction:column;min-height:0">
+        <h3>Marked steps (<span id="mcount">0</span>)</h3>
+        <div class="marks" id="mlist"><div class="none">No steps marked yet.</div></div>
+      </div>
+      <div class="panel help">
+        <b>Space</b> play/pause &nbsp; <b>←</b>/<b>→</b> ±1 frame &nbsp; <b>Shift</b>+arrows ±1 s<br>
+        <b>1</b>–<b>9</b>,<b>0</b> mark that part at the current frame &nbsp; <b>Del</b> remove last
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const COLORS=['#19e3c0','#4d8dff','#ffb64d','#ff6b7a','#a06bff','#3ddc84','#ff5dc8','#62d0ff','#f7c948','#b4e34d'];
+let PARTS=[], fps=30, vidName='', marks=[]; // marks: {t, pi}
+let USER='', videosData=[], hbTimer=null, direction='assembly';
+const vid=$('#vid');
+const jpost=(u,b)=>fetch(u,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(b)});
+
+// ---- annotator identity (locks videos so two people don't label the same one) ----
+function initUser(){ USER=localStorage.getItem('annotator')||'';
+  if(!USER){ USER=(prompt("Your name — used to lock videos so two people don't label the same one:")||'').trim()||'anon';
+    localStorage.setItem('annotator',USER); }
+  $('#uname').textContent=USER; }
+$('#who').onclick=()=>{ const n=(prompt('Your name:',USER)||'').trim(); if(n){USER=n;localStorage.setItem('annotator',n);$('#uname').textContent=n;} };
+
+function mmss(t){ if(!isFinite(t))t=0; const m=Math.floor(t/60), s=t%60; return m+':'+s.toFixed(1).padStart(4,'0'); }
+function frameOf(t){ return Math.round(t*fps); }
+
+// ---- init ----
+fetch('/api/config').then(r=>r.json()).then(c=>{
+  PARTS=c.parts; fps=c.fps_default; $('#fps').value=fps; $('#vdir').textContent=c.videos_dir.split('/').slice(-2).join('/')+'/';
+  renderParts();
+});
+function optLabel(v){
+  let tag = v.discarded ? '⨯ ' : v.labeled ? '✓ ' : (v.claimed_by && v.claimed_by!==USER) ? '🔒 ' : '';
+  let suf = v.discarded ? ' (discarded)' : (v.claimed_by && v.claimed_by!==USER) ? '  — '+v.claimed_by : '';
+  return tag + v.name + suf;
+}
+function refreshVideos(){
+  fetch('/api/videos').then(r=>r.json()).then(d=>{ videosData=d.videos;
+    const hide=$('#hidedone').checked, sel=$('#vsel'), cur=sel.value;
+    const list=d.videos.filter(v=> !hide || (!v.labeled && !v.discarded) || v.name===vidName);
+    sel.innerHTML='<option value="">— choose a video —</option>'+
+      list.map(v=>`<option value="${v.name}">${optLabel(v)}</option>`).join('');
+    if(!list.length) sel.innerHTML+='<option disabled>(none pending — all done?)</option>';
+    sel.value=cur; updateProgress();
+  });
+}
+function updateProgress(){
+  const total=videosData.length, done=videosData.filter(v=>v.labeled).length, disc=videosData.filter(v=>v.discarded).length;
+  $('#progfill').style.width=(total?100*done/total:0)+'%';
+  $('#progtxt').textContent=`${done} / ${total} annotated`+(disc?` · ${disc} discarded`:'')+` · ${Math.max(0,total-done-disc)} left`;
+}
+// ---- Assembly / Disassembly direction (sets install vs remove id) ----
+function guessDir(name){ return /disassembl/i.test(name)?'disassembly':'assembly'; }
+function setDir(d){ direction=d; $$('#dirseg .segb').forEach(b=>b.classList.toggle('active',b.dataset.dir===d)); }
+$$('#dirseg .segb').forEach(b=>b.onclick=()=>setDir(b.dataset.dir));
+$('#hidedone').onchange=refreshVideos;
+initUser(); refreshVideos(); setInterval(refreshVideos, 15000);
+
+function renderParts(){
+  $('#parts').innerHTML=PARTS.map((p,i)=>`
+    <div class="pbtn" style="--c:${COLORS[i]}" data-i="${i}" onclick="mark(${i})">
+      <span class="kbd">${(i+1)%10}</span><span class="dot"></span>
+      <span class="nm">${p.name}</span><span class="cnt" id="cnt${i}">·</span>
+    </div>`).join('');
+}
+
+$('#vsel').onchange=e=>selectVideo(e.target.value);
+function selectVideo(name){
+  const prev=vidName;
+  if(prev && prev!==name) release(prev);
+  if(!name){ loadVideo(''); return; }
+  jpost('/api/claim',{video:name,user:USER,steal:false}).then(async r=>{
+    if(r.status===409){ const j=await r.json();
+      if(confirm(`"${name}" is being annotated by ${j.claimed_by}. Take it over anyway?`))
+        return jpost('/api/claim',{video:name,user:USER,steal:true}).then(()=>{ startHeartbeat(); loadVideo(name); refreshVideos(); });
+      $('#vsel').value=prev||''; return; }
+    startHeartbeat(); loadVideo(name); refreshVideos();
+  }).catch(()=>{ startHeartbeat(); loadVideo(name); });
+}
+function startHeartbeat(){ clearInterval(hbTimer);
+  hbTimer=setInterval(()=>{ if(vidName) jpost('/api/claim',{video:vidName,user:USER,steal:true}); }, 30000); }
+function release(name){ if(!name)return; const b={video:name,user:USER};
+  if(navigator.sendBeacon) navigator.sendBeacon('/api/release',new Blob([JSON.stringify(b)],{type:'application/json'}));
+  else fetch('/api/release',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(b),keepalive:true}); }
+window.addEventListener('beforeunload',()=>{ if(vidName) release(vidName); });
+
+function loadVideo(name){
+  vidName=name; marks=[];
+  if(!name){ vid.removeAttribute('src'); vid.load(); $('#empty').style.display='block'; clearInterval(hbTimer); render(); return; }
+  $('#empty').style.display='none';
+  vid.src='/media/video/'+encodeURIComponent(name); vid.load();
+  fetch('/api/labels/'+encodeURIComponent(name)).then(r=>r.json()).then(d=>{
+    if(vidName!==name) return;   // switched away while in flight — don't load these marks onto the new video
+    if(d.fps){ fps=d.fps; $('#fps').value=fps; }
+    setDir(d.direction || guessDir(name));
+    marks=(d.marks||[]).map(m=>({t:+m.t, pi:+m.pi})); render();
+    setStatus(marks.length? 'loaded '+marks.length+' saved marks':'');
+  });
+}
+
+// ---- reset / discard ----
+$('#reset').onclick=()=>{ if(!vidName){setStatus('pick a video');return;}
+  if(!confirm('Reset ALL annotations for this video?\nClears the marks here and deletes any saved labels.'))return;
+  marks=[]; render();
+  jpost('/api/reset',{video:vidName}).then(()=>{ setStatus('✓ reset'); refreshVideos(); }); };
+$('#discard').onclick=()=>{ if(!vidName){setStatus('pick a video');return;}
+  if(!confirm('Discard this video?\nIt will be flagged as not-to-be-labelled and skipped.'))return;
+  const done=vidName;
+  jpost('/api/discard',{video:done,user:USER}).then(()=>{ setStatus('⨯ discarded'); vidName=''; loadVideo('');
+    refreshVideos(); setTimeout(()=>nextVideo(done),300); }); };
+function nextVideo(after){
+  const c=videosData.find(v=>!v.labeled&&!v.discarded&&v.name!==after&&(!v.claimed_by||v.claimed_by===USER));
+  if(c){ $('#vsel').value=c.name; selectVideo(c.name); } }
+
+$('#fps').onchange=e=>{ fps=parseFloat(e.target.value)||30; render(); };
+
+// ---- transport ----
+function play(){ vid.paused?vid.play():vid.pause(); }
+function step(df){ vid.pause(); const f=frameOf(vid.currentTime)+df; vid.currentTime=Math.max(0,Math.min(vid.duration||0, f/fps)); }
+function jump(ds){ vid.pause(); vid.currentTime=Math.max(0,Math.min(vid.duration||0, vid.currentTime+ds)); }
+$('#play').onclick=play; $('#back1').onclick=()=>step(-1); $('#fwd1').onclick=()=>step(1);
+$('#back10').onclick=()=>jump(-1); $('#fwd10').onclick=()=>jump(1);
+const SPEEDS=[0.25,0.5,1,1.5,2,3,4];
+$('#speed').onchange=e=>{ vid.playbackRate=parseFloat(e.target.value)||1; };
+function setSpeed(d){ let i=SPEEDS.indexOf(parseFloat($('#speed').value)); i=Math.max(0,Math.min(SPEEDS.length-1,(i<0?2:i)+d));
+  $('#speed').value=SPEEDS[i]; vid.playbackRate=SPEEDS[i]; }
+vid.addEventListener('play',()=>$('#play').textContent='⏸');
+vid.addEventListener('pause',()=>$('#play').textContent='▶');
+vid.addEventListener('loadedmetadata',()=>{ $('#rdur').textContent=mmss(vid.duration);
+  $('#axmid').textContent=mmss(vid.duration/2); $('#axend').textContent=mmss(vid.duration);
+  vid.playbackRate=parseFloat($('#speed').value)||1; render(); });
+vid.addEventListener('durationchange',render);
+vid.addEventListener('timeupdate',updatePlayhead);
+function updatePlayhead(){ $('#rfr').textContent=frameOf(vid.currentTime); $('#rt').textContent=mmss(vid.currentTime);
+  const p=vid.duration?100*vid.currentTime/vid.duration:0; $('#ph').style.left=p+'%'; }
+
+// ---- timeline click to seek ----
+$('#tl').addEventListener('click',e=>{ if(!vid.duration)return; const r=e.currentTarget.getBoundingClientRect();
+  vid.currentTime=Math.max(0,Math.min(vid.duration,(e.clientX-r.left)/r.width*vid.duration)); });
+
+// ---- marking ----
+function mark(pi){ if(!vidName||!isFinite(vid.currentTime))return;
+  marks.push({t:vid.currentTime, pi}); render(); flash(pi); }
+function flash(pi){ const b=$$('.pbtn')[pi]; if(!b)return; b.style.background=COLORS[pi]+'33'; setTimeout(()=>b.style.background='',180); }
+function delMark(idx){ marks.splice(idx,1); render(); }
+function seekTo(t){ vid.pause(); vid.currentTime=t; }
+
+function render(){
+  const sorted=[...marks].map((m,i)=>({...m,i})).sort((a,b)=>a.t-b.t);
+  // counts per part
+  PARTS.forEach((p,i)=>{ const n=marks.filter(m=>m.pi===i).length;
+    const el=$('#cnt'+i), btn=$$('.pbtn')[i]; if(el){el.textContent=n?('×'+n):'·';} if(btn)btn.classList.toggle('has',n>0); });
+  // marks list
+  $('#mcount').textContent=marks.length;
+  const ml=$('#mlist');
+  if(!marks.length){ ml.innerHTML='<div class="none">No steps marked yet.</div>'; }
+  else ml.innerHTML=sorted.map(m=>`
+    <div class="mrow" onclick="seekTo(${m.t})">
+      <span class="md" style="background:${COLORS[m.pi]}"></span>
+      <span class="mt">f${frameOf(m.t)} · ${mmss(m.t)}</span>
+      <span class="mn">${PARTS[m.pi].name}</span>
+      <span class="del" onclick="event.stopPropagation();delMark(${m.i})">✕</span>
+    </div>`).join('');
+  // timeline segments (prev completion -> this completion)
+  const tl=$('#tl'); tl.querySelectorAll('.seg,.seglab,.tick').forEach(e=>e.remove());
+  const dur=vid.duration;
+  // on a pre-annotated video the saved marks arrive before the video metadata does; drawing
+  // them against an unknown duration puts every segment off-scale, so wait for loadedmetadata
+  if(!dur||!isFinite(dur)) return;
+  let prev=0;
+  sorted.forEach(m=>{ const l=Math.max(0,Math.min(100,100*prev/dur)), w=Math.max(0,Math.min(100-l,100*(m.t-prev)/dur));
+    const s=document.createElement('div'); s.className='seg'; s.style.left=l+'%'; s.style.width=w+'%'; s.style.background=COLORS[m.pi];
+    tl.insertBefore(s,$('#ph'));
+    const lab=document.createElement('div'); lab.className='seglab'; lab.style.left=l+'%'; lab.textContent=PARTS[m.pi].name; tl.insertBefore(lab,$('#ph'));
+    const tk=document.createElement('div'); tk.className='tick'; tk.style.left=Math.max(0,Math.min(100,100*m.t/dur))+'%'; tl.insertBefore(tk,$('#ph'));
+    prev=m.t; });
+}
+
+// ---- keyboard ----
+document.addEventListener('keydown',e=>{
+  if(/INPUT|SELECT|TEXTAREA/.test(document.activeElement.tagName))return;
+  if(e.key===' '){e.preventDefault();play();}
+  else if(e.key==='ArrowLeft'){e.preventDefault(); e.shiftKey?jump(-1):step(-1);}
+  else if(e.key==='ArrowRight'){e.preventDefault(); e.shiftKey?jump(1):step(1);}
+  else if(e.key===','){step(-1);} else if(e.key==='.'){step(1);}
+  else if(e.key==='['){e.preventDefault();setSpeed(-1);} else if(e.key===']'){e.preventDefault();setSpeed(1);}
+  else if(e.key>='0'&&e.key<='9'){ const i=e.key==='0'?9:+e.key-1; if(i<PARTS.length)mark(i); }
+  else if(e.key==='Delete'||e.key==='Backspace'){ if(marks.length){marks.pop();render();} }
+  else if(e.key.toLowerCase()==='s'){ save(); }
+});
+
+// ---- save / export ----
+function setStatus(t){ $('#status').textContent=t; if(t)setTimeout(()=>{if($('#status').textContent===t)$('#status').textContent='';},4000); }
+$('#save').onclick=save;
+function save(){
+  if(!vidName){ setStatus('pick a video'); return; }
+  fetch('/api/save',{method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({video:vidName,fps,direction,marks:marks.map(m=>({t:m.t,pi:m.pi}))})})
+    .then(r=>r.json()).then(d=>{ setStatus(d.ok?('✓ saved '+d.n+' steps'):'save failed'); refreshVideos(); })
+    .catch(()=>setStatus('save failed'));
+}
+$('#dl').onclick=()=>{ if(!marks.length){setStatus('nothing to export');return;}
+  const base=direction==='disassembly'?5:3, verb=direction==='disassembly'?'Remove ':'Install ';
+  const rows=[...marks].sort((a,b)=>a.t-b.t).map(m=>`${String(frameOf(m.t)).padStart(6,'0')}.jpg,${base+3*m.pi},${verb+PARTS[m.pi].name}`);
+  const blob=new Blob([rows.join('\n')+'\n'],{type:'text/csv'}); const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob); a.download=(vidName.replace(/\.[^.]+$/,'')||'labels')+'_PSR_labels.csv'; a.click(); };
+</script>
+</body>
+</html>

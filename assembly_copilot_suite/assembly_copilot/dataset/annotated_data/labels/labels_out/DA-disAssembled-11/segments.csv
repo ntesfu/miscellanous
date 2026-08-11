@@ -1,0 +1,11 @@
+part,action,start_frame,end_frame,start_sec,end_sec
+Propeller Cone plate,remove,0,371,0.0,12.36
+Propeller Cone Tip,remove,371,1006,12.36,33.543
+Frame Subassembly,remove,1006,2039,33.543,67.977
+Cowling Bracket,remove,2039,3023,67.977,100.765
+Exhaust Casing,remove,3023,4222,100.765,140.744
+Exhaust,remove,4222,5151,140.744,171.703
+Compressor Casing,remove,5151,6953,171.703,231.76
+Pop Control Sun Gear,remove,6953,7952,231.76,265.077
+Pop Control Ring Gear,remove,7952,8453,265.077,281.777
+Main Drive Planet Gear,remove,8453,8516,281.777,283.86

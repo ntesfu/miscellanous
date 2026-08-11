@@ -1,0 +1,3 @@
+fastapi
+uvicorn
+imageio-ffmpeg   # only needed if you run ./make_proxies.sh and have no system ffmpeg

@@ -1,0 +1,27 @@
+# Merged detector dataset: studio photos + annotated video frames + negatives.
+#
+#   photos (95, 1139 boxes)   what each part looks like -- clean, high-res, and the
+#                             only rich source for the two gear classes (95 boxes
+#                             each vs 14-16 in video frames)
+#   video  (94, ~500 boxes)   the deployment domain: egocentric view, hands, blur,
+#                             partially-emptied tables
+#   negatives (26, 0 boxes)   frames with NOTHING loose -- teach the model not to
+#                             fire on the built assembly or bare table
+#
+# Val is 20 VIDEO frames only: photos-only validation already fooled us once
+# (mAP50 0.995 on photos, 2/10 classes found on video). The number this yaml
+# produces is measured in the domain the detector must serve.
+path: /media/lm-ciss/LM_4TB/assembly_copilot/detector
+train: cfg/merged_train.txt
+val: cfg/merged_val.txt
+names:
+  0: Main Drive Planet Gear
+  1: Pop Control Ring Gear
+  2: Pop Control Sun Gear
+  3: Compressor Casing
+  4: Exhaust
+  5: Exhaust Casing
+  6: Cowling Bracket
+  7: Frame Subassembly
+  8: Propeller Cone plate
+  9: Propeller Cone Tip

@@ -1,0 +1,35 @@
+{
+  "generated": "2026-07-29 14:10:27",
+  "root": "/media/lm-ciss/LM_4TB/egocentric_videos/ego_psr_repro/industReal/psr_tas",
+  "results": {
+    "v4_fusion_diffact": {
+      "label": "v4  Fusion + DiffAct  (NEW BEST)",
+      "group": "offline_step",
+      "kind": "diffact",
+      "status": "ok",
+      "seconds": 1.8,
+      "metrics": {
+        "rows": {
+          "decoder-agg": {
+            "Acc": 84.21087858640846,
+            "Edit": 87.19122023809524,
+            "F1@10": 88.77284595300262,
+            "F1@25": 87.72845953002611,
+            "F1@50": 79.89556135770236,
+            "n": 32
+          }
+        },
+        "best_decode": "decoder-agg",
+        "best": {
+          "Acc": 84.21087858640846,
+          "Edit": 87.19122023809524,
+          "F1@10": 88.77284595300262,
+          "F1@25": 87.72845953002611,
+          "F1@50": 79.89556135770236,
+          "n": 32
+        },
+        "source": "recomputed from cached predictions"
+      }
+    }
+  }
+}

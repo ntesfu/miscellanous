@@ -1,0 +1,21 @@
+# aiops engine-parts detection - VIDEO FRAMES subset (sparse boxes)
+# 114 labeled frames, 587 boxes, 10 classes. Empty frames excluded.
+# 'path' MUST point at this dataset root on whatever machine trains on it.
+path: /media/lm-ciss/LM_4TB/aiops/aiops_parts_detection_frames
+train: images
+val: images
+# --- optional held-out split (85/15, seed 1337): comment the two lines above,
+#     uncomment the two below.
+# train: splits/train.txt
+# val: splits/val.txt
+names:
+  0: Main Drive Planet Gear
+  1: Pop Control Ring Gear
+  2: Pop Control Sun Gear
+  3: Compressor Casing
+  4: Exhaust
+  5: Exhaust Casing
+  6: Cowling Bracket
+  7: Frame Subassembly
+  8: Propeller Cone plate
+  9: Propeller Cone Tip

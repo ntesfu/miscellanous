@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Ego Recorder · Viewer</title>
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <div class="brand"><span class="logo">🎥</span> Ego Recorder <small>Viewer</small></div>
+      <div class="conn"><span id="dot" class="dot"></span><span id="stateText">Connecting…</span></div>
+      <div class="spacer"></div>
+      <div class="metrics">
+        <span>Res <b id="metaRes">—</b></span>
+        <span>Cam <b id="metaCam">—</b></span>
+        <span>Latency <b id="metaRtt">—</b></span>
+        <span>Viewers <b id="metaViewers">—</b></span>
+      </div>
+    </header>
+
+    <section class="stage-wrap">
+      <div class="stage" id="stage">
+        <video id="remote" playsinline autoplay muted></video>
+
+        <div class="rec-badge">
+          <span id="recDot" class="recDot"></span>
+          <span id="recTime">00:00</span>
+        </div>
+
+        <div class="nosignal" id="noSignal">
+          <div class="big">📡</div>
+          <div>Waiting for the iPhone…</div>
+          <div class="hint">Open <b>https://&lt;this-mac-ip&gt;:8443/phone</b> in Safari on your iPhone and allow the camera.</div>
+        </div>
+
+        <div class="dock">
+          <button class="ctl" id="btnSwitch"><span class="ico">🔄</span><span class="txt">Flip</span></button>
+          <button class="ctl" id="btnTorch"><span class="ico">🔦</span><span class="txt">Torch</span></button>
+          <button class="recbtn" id="btnRec">
+            <span class="ring"></span><span class="label">Record</span>
+          </button>
+          <button class="ctl" id="btnSnap"><span class="ico">📸</span><span class="txt">Photo</span></button>
+          <button class="ctl" id="btnMute"><span class="ico">🔇</span><span class="txt">Audio</span></button>
+          <button class="ctl" id="btnMirror"><span class="ico">🪞</span><span class="txt">Mirror</span></button>
+          <button class="ctl" id="btnFs"><span class="ico">⛶</span><span class="txt">Full</span></button>
+        </div>
+      </div>
+    </section>
+
+    <aside class="side">
+      <div class="sec">
+        <h3>Capture settings</h3>
+        <div class="row">
+          <label for="quality">Quality</label>
+          <select id="quality">
+            <option value="720p">720p · 30fps</option>
+            <option value="1080p" selected>1080p · 30fps</option>
+            <option value="1080p60">1080p · 60fps</option>
+            <option value="4k">4K · 30fps</option>
+          </select>
+        </div>
+        <div class="row">
+          <label for="person">Name</label>
+          <select id="person">
+            <option value="Ketan" selected>Ketan</option>
+            <option value="DA">DA</option>
+            <option value="Nahom">Nahom</option>
+          </select>
+        </div>
+        <div class="row">
+          <label for="mode">Stage</label>
+          <select id="mode">
+            <option value="Assembled" selected>Assemble</option>
+            <option value="disAssembled">disAssemble</option>
+          </select>
+        </div>
+        <div class="row">
+          <label>Saves as</label>
+          <span id="namePreview" style="color:var(--muted);font-size:12px">Ketan-Assembled-…</span>
+        </div>
+        <div class="row" id="lensRow" style="display:none;flex-direction:column;align-items:flex-start;gap:8px">
+          <label>Lens</label>
+          <div class="lens-pills" id="lensPills"></div>
+        </div>
+        <div class="row">
+          <label>Shortcuts</label>
+          <span style="color:var(--muted);font-size:12px">R rec · S photo · C flip · F full</span>
+        </div>
+      </div>
+      <div class="sec reclib">
+        <h3 style="display:flex;justify-content:space-between;align-items:center">
+          Recordings <button class="mini" id="btnRefresh">Refresh</button>
+        </h3>
+        <ul id="recList"><li class="empty">No recordings yet.</li></ul>
+      </div>
+    </aside>
+  </div>
+
+  <div class="modal" id="player">
+    <button class="close" id="closePlayer">✕</button>
+    <video id="playerVideo" controls playsinline></video>
+  </div>
+
+  <div class="toast" id="toast"></div>
+  <script type="module" src="/static/viewer.js"></script>
+</body>
+</html>

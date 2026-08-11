@@ -1,0 +1,11 @@
+{
+  "head": "v4 Type head (DiffAct on fusion 2176-d, type labels)",
+  "test_n": 32,
+  "segmentation": {"Acc": 87.97, "Edit": 83.02, "F1@10": 84.04, "F1@25": 80.85, "F1@50": 75.53, "epoch": 400},
+  "fault_recall": {
+    "remove":    {"clip_recall": 69.9, "event_recall": 72.2, "precision": 81.2, "gt_clips": 2640, "gt_events": 18},
+    "incorrect": {"clip_recall": 5.1,  "event_recall": 20.0, "precision": 16.0, "gt_clips": 3204, "gt_events": 10}
+  },
+  "reference_handoff": {"remove_recall": 69, "incorrect_recall": 10.1},
+  "conclusion": "Reproduces handoff finding: remove well-detected (~70%), incorrect data-limited (only 10 test events)."
+}

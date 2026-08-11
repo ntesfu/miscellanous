@@ -1,0 +1,37 @@
+diff --git a/dataset.py b/dataset.py
+index 5465e40..57d39a6 100755
+--- a/dataset.py
++++ b/dataset.py
+@@ -89,6 +89,8 @@ def get_boundary_seq(event_seq, boundary_smooth=None):
+ 
+     _, start_times, end_times = get_labels_start_end_time([str(int(i)) for i in event_seq])
+     boundaries = start_times[1:]
++    if len(boundaries) == 0:
++        return boundary_seq  # constant-class sequence (common for TYPE labels): no interior boundaries
+     assert min(boundaries) > 0
+     boundary_seq[boundaries] = 1
+     boundary_seq[[i-1 for i in boundaries]] = 1
+@@ -174,7 +176,9 @@ class VideoFeatureDataset(Dataset):
+             feature = feature.T   # F x T
+ 
+             boundary = boundary.unsqueeze(0)
+-            boundary /= boundary.max()  # normalize again
++            bmax = boundary.max()
++            if bmax > 0:
++                boundary /= bmax  # normalize again (skip when constant-class rec -> all-zero boundary, avoids /0 -> NaN)
+             
+         if self.mode == 'test':
+ 
+diff --git a/utils.py b/utils.py
+index de555e0..0a0680b 100755
+--- a/utils.py
++++ b/utils.py
+@@ -84,7 +84,7 @@ def get_labels_start_end_time(frame_wise_labels, bg_class=["background"]):
+ def levenstein(p, y, norm=False):
+     m_row = len(p)    
+     n_col = len(y)
+-    D = np.zeros([m_row+1, n_col+1], np.float)
++    D = np.zeros([m_row+1, n_col+1], float)
+     for i in range(m_row+1):
+         D[i, 0] = i
+     for i in range(n_col+1):

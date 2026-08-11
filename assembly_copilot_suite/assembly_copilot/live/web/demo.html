@@ -1,0 +1,482 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Assembly Copilot — live demo</title>
+<style>
+  :root{
+    --bg:#0f1115; --panel:#171a21; --line:#262b36; --ink:#e6e9ef; --dim:#8b93a3;
+    --acc:#5b8def; --ok:#3fbf7f; --warn:#e0a33e; --live:#e05f5f;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+       font:14px/1.5 "Helvetica Neue",Helvetica,Arial,sans-serif}
+  header{padding:18px 26px;border-bottom:1px solid var(--line);display:flex;
+         align-items:baseline;gap:14px;flex-wrap:wrap}
+  h1{font-size:19px;margin:0;font-weight:650}
+  .sub{color:var(--dim);font-size:12.5px}
+  .pill{margin-left:auto;font-size:11px;color:var(--dim);border:1px solid var(--line);
+        padding:4px 10px;border-radius:99px}
+  main{display:grid;grid-template-columns:1.15fr .85fr;gap:18px;padding:18px 26px;
+       align-items:start}
+  @media(max-width:1000px){main{grid-template-columns:1fr}}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:16px}
+  .card h2{font-size:12px;letter-spacing:.7px;text-transform:uppercase;color:var(--dim);
+           margin:0 0 12px;font-weight:700}
+  video{width:100%;border-radius:8px;background:#000;display:block}
+  .drop{border:1.5px dashed var(--line);border-radius:8px;padding:34px;text-align:center;
+        color:var(--dim);cursor:pointer;transition:.15s}
+  .drop:hover,.drop.over{border-color:var(--acc);color:var(--ink);background:#1b1f28}
+  .bar{height:6px;background:#11141a;border-radius:99px;overflow:hidden;margin:12px 0 6px}
+  .bar>i{display:block;height:100%;width:0;background:var(--acc);transition:width .2s}
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:12px}
+  .stat{background:#11141a;border-radius:7px;padding:9px 11px}
+  .stat b{display:block;font-size:17px;font-weight:650}
+  .stat span{font-size:10.5px;color:var(--dim);letter-spacing:.4px}
+  #tlhead{display:grid;grid-template-columns:44px 1fr 1fr;gap:8px;margin-bottom:6px}
+  #tlhead span{font-size:10px;letter-spacing:.7px;text-transform:uppercase;color:var(--dim);text-align:center}
+  #tlbody{position:relative;display:grid;grid-template-columns:44px 1fr 1fr;gap:8px;height:470px}
+  #tlaxis{position:relative}
+  #tlaxis span{position:absolute;right:6px;transform:translateY(-50%);font-size:10px;color:var(--dim);font-variant-numeric:tabular-nums}
+  .lane{position:relative;background:#11141a;border-radius:6px;overflow:hidden}
+  .tseg{position:absolute;left:4px;right:4px;border-radius:4px;padding:2px 6px;overflow:hidden;font-size:10.5px;line-height:1.3}
+  .tseg b{display:block;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .tseg span{color:var(--dim);font-size:9.5px}
+  .nogt{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:var(--dim);font-size:11px;text-align:center;padding:0 10px}
+  #nowline{position:absolute;left:52px;right:0;top:0;height:1.5px;background:var(--live);box-shadow:0 0 8px rgba(224,95,95,.45);pointer-events:none}
+  #log{max-height:260px;overflow:auto;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+       font-size:12px}
+  #log div{padding:4px 0;border-bottom:1px solid #1c202a;display:flex;gap:10px}
+  #log .t{color:var(--dim);font-variant-numeric:tabular-nums;min-width:52px}
+  #log .ok{color:var(--ok)}
+  #log .en{color:var(--acc)}
+  #log .er{color:var(--live)}
+  .note{font-size:11.5px;color:var(--dim);margin-top:12px;line-height:1.55;
+        border-top:1px solid var(--line);padding-top:11px}
+  .now{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+  .dot{width:9px;height:9px;border-radius:99px;background:#333}
+  .dot.on{background:var(--live);box-shadow:0 0 0 4px rgba(224,95,95,.16)}
+  .now b{font-size:16px}
+</style>
+</head>
+<body>
+<header>
+  <h1>Assembly Copilot — live demo</h1>
+  <span class="sub">causal step head · procedure-aware online decode</span>
+  <span class="pill" id="dev">checking…</span>
+</header>
+
+<main>
+  <section>
+    <div class="card">
+      <h2>Recording</h2>
+      <div id="drop" class="drop">
+        <b>Drop a video here</b> or click to choose<br/>
+        <span style="font-size:12px">mp4 / mov · egocentric, 30 fps</span>
+      </div>
+      <input id="file" type="file" accept="video/*" hidden/>
+      <div id="lib" style="margin-top:10px">
+        <div style="font-size:11px;letter-spacing:.6px;color:var(--dim);margin-bottom:6px">
+          OR PICK AN EXISTING RECORDING</div>
+        <select id="pick" style="width:100%;background:#11141a;color:var(--ink);
+          border:1px solid var(--line);border-radius:6px;padding:8px 10px;font-size:13px">
+          <option value="">loading…</option></select>
+        <div style="font-size:11px;color:var(--dim);margin-top:6px">
+          <b>test</b> = held out, the model has never seen it · <b>train</b> = seen during training</div>
+      </div>
+      <div id="vwrap" style="position:relative">
+        <video id="vid" controls hidden></video>
+        <canvas id="sal" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none"></canvas>
+        <canvas id="det" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none"></canvas>
+      </div>
+      <label id="salrow" style="display:none;align-items:center;gap:8px;margin-top:8px;font-size:12px;color:var(--dim);cursor:pointer">
+        <input id="saltoggle" type="checkbox" style="accent-color:var(--acc)"/>
+        <span>saliency overlay — VideoMAEv2-giant last-layer attention (motion encoder), frame-accurate, interpolated between maps 0.6 s apart<span id="salstat"></span></span>
+      </label>
+      <label id="detrow" style="display:none;align-items:center;gap:8px;margin-top:6px;font-size:12px;color:var(--dim);cursor:pointer">
+        <input id="dettoggle" type="checkbox" checked style="accent-color:var(--ok)"/>
+        <span>next-part box — YOLO finds the part of the step in progress; the step head chooses WHICH part, the detector only says WHERE<span id="detstat"></span></span>
+      </label>
+      <div class="bar"><i id="prog"></i></div>
+      <div class="stats">
+        <div class="stat"><b id="s-clip">–</b><span>CLIPS DONE</span></div>
+        <div class="stat"><b id="s-rate">–</b><span>CLIPS / SEC</span></div>
+        <div class="stat"><b id="s-rt">–</b><span>× REAL-TIME</span></div>
+        <div class="stat"><b id="s-conf">–</b><span>CONFIDENCE</span></div>
+      </div>
+      <p class="note" id="note">
+        The demo replays a file, but nothing here looks ahead. The head is strictly
+        causal and the decoder is fixed-lag, so each result is computed from that
+        moment and earlier only — identical to what a live camera would have produced.
+      </p>
+    </div>
+  </section>
+
+  <section>
+    <div class="card" style="margin-bottom:18px">
+      <h2>Timeline — ground truth vs prediction</h2>
+      <div class="now"><span class="dot" id="dot"></span><b id="cur">idle</b><span id="ahead" style="margin-left:auto;font-size:11px;color:var(--dim)"></span></div>
+      <div id="tlhead"><span></span><span>ground truth</span><span>prediction</span></div>
+      <div id="tlbody">
+        <div id="tlaxis"></div>
+        <div class="lane" id="gtlane"></div>
+        <div class="lane" id="prlane"></div>
+        <div id="nowline"></div>
+      </div>
+    </div>
+    <div class="card">
+      <h2>Completion events</h2>
+      <div id="log"><div><span class="t">—</span><span>waiting for a recording…</span></div></div>
+    </div>
+  </section>
+</main>
+
+<script>
+const $=s=>document.querySelector(s);
+const COLORS=['#5b8def','#3fbf7f','#e0a33e','#e05f5f','#8465c4','#4fb3c9','#c96fa8','#8fbf4d','#bf7f4d','#93a3bf'];
+let classes=[], queue=[], allEvents=[], gtSegs=null, analysed=false, metaDur=0, axisBuilt=false;
+
+fetch('/api/status').then(r=>r.json()).then(d=>{
+  $('#dev').textContent=d.device.toUpperCase()+(d.loaded?' · models loaded':' · models load on first run')+' · ui v13';
+});
+
+$('#drop').onclick=()=>$('#file').click();
+['dragover','dragleave','drop'].forEach(e=>$('#drop').addEventListener(e,ev=>{
+  ev.preventDefault(); $('#drop').classList.toggle('over', e==='dragover');
+  if(e==='drop' && ev.dataTransfer.files[0]) send(ev.dataTransfer.files[0]);
+}));
+$('#file').onchange=e=>{ if(e.target.files[0]) send(e.target.files[0]); };
+
+fetch('/api/library').then(r=>r.json()).then(list=>{
+  const s=$('#pick');
+  s.innerHTML='<option value="">choose a recording…</option>';
+  ['test','train'].forEach(sp=>{
+    const g=document.createElement('optgroup');
+    g.label=sp==='test'?'TEST — unseen by the model':'TRAIN — seen during training';
+    list.filter(v=>v.split===sp).forEach(v=>{
+      const o=document.createElement('option');
+      o.value=v.name; o.textContent=v.name+'  ('+v.dir+')'; g.appendChild(o);
+    });
+    s.appendChild(g);
+  });
+  s.onchange=()=>{ if(s.value) runLib(s.value); };
+});
+
+function reset(){
+  queue=[]; allEvents=[]; analysed=false; axisBuilt=false; gtSegs=null;
+  $('#gtlane').innerHTML=''; $('#prlane').innerHTML='';
+  const l=$('#log'); l.innerHTML=''; l.dataset.clean='1';
+}
+
+function runLib(name){
+  $('#drop').style.display='none'; $('#lib').style.display='none';
+  reset();
+  fetch('/api/gt/'+name).then(r=>r.json()).then(d=>{
+    gtSegs=d.segments;
+    if(!gtSegs) $('#gtlane').innerHTML='<div class="nogt">no ground truth found</div>';
+  });
+  const v=$('#vid'); v.hidden=false; v.src='/library/'+name+'.mp4';
+  resetSal(); resetDet(); salBase=name+'.mp4'; $('#salrow').style.display='flex'; $('#detrow').style.display='flex';
+  if($('#dettoggle').checked) startDetTrack();
+  log('en','0.0s','running '+name+' …');
+  fetch('/api/run/'+name,{method:'POST'}).then(r=>r.json()).then(d=>stream(d.job));
+}
+
+function send(f){
+  $('#drop').style.display='none'; $('#lib').style.display='none';
+  reset();
+  $('#gtlane').innerHTML='<div class="nogt">no ground truth for uploads — prediction lane only</div>';
+  const v=$('#vid'); v.hidden=false; v.src=URL.createObjectURL(f);
+  log('en','0.0s','uploading '+f.name+' …');
+  const fd=new FormData(); fd.append('file',f);
+  fetch('/api/upload',{method:'POST',body:fd}).then(r=>r.json()).then(d=>{
+    resetSal(); resetDet(); salBase=d.video.split('/').pop(); $('#salrow').style.display='flex'; $('#detrow').style.display='flex';
+    if($('#dettoggle').checked) startDetTrack();
+    stream(d.job);
+  });
+}
+
+function log(cls,t,msg){
+  const l=$('#log');
+  if(l.dataset.clean!=='1'){ l.innerHTML=''; l.dataset.clean='1'; }
+  const d=document.createElement('div');
+  d.innerHTML=`<span class="t">${t}</span><span class="${cls}">${msg}</span>`;
+  l.prepend(d);
+}
+
+function stream(job){
+  log('en','0.0s','processing started — first result after the 1.6 s clip fills');
+  const es=new EventSource('/api/events/'+job);
+  es.onerror=()=>{ if(es.readyState===EventSource.CLOSED)
+      log('er','—','event stream lost — pick the video again to re-run'); };
+  es.onmessage=m=>{
+    const e=JSON.parse(m.data);
+    if(e.type==='meta'){
+      classes=e.classes; metaDur=e.seconds;
+      log('en','0.0s',`${e.frames} frames · ${e.seconds.toFixed(1)}s · ${e.clips} clips · decode lag ${e.lag_s.toFixed(1)}s`);
+      $('#vid').play().catch(()=>log('en','—','press play to start the video'));
+    }
+    else if(e.type==='tick'){
+      $('#s-clip').textContent=e.done+'/'+e.total;
+      $('#s-rate').textContent=e.rate.toFixed(1);
+      $('#s-rt').textContent=e.realtime.toFixed(2)+'×';
+      $('#s-conf').textContent=(e.conf*100).toFixed(0)+'%';
+      $('#s-rt').style.color = e.realtime>=1 ? 'var(--ok)' : 'var(--warn)';
+    }
+    // timed events are QUEUED and released by the video clock in pump(); applying
+    // them on arrival would race ~20x ahead of playback
+    else if(e.type==='enter'){ const o={t:e.at,kind:'enter',step:e.step}; queue.push(o); allEvents.push(o); pump(); }
+    else if(e.type==='complete'){ const o={t:e.at,kind:'complete',step:e.step,lag:e.announced_after}; queue.push(o); allEvents.push(o); pump(); }
+    else if(e.type==='queued'){ if(e.ahead>0) log('en','—', e.ahead+' job(s) ahead — one GPU, jobs run one at a time'); }
+    else if(e.type==='done'){
+      analysed=true; $('#s-clip').textContent='analysed';
+      if($('#saltoggle').checked) startSalTrack();   // deferred: analysis has the GPU first
+      if($('#dettoggle').checked) startDetTrack();
+      log('en','—','analysis finished in '+e.elapsed+'s — playback continues in sync');
+      es.close();
+    }
+    else if(e.type==='error'){ $('#cur').textContent='error'; log('er','—',e.message); console.error(e.trace); es.close(); }
+  };
+}
+
+const fmt=t=>{const m=Math.floor(t/60),s=Math.round(t%60);return m+':'+String(s).padStart(2,'0');};
+
+function buildAxis(dur){
+  const a=$('#tlaxis'); a.innerHTML='';
+  [0,.25,.5,.75,1].forEach(f=>{
+    const s=document.createElement('span');
+    s.style.top=(f*100)+'%'; s.textContent=fmt(dur*f); a.appendChild(s);
+  });
+  axisBuilt=true;
+}
+
+function colorOf(step){
+  const i=classes.indexOf(step)-1;
+  return COLORS[(i>=0?i:COLORS.length-1)%COLORS.length];
+}
+
+function drawLane(lane, segs, dur){
+  lane.innerHTML='';
+  segs.forEach(s=>{
+    const c=colorOf(s.step);
+    const d=document.createElement('div'); d.className='tseg';
+    d.style.top=(100*s.start/dur)+'%';
+    d.style.height=Math.max(1.2,100*(s.end-s.start)/dur)+'%';
+    d.style.background=c+'26'; d.style.borderLeft='3px solid '+c;
+    d.title=`${s.step.replace(/_/g,' ')}  ${s.start.toFixed(1)} – ${s.end.toFixed(1)} s`;
+    d.innerHTML=`<b>${s.step.replace(/_/g,' ')}</b><span>${s.end.toFixed(1)}s</span>`;
+    lane.appendChild(d);
+  });
+}
+
+function pump(){
+  const v=$('#vid'); if(!v || isNaN(v.currentTime)) return;
+  const now=v.currentTime;
+  const dur=(v.duration&&isFinite(v.duration))?v.duration:metaDur;
+  if(!dur) return;
+  if(!axisBuilt) buildAxis(dur);
+  $('#prog').style.width=(100*now/dur)+'%';
+
+  queue.sort((a,b)=>a.t-b.t);
+  while(queue.length && queue[0].t<=now){
+    const e=queue.shift();
+    if(e.kind==='enter'){
+      $('#dot').classList.add('on');
+      $('#cur').textContent=e.step.replace(/_/g,' ');
+      if(curStepName!==e.step) emaBox=null;
+      curStepName=e.step;
+    } else {
+      log('ok', e.t.toFixed(1)+'s','✓ step complete — '+e.step.replace(/_/g,' ')+
+          (e.lag?` <span style="color:var(--dim)">(flagged ${e.lag.toFixed(1)}s later live)</span>`:''));
+    }
+  }
+
+  // both lanes are revealed by the same clock: a GT segment appears when the video
+  // passes ITS completion, a predicted one when the video passes the model's -- so
+  // aligned bars appearing near-simultaneously IS the accuracy, visibly
+  if(gtSegs) drawLane($('#gtlane'), gtSegs.filter(s=>s.end<=now), dur);
+  const comps=allEvents.filter(e=>e.kind==='complete'&&e.t<=now).sort((a,b)=>a.t-b.t);
+  drawLane($('#prlane'), comps.map((c,i)=>({step:c.step,start:i?comps[i-1].t:0,end:c.t})), dur);
+  $('#nowline').style.top=(100*Math.min(now,dur)/dur)+'%';
+
+  const nxt=queue.length?queue[0].t:null;
+  $('#ahead').textContent=analysed
+      ? (nxt!==null?'next step at '+nxt.toFixed(0)+'s':'all steps shown')
+      : 'analysing ahead of playback…';
+}
+
+// ---- saliency overlay --------------------------------------------------------
+// A background job streams the giant's attention map for a window centred every
+// 0.6 s across the whole video. Rendering runs on requestAnimationFrame and
+// linearly interpolates between the two maps bracketing the playhead -- the overlay
+// is driven by the video clock alone, so it is frame-accurate and moves smoothly
+// instead of snapping to whatever the network last returned.
+let salBase=null, salTrack=[], salES=null, salTotal=0, salStarted=false;
+let detTrack=[], detES=null, detTotal=0, detStarted=false, detNames=[], curStepName=null;
+
+function clearDet(){ const c=$('#det'); c.getContext('2d').clearRect(0,0,c.width,c.height); }
+function resetDet(){ if(detES){detES.close(); detES=null;} detTrack=[]; detTotal=0; detStarted=false; curStepName=null; emaBox=null; lastSeenT=-1e9; clearDet(); }
+
+function startDetTrack(){
+  if(detStarted || !salBase) return;
+  detStarted=true;
+  fetch('/api/detect_track?video='+encodeURIComponent(salBase))
+    .then(r=>r.json()).then(d=>{
+      detES=new EventSource('/api/events/'+d.job);
+      detES.onmessage=m=>{
+        const e=JSON.parse(m.data);
+        if(e.type==='det_meta'){ detTotal=e.count; detNames=e.names; }
+        else if(e.type==='det') detTrack.push(e);
+        else if(e.type==='det_done'||e.type==='error'){ if(detES){detES.close(); detES=null;} }
+      };
+    });
+}
+$('#dettoggle').addEventListener('change',()=>{ if($('#dettoggle').checked) startDetTrack(); else clearDet(); });
+
+let lastSeenT=-1e9;   // hysteresis clock: when the box was last actually visible
+
+function bestOf(map, ci, thr){
+  return map.boxes.filter(b=>b.c===ci && b.s>=thr).sort((x,y)=>y.s-x.s)[0]||null;
+}
+
+function detBoxFor(t, targetName){
+  // Per-frame honesty: the box exists ONLY if the detector sees the part around the
+  // current frame. Lookback is 0.6 s -- enough to bridge one or two missed samples
+  // of a part that is genuinely in view, far too short to ghost a departed part.
+  // Hysteresis stops blinking: 0.35 confidence to APPEAR, 0.22 to SUSTAIN a box
+  // that was visible within the last half second.
+  const a=detTrack; if(!a.length) return null;
+  const ci=detNames.indexOf(targetName);
+  const thr=(t-lastSeenT<=0.5)?0.22:0.35;
+  let prev=null, next=null;
+  for(let i=a.length-1;i>=0;i--){
+    const m=a[i];
+    if(m.t>t+0.2) continue;
+    if(m.t<t-0.6) break;
+    const b=bestOf(m,ci,thr);
+    if(!b) continue;
+    if(m.t<=t){ prev={t:m.t, b}; break; }
+    next={t:m.t, b};
+  }
+  if(prev && next){
+    const w=(t-prev.t)/((next.t-prev.t)||1);
+    const L=(i)=>prev.b.b[i]*(1-w)+next.b.b[i]*w;
+    lastSeenT=t;
+    return {box:{b:[L(0),L(1),L(2),L(3)], s:Math.max(prev.b.s,next.b.s)}, age:0};
+  }
+  const one=prev||next;
+  if(one){ lastSeenT=t; return {box:one.b, age:0}; }
+  return null;
+}
+
+// exponential smoothing of the drawn rectangle: absorbs residual 0.2 s stepping
+let emaBox=null, emaT=0;
+function smoothBox(b, now){
+  const dt=Math.max(0.001, now-emaT); emaT=now;
+  if(!emaBox){ emaBox=b.slice(); return emaBox; }
+  const k=1-Math.exp(-dt/0.05);
+  for(let i=0;i<4;i++) emaBox[i]+=(b[i]-emaBox[i])*k;
+  return emaBox;
+}
+
+(function detLoop(){
+  const v=$('#vid'), tog=$('#dettoggle');
+  if(tog && tog.checked && !v.hidden && curStepName && curStepName!=='background'){
+    const c=$('#det'); c.width=v.clientWidth; c.height=v.clientHeight;
+    const ctx=c.getContext('2d'); ctx.clearRect(0,0,c.width,c.height);
+    {
+      const target=curStepName.replace(/_/g,' ');
+      const hit=detBoxFor(v.currentTime, target);
+      if(hit){
+        const cand=hit.box;
+        ctx.globalAlpha=1;
+        const [x0,y0,x1,y1]=smoothBox(cand.b, performance.now()/1000);
+        const X=x0*c.width, Y=y0*c.height, W=(x1-x0)*c.width, H=(y1-y0)*c.height;
+        ctx.strokeStyle='#3fbf7f'; ctx.lineWidth=4; ctx.strokeRect(X,Y,W,H);
+        ctx.fillStyle='#3fbf7f';
+        const label=target+'  '+(cand.s*100).toFixed(0)+'%';
+        ctx.font='600 14px Helvetica';
+        const tw=ctx.measureText(label).width+12;
+        ctx.fillRect(X, Math.max(0,Y-22), tw, 22);
+        ctx.fillStyle='#08130c'; ctx.fillText(label, X+6, Math.max(14,Y-6));
+        ctx.globalAlpha=1;
+      }
+    }
+    $('#detstat').textContent=(detTotal && detTrack.length<detTotal)
+        ? ' · locating '+Math.round(100*detTrack.length/detTotal)+'%' : '';
+  } else if(tog && !tog.checked){ /* cleared on toggle */ }
+  requestAnimationFrame(detLoop);
+})();
+
+function clearSal(){ const c=$('#sal'); c.getContext('2d').clearRect(0,0,c.width,c.height); }
+function resetSal(){ if(salES){salES.close(); salES=null;} salTrack=[]; salTotal=0; salStarted=false; clearSal(); }
+
+function startSalTrack(){
+  if(salStarted || !salBase) return;
+  salStarted=true;
+  fetch('/api/saliency_track?video='+encodeURIComponent(salBase))
+    .then(r=>r.json()).then(d=>{
+      salES=new EventSource('/api/events/'+d.job);
+      salES.onmessage=m=>{
+        const e=JSON.parse(m.data);
+        if(e.type==='sal_meta') salTotal=e.count;
+        else if(e.type==='sal') salTrack.push(e);            // arrives in time order
+        else if(e.type==='sal_done'||e.type==='error'){ if(salES){salES.close(); salES=null;} }
+      };
+    });
+}
+$('#saltoggle').addEventListener('change',()=>{ if($('#saltoggle').checked) startSalTrack(); else clearSal(); });
+
+function salAt(t){
+  const a=salTrack; if(!a.length || t<a[0].t-0.6) return null;
+  let lo=0, hi=a.length-1;
+  while(lo<hi){ const m=(lo+hi+1)>>1; if(a[m].t<=t) lo=m; else hi=m-1; }
+  const g0=a[lo], g1=a[lo+1];
+  if(!g1) return (t-g0.t<=0.9) ? g0.grid : null;             // buffered edge
+  const w=Math.min(1,Math.max(0,(t-g0.t)/((g1.t-g0.t)||1)));
+  return g0.grid.map((v,i)=>v*(1-w)+g1.grid[i]*w);
+}
+
+function renderSal(grid,gw,gh){
+  const v=$('#vid'), c=$('#sal');
+  c.width=v.clientWidth; c.height=v.clientHeight;
+  const tmp=document.createElement('canvas'); tmp.width=gw; tmp.height=gh;
+  const tctx=tmp.getContext('2d'); const im=tctx.createImageData(gw,gh);
+  const sorted=[...grid].sort((a,b)=>a-b);
+  const lo=sorted[Math.floor(sorted.length*0.55)], hi=sorted[sorted.length-1];
+  const rg=(hi-lo)||1;
+  grid.forEach((val,i)=>{
+    const z=Math.max(0,Math.min(1,(val-lo)/rg)), o=i*4;
+    if(z<=0){ im.data[o+3]=0; return; }
+    im.data[o]=255;
+    im.data[o+1]=Math.round(215*(1-z*z));
+    im.data[o+2]=0;
+    im.data[o+3]=Math.round(70+z*185);
+  });
+  tctx.putImageData(im,0,0);
+  const ctx=c.getContext('2d');
+  ctx.clearRect(0,0,c.width,c.height);
+  ctx.imageSmoothingEnabled=true; ctx.imageSmoothingQuality='high';
+  ctx.drawImage(tmp,0,0,c.width,c.height);
+}
+
+(function salLoop(){
+  const v=$('#vid'), tog=$('#saltoggle');
+  if(tog && tog.checked && !v.hidden && salBase){
+    const g=salAt(v.currentTime);
+    if(g) renderSal(g,16,16); else clearSal();
+    $('#salstat').textContent=(salTotal && salTrack.length<salTotal)
+        ? ' · computing '+Math.round(100*salTrack.length/salTotal)+'%' : '';
+  }
+  requestAnimationFrame(salLoop);
+})();
+
+$('#vid').addEventListener('timeupdate', pump);
+$('#vid').addEventListener('seeked', ()=>{
+  const l=$('#log'); l.innerHTML=''; l.dataset.clean='1';
+  queue=allEvents.slice(); pump();
+});
+</script>
+</body>
+</html>

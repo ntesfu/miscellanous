@@ -1,0 +1,1402 @@
+[
+ {
+  "file": "DA-Assembled-1__f009837__pickup.jpg",
+  "rec": "DA-Assembled-1",
+  "split": "test",
+  "frame": 9837,
+  "kind": "pickup",
+  "near_part": "Propeller Cone Tip",
+  "subject": "DA",
+  "direction": "assembly"
+ },
+ {
+  "file": "DA-Assembled-1__f009005__pickup.jpg",
+  "rec": "DA-Assembled-1",
+  "split": "test",
+  "frame": 9005,
+  "kind": "pickup",
+  "near_part": "Propeller Cone plate",
+  "subject": "DA",
+  "direction": "assembly"
+ },
+ {
+  "file": "DA-Assembled-1__f008834__progress80.jpg",
+  "rec": "DA-Assembled-1",
+  "split": "test",
+  "frame": 8834,
+  "kind": "progress80",
+  "near_part": "",
+  "subject": "DA",
+  "direction": "assembly"
+ },
+ {
+  "file": "DA-Assembled-2__f006563__pickup.jpg",
+  "rec": "DA-Assembled-2",
+  "split": "test",
+  "frame": 6563,
+  "kind": "pickup",
+  "near_part": "Exhaust Casing",
+  "subject": "DA",
+  "direction": "assembly"
+ },
+ {
+  "file": "DA-Assembled-2__f001759__pickup.jpg",
+  "rec": "DA-Assembled-2",
+  "split": "test",
+  "frame": 1759,
+  "kind": "pickup",
+  "near_part": "Pop Control Sun Gear",
+  "subject": "DA",
+  "direction": "assembly"
+ },
+ {
+  "file": "DA-Assembled-2__f005182__progress45.jpg",
+  "rec": "DA-Assembled-2",
+  "split": "test",
+  "frame": 5182,
+  "kind": "progress45",
+  "near_part": "",
+  "subject": "DA",
+  "direction": "assembly"
+ },
+ {
+  "file": "DA-Assembled-2__f009213__progress80.jpg",
+  "rec": "DA-Assembled-2",
+  "split": "test",
+  "frame": 9213,
+  "kind": "progress80",
+  "near_part": "",
+  "subject": "DA",
+  "direction": "assembly"
+ },
+ {
+  "file": "DA-disAssembled-3__f003210__pickup.jpg",
+  "rec": "DA-disAssembled-3",
+  "split": "test",
+  "frame": 3210,
+  "kind": "pickup",
+  "near_part": "Exhaust",
+  "subject": "DA",
+  "direction": "disassembly"
+ },
+ {
+  "file": "DA-disAssembled-3__f004120__pickup.jpg",
+  "rec": "DA-disAssembled-3",
+  "split": "test",
+  "frame": 4120,
+  "kind": "pickup",
+  "near_part": "Compressor Casing",
+  "subject": "DA",
+  "direction": "disassembly"
+ },
+ {
+  "file": "DA-disAssembled-3__f000994__progress15.jpg",
+  "rec": "DA-disAssembled-3",
+  "split": "test",
+  "frame": 994,
+  "kind": "progress15",
+  "near_part": "",
+  "subject": "DA",
+  "direction": "disassembly"
+ },
+ {
+  "file": "DA-disAssembled-3__f005304__progress80.jpg",
+  "rec": "DA-disAssembled-3",
+  "split": "test",
+  "frame": 5304,
+  "kind": "progress80",
+  "near_part": "",
+  "subject": "DA",
+  "direction": "disassembly"
+ },
+ {
+  "file": "DA-disAssembled-7__f003893__pickup.jpg",
+  "rec": "DA-disAssembled-7",
+  "split": "test",
+  "frame": 3893,
+  "kind": "pickup",
+  "near_part": "Exhaust",
+  "subject": "DA",
+  "direction": "disassembly"
+ },
+ {
+  "file": "DA-disAssembled-7__f003204__pickup.jpg",
+  "rec": "DA-disAssembled-7",
+  "split": "test",
+  "frame": 3204,
+  "kind": "pickup",
+  "near_part": "Exhaust Casing",
+  "subject": "DA",
+  "direction": "disassembly"
+ },
+ {
+  "file": "DA-disAssembled-7__f001046__progress15.jpg",
+  "rec": "DA-disAssembled-7",
+  "split": "test",
+  "frame": 1046,
+  "kind": "progress15",
+  "near_part": "",
+  "subject": "DA",
+  "direction": "disassembly"
+ },
+ {
+  "file": "DA-disAssembled-7__f005580__progress80.jpg",
+  "rec": "DA-disAssembled-7",
+  "split": "test",
+  "frame": 5580,
+  "kind": "progress80",
+  "near_part": "",
+  "subject": "DA",
+  "direction": "disassembly"
+ },
+ {
+  "file": "Ketan-Assembled-7__f006589__pickup.jpg",
+  "rec": "Ketan-Assembled-7",
+  "split": "test",
+  "frame": 6589,
+  "kind": "pickup",
+  "near_part": "Cowling Bracket",
+  "subject": "Ketan",
+  "direction": "assembly"
+ },
+ {
+  "file": "Ketan-Assembled-7__f002804__pickup.jpg",
+  "rec": "Ketan-Assembled-7",
+  "split": "test",
+  "frame": 2804,
+  "kind": "pickup",
+  "near_part": "Compressor Casing",
+  "subject": "Ketan",
+  "direction": "assembly"
+ },
+ {
+  "file": "Ketan-Assembled-7__f008890__progress80.jpg",
+  "rec": "Ketan-Assembled-7",
+  "split": "test",
+  "frame": 8890,
+  "kind": "progress80",
+  "near_part": "",
+  "subject": "Ketan",
+  "direction": "assembly"
+ },
+ {
+  "file": "Ketan-Assembled-9__f005722__pickup.jpg",
+  "rec": "Ketan-Assembled-9",
+  "split": "test",
+  "frame": 5722,
+  "kind": "pickup",
+  "near_part": "Exhaust Casing",
+  "subject": "Ketan",
+  "direction": "assembly"
+ },
+ {
+  "file": "Ketan-Assembled-9__f000507__pickup.jpg",
+  "rec": "Ketan-Assembled-9",
+  "split": "test",
+  "frame": 507,
+  "kind": "pickup",
+  "near_part": "Pop Control Ring Gear",
+  "subject": "Ketan",
+  "direction": "assembly"
+ },
+ {
+  "file": "Ketan-Assembled-9__f004493__progress45.jpg",
+  "rec": "Ketan-Assembled-9",
+  "split": "test",
+  "frame": 4493,
+  "kind": "progress45",
+  "near_part": "",
+  "subject": "Ketan",
+  "direction": "assembly"
+ },
+ {
+  "file": "Nahom-Assembled-5__f005748__pickup.jpg",
+  "rec": "Nahom-Assembled-5",
+  "split": "test",
+  "frame": 5748,
+  "kind": "pickup",
+  "near_part": "Cowling Bracket",
+  "subject": "Nahom",
+  "direction": "assembly"
+ },
+ {
+  "file": "Nahom-Assembled-5__f008232__pickup.jpg",
+  "rec": "Nahom-Assembled-5",
+  "split": "test",
+  "frame": 8232,
+  "kind": "pickup",
+  "near_part": "Propeller Cone Tip",
+  "subject": "Nahom",
+  "direction": "assembly"
+ },
+ {
+  "file": "Nahom-Assembled-5__f001459__progress15.jpg",
+  "rec": "Nahom-Assembled-5",
+  "split": "test",
+  "frame": 1459,
+  "kind": "progress15",
+  "near_part": "",
+  "subject": "Nahom",
+  "direction": "assembly"
+ },
+ {
+  "file": "Nahom-Assembled-5__f007782__progress80.jpg",
+  "rec": "Nahom-Assembled-5",
+  "split": "test",
+  "frame": 7782,
+  "kind": "progress80",
+  "near_part": "",
+  "subject": "Nahom",
+  "direction": "assembly"
+ },
+ {
+  "file": "Nahom-Assembled-7__f000291__pickup.jpg",
+  "rec": "Nahom-Assembled-7",
+  "split": "test",
+  "frame": 291,
+  "kind": "pickup",
+  "near_part": "Pop Control Ring Gear",
+  "subject": "Nahom",
+  "direction": "assembly"
+ },
+ {
+  "file": "Nahom-Assembled-7__f008864__pickup.jpg",
+  "rec": "Nahom-Assembled-7",
+  "split": "test",
+  "frame": 8864,
+  "kind": "pickup",
+  "near_part": "Propeller Cone plate",
+  "subject": "Nahom",
+  "direction": "assembly"
+ },
+ {
+  "file": "Nahom-Assembled-7__f004631__progress45.jpg",
+  "rec": "Nahom-Assembled-7",
+  "split": "test",
+  "frame": 4631,
+  "kind": "progress45",
+  "near_part": "",
+  "subject": "Nahom",
+  "direction": "assembly"
+ },
+ {
+  "file": "Nahom-disAssembled-11__f003954__pickup.jpg",
+  "rec": "Nahom-disAssembled-11",
+  "split": "test",
+  "frame": 3954,
+  "kind": "pickup",
+  "near_part": "Exhaust",
+  "subject": "Nahom",
+  "direction": "disassembly"
+ },
+ {
+  "file": "Nahom-disAssembled-11__f005121__pickup.jpg",
+  "rec": "Nahom-disAssembled-11",
+  "split": "test",
+  "frame": 5121,
+  "kind": "pickup",
+  "near_part": "Compressor Casing",
+  "subject": "Nahom",
+  "direction": "disassembly"
+ },
+ {
+  "file": "Nahom-disAssembled-11__f003998__progress45.jpg",
+  "rec": "Nahom-disAssembled-11",
+  "split": "test",
+  "frame": 3998,
+  "kind": "progress45",
+  "near_part": "",
+  "subject": "Nahom",
+  "direction": "disassembly"
+ },
+ {
+  "file": "Nahom-disAssembled-13__f006058__pickup.jpg",
+  "rec": "Nahom-disAssembled-13",
+  "split": "test",
+  "frame": 6058,
+  "kind": "pickup",
+  "near_part": "Compressor Casing",
+  "subject": "Nahom",
+  "direction": "disassembly"
+ },
+ {
+  "file": "Nahom-disAssembled-13__f004470__pickup.jpg",
+  "rec": "Nahom-disAssembled-13",
+  "split": "test",
+  "frame": 4470,
+  "kind": "pickup",
+  "near_part": "Exhaust Casing",
+  "subject": "Nahom",
+  "direction": "disassembly"
+ },
+ {
+  "file": "Nahom-disAssembled-13__f008401__progress80.jpg",
+  "rec": "Nahom-disAssembled-13",
+  "split": "test",
+  "frame": 8401,
+  "kind": "progress80",
+  "near_part": "",
+  "subject": "Nahom",
+  "direction": "disassembly"
+ },
+ {
+  "file": "DA-Assembled-4__f000030__pickup.jpg",
+  "rec": "DA-Assembled-4",
+  "split": "train",
+  "frame": 30,
+  "kind": "pickup",
+  "near_part": "Main Drive Planet Gear",
+  "subject": "DA",
+  "direction": "assembly"
+ },
+ {
+  "file": "DA-Assembled-4__f005581__pickup.jpg",
+  "rec": "DA-Assembled-4",
+  "split": "train",
+  "frame": 5581,
+  "kind": "pickup",
+  "near_part": "Exhaust Casing",
+  "subject": "DA",
+  "direction": "assembly"
+ },
+ {
+  "file": "DA-Assembled-4__f001358__progress15.jpg",
+  "rec": "DA-Assembled-4",
+  "split": "train",
+  "frame": 1358,
+  "kind": "progress15",
+  "near_part": "",
+  "subject": "DA",
+  "direction": "assembly"
+ },
+ {
+  "file": "DA-Assembled-4__f004076__progress45.jpg",
+  "rec": "DA-Assembled-4",
+  "split": "train",
+  "frame": 4076,
+  "kind": "progress45",
+  "near_part": "",
+  "subject": "DA",
+  "direction": "assembly"
+ },
+ {
+  "file": "DA-Assembled-4__f007246__progress80.jpg",
+  "rec": "DA-Assembled-4",
+  "split": "train",
+  "frame": 7246,
+  "kind": "progress80",
+  "near_part": "",
+  "subject": "DA",
+  "direction": "assembly"
+ },
+ {
+  "file": "DA-Assembled-5__f007264__pickup.jpg",
+  "rec": "DA-Assembled-5",
+  "split": "train",
+  "frame": 7264,
+  "kind": "pickup",
+  "near_part": "Propeller Cone plate",
+  "subject": "DA",
+  "direction": "assembly"
+ },
+ {
+  "file": "DA-Assembled-5__f000321__pickup.jpg",
+  "rec": "DA-Assembled-5",
+  "split": "train",
+  "frame": 321,
+  "kind": "pickup",
+  "near_part": "Pop Control Ring Gear",
+  "subject": "DA",
+  "direction": "assembly"
+ },
+ {
+  "file": "DA-Assembled-5__f001141__progress15.jpg",
+  "rec": "DA-Assembled-5",
+  "split": "train",
+  "frame": 1141,
+  "kind": "progress15",
+  "near_part": "",
+  "subject": "DA",
+  "direction": "assembly"
+ },
+ {
+  "file": "DA-Assembled-6__f005999__pickup.jpg",
+  "rec": "DA-Assembled-6",
+  "split": "train",
+  "frame": 5999,
+  "kind": "pickup",
+  "near_part": "Frame Subassembly",
+  "subject": "DA",
+  "direction": "assembly"
+ },
+ {
+  "file": "DA-Assembled-6__f003098__pickup.jpg",
+  "rec": "DA-Assembled-6",
+  "split": "train",
+  "frame": 3098,
+  "kind": "pickup",
+  "near_part": "Compressor Casing",
+  "subject": "DA",
+  "direction": "assembly"
+ },
+ {
+  "file": "DA-Assembled-6__f001276__progress15.jpg",
+  "rec": "DA-Assembled-6",
+  "split": "train",
+  "frame": 1276,
+  "kind": "progress15",
+  "near_part": "",
+  "subject": "DA",
+  "direction": "assembly"
+ },
+ {
+  "file": "DA-Assembled-6__f006808__progress80.jpg",
+  "rec": "DA-Assembled-6",
+  "split": "train",
+  "frame": 6808,
+  "kind": "progress80",
+  "near_part": "",
+  "subject": "DA",
+  "direction": "assembly"
+ },
+ {
+  "file": "DA-Assembled-7__f001324__pickup.jpg",
+  "rec": "DA-Assembled-7",
+  "split": "train",
+  "frame": 1324,
+  "kind": "pickup",
+  "near_part": "Pop Control Sun Gear",
+  "subject": "DA",
+  "direction": "assembly"
+ },
+ {
+  "file": "DA-Assembled-7__f005110__pickup.jpg",
+  "rec": "DA-Assembled-7",
+  "split": "train",
+  "frame": 5110,
+  "kind": "pickup",
+  "near_part": "Exhaust Casing",
+  "subject": "DA",
+  "direction": "assembly"
+ },
+ {
+  "file": "DA-Assembled-7__f001271__progress15.jpg",
+  "rec": "DA-Assembled-7",
+  "split": "train",
+  "frame": 1271,
+  "kind": "progress15",
+  "near_part": "",
+  "subject": "DA",
+  "direction": "assembly"
+ },
+ {
+  "file": "DA-disAssembled-1__f008139__pickup.jpg",
+  "rec": "DA-disAssembled-1",
+  "split": "train",
+  "frame": 8139,
+  "kind": "pickup",
+  "near_part": "Main Drive Planet Gear",
+  "subject": "DA",
+  "direction": "disassembly"
+ },
+ {
+  "file": "DA-disAssembled-1__f007115__pickup.jpg",
+  "rec": "DA-disAssembled-1",
+  "split": "train",
+  "frame": 7115,
+  "kind": "pickup",
+  "near_part": "Pop Control Sun Gear",
+  "subject": "DA",
+  "direction": "disassembly"
+ },
+ {
+  "file": "DA-disAssembled-1__f003774__progress45.jpg",
+  "rec": "DA-disAssembled-1",
+  "split": "train",
+  "frame": 3774,
+  "kind": "progress45",
+  "near_part": "",
+  "subject": "DA",
+  "direction": "disassembly"
+ },
+ {
+  "file": "DA-disAssembled-1__f006709__progress80.jpg",
+  "rec": "DA-disAssembled-1",
+  "split": "train",
+  "frame": 6709,
+  "kind": "progress80",
+  "near_part": "",
+  "subject": "DA",
+  "direction": "disassembly"
+ },
+ {
+  "file": "DA-disAssembled-10__f007861__pickup.jpg",
+  "rec": "DA-disAssembled-10",
+  "split": "train",
+  "frame": 7861,
+  "kind": "pickup",
+  "near_part": "Main Drive Planet Gear",
+  "subject": "DA",
+  "direction": "disassembly"
+ },
+ {
+  "file": "DA-disAssembled-10__f003512__pickup.jpg",
+  "rec": "DA-disAssembled-10",
+  "split": "train",
+  "frame": 3512,
+  "kind": "pickup",
+  "near_part": "Exhaust Casing",
+  "subject": "DA",
+  "direction": "disassembly"
+ },
+ {
+  "file": "DA-disAssembled-11__f002069__pickup.jpg",
+  "rec": "DA-disAssembled-11",
+  "split": "train",
+  "frame": 2069,
+  "kind": "pickup",
+  "near_part": "Cowling Bracket",
+  "subject": "DA",
+  "direction": "disassembly"
+ },
+ {
+  "file": "DA-disAssembled-11__f007982__pickup.jpg",
+  "rec": "DA-disAssembled-11",
+  "split": "train",
+  "frame": 7982,
+  "kind": "pickup",
+  "near_part": "Pop Control Ring Gear",
+  "subject": "DA",
+  "direction": "disassembly"
+ },
+ {
+  "file": "DA-disAssembled-12__f000194__pickup.jpg",
+  "rec": "DA-disAssembled-12",
+  "split": "train",
+  "frame": 194,
+  "kind": "pickup",
+  "near_part": "Propeller Cone Tip",
+  "subject": "DA",
+  "direction": "disassembly"
+ },
+ {
+  "file": "DA-disAssembled-12__f007546__pickup.jpg",
+  "rec": "DA-disAssembled-12",
+  "split": "train",
+  "frame": 7546,
+  "kind": "pickup",
+  "near_part": "Pop Control Ring Gear",
+  "subject": "DA",
+  "direction": "disassembly"
+ },
+ {
+  "file": "DA-disAssembled-5__f006318__pickup.jpg",
+  "rec": "DA-disAssembled-5",
+  "split": "train",
+  "frame": 6318,
+  "kind": "pickup",
+  "near_part": "Main Drive Planet Gear",
+  "subject": "DA",
+  "direction": "disassembly"
+ },
+ {
+  "file": "DA-disAssembled-5__f000030__pickup.jpg",
+  "rec": "DA-disAssembled-5",
+  "split": "train",
+  "frame": 30,
+  "kind": "pickup",
+  "near_part": "Propeller Cone plate",
+  "subject": "DA",
+  "direction": "disassembly"
+ },
+ {
+  "file": "DA-disAssembled-5__f005305__progress80.jpg",
+  "rec": "DA-disAssembled-5",
+  "split": "train",
+  "frame": 5305,
+  "kind": "progress80",
+  "near_part": "",
+  "subject": "DA",
+  "direction": "disassembly"
+ },
+ {
+  "file": "DA-disAssembled-6__f000241__pickup.jpg",
+  "rec": "DA-disAssembled-6",
+  "split": "train",
+  "frame": 241,
+  "kind": "pickup",
+  "near_part": "Propeller Cone Tip",
+  "subject": "DA",
+  "direction": "disassembly"
+ },
+ {
+  "file": "DA-disAssembled-6__f003263__pickup.jpg",
+  "rec": "DA-disAssembled-6",
+  "split": "train",
+  "frame": 3263,
+  "kind": "pickup",
+  "near_part": "Compressor Casing",
+  "subject": "DA",
+  "direction": "disassembly"
+ },
+ {
+  "file": "DA-disAssembled-6__f000778__progress15.jpg",
+  "rec": "DA-disAssembled-6",
+  "split": "train",
+  "frame": 778,
+  "kind": "progress15",
+  "near_part": "",
+  "subject": "DA",
+  "direction": "disassembly"
+ },
+ {
+  "file": "DA-disAssembled-6__f002336__progress45.jpg",
+  "rec": "DA-disAssembled-6",
+  "split": "train",
+  "frame": 2336,
+  "kind": "progress45",
+  "near_part": "",
+  "subject": "DA",
+  "direction": "disassembly"
+ },
+ {
+  "file": "DA-disAssembled-8__f006987__pickup.jpg",
+  "rec": "DA-disAssembled-8",
+  "split": "train",
+  "frame": 6987,
+  "kind": "pickup",
+  "near_part": "Main Drive Planet Gear",
+  "subject": "DA",
+  "direction": "disassembly"
+ },
+ {
+  "file": "DA-disAssembled-8__f000030__pickup.jpg",
+  "rec": "DA-disAssembled-8",
+  "split": "train",
+  "frame": 30,
+  "kind": "pickup",
+  "near_part": "Propeller Cone plate",
+  "subject": "DA",
+  "direction": "disassembly"
+ },
+ {
+  "file": "DA-disAssembled-8__f001083__progress15.jpg",
+  "rec": "DA-disAssembled-8",
+  "split": "train",
+  "frame": 1083,
+  "kind": "progress15",
+  "near_part": "",
+  "subject": "DA",
+  "direction": "disassembly"
+ },
+ {
+  "file": "DA-disAssembled-8__f005778__progress80.jpg",
+  "rec": "DA-disAssembled-8",
+  "split": "train",
+  "frame": 5778,
+  "kind": "progress80",
+  "near_part": "",
+  "subject": "DA",
+  "direction": "disassembly"
+ },
+ {
+  "file": "DA-disAssembled-9__f000030__pickup.jpg",
+  "rec": "DA-disAssembled-9",
+  "split": "train",
+  "frame": 30,
+  "kind": "pickup",
+  "near_part": "Propeller Cone plate",
+  "subject": "DA",
+  "direction": "disassembly"
+ },
+ {
+  "file": "DA-disAssembled-9__f002466__pickup.jpg",
+  "rec": "DA-disAssembled-9",
+  "split": "train",
+  "frame": 2466,
+  "kind": "pickup",
+  "near_part": "Cowling Bracket",
+  "subject": "DA",
+  "direction": "disassembly"
+ },
+ {
+  "file": "DA-disAssembled-9__f001224__progress15.jpg",
+  "rec": "DA-disAssembled-9",
+  "split": "train",
+  "frame": 1224,
+  "kind": "progress15",
+  "near_part": "",
+  "subject": "DA",
+  "direction": "disassembly"
+ },
+ {
+  "file": "DA-disAssembled-9__f003674__progress45.jpg",
+  "rec": "DA-disAssembled-9",
+  "split": "train",
+  "frame": 3674,
+  "kind": "progress45",
+  "near_part": "",
+  "subject": "DA",
+  "direction": "disassembly"
+ },
+ {
+  "file": "Ketan-Assembled-1__f003325__pickup.jpg",
+  "rec": "Ketan-Assembled-1",
+  "split": "train",
+  "frame": 3325,
+  "kind": "pickup",
+  "near_part": "Compressor Casing",
+  "subject": "Ketan",
+  "direction": "assembly"
+ },
+ {
+  "file": "Ketan-Assembled-1__f001066__pickup.jpg",
+  "rec": "Ketan-Assembled-1",
+  "split": "train",
+  "frame": 1066,
+  "kind": "pickup",
+  "near_part": "Pop Control Ring Gear",
+  "subject": "Ketan",
+  "direction": "assembly"
+ },
+ {
+  "file": "Ketan-Assembled-1__f001969__progress15.jpg",
+  "rec": "Ketan-Assembled-1",
+  "split": "train",
+  "frame": 1969,
+  "kind": "progress15",
+  "near_part": "",
+  "subject": "Ketan",
+  "direction": "assembly"
+ },
+ {
+  "file": "Ketan-Assembled-1__f005907__progress45.jpg",
+  "rec": "Ketan-Assembled-1",
+  "split": "train",
+  "frame": 5907,
+  "kind": "progress45",
+  "near_part": "",
+  "subject": "Ketan",
+  "direction": "assembly"
+ },
+ {
+  "file": "Ketan-Assembled-11__f004768__pickup.jpg",
+  "rec": "Ketan-Assembled-11",
+  "split": "train",
+  "frame": 4768,
+  "kind": "pickup",
+  "near_part": "Exhaust",
+  "subject": "Ketan",
+  "direction": "assembly"
+ },
+ {
+  "file": "Ketan-Assembled-11__f002595__pickup.jpg",
+  "rec": "Ketan-Assembled-11",
+  "split": "train",
+  "frame": 2595,
+  "kind": "pickup",
+  "near_part": "Compressor Casing",
+  "subject": "Ketan",
+  "direction": "assembly"
+ },
+ {
+  "file": "Ketan-Assembled-11__f001607__progress15.jpg",
+  "rec": "Ketan-Assembled-11",
+  "split": "train",
+  "frame": 1607,
+  "kind": "progress15",
+  "near_part": "",
+  "subject": "Ketan",
+  "direction": "assembly"
+ },
+ {
+  "file": "Ketan-Assembled-11__f004823__progress45.jpg",
+  "rec": "Ketan-Assembled-11",
+  "split": "train",
+  "frame": 4823,
+  "kind": "progress45",
+  "near_part": "",
+  "subject": "Ketan",
+  "direction": "assembly"
+ },
+ {
+  "file": "Ketan-Assembled-11__f008575__progress80.jpg",
+  "rec": "Ketan-Assembled-11",
+  "split": "train",
+  "frame": 8575,
+  "kind": "progress80",
+  "near_part": "",
+  "subject": "Ketan",
+  "direction": "assembly"
+ },
+ {
+  "file": "Ketan-Assembled-2__f011844__pickup.jpg",
+  "rec": "Ketan-Assembled-2",
+  "split": "train",
+  "frame": 11844,
+  "kind": "pickup",
+  "near_part": "Frame Subassembly",
+  "subject": "Ketan",
+  "direction": "assembly"
+ },
+ {
+  "file": "Ketan-Assembled-2__f010332__pickup.jpg",
+  "rec": "Ketan-Assembled-2",
+  "split": "train",
+  "frame": 10332,
+  "kind": "pickup",
+  "near_part": "Exhaust Casing",
+  "subject": "Ketan",
+  "direction": "assembly"
+ },
+ {
+  "file": "Ketan-Assembled-2__f002526__progress15.jpg",
+  "rec": "Ketan-Assembled-2",
+  "split": "train",
+  "frame": 2526,
+  "kind": "progress15",
+  "near_part": "",
+  "subject": "Ketan",
+  "direction": "assembly"
+ },
+ {
+  "file": "Ketan-Assembled-3__f000030__pickup.jpg",
+  "rec": "Ketan-Assembled-3",
+  "split": "train",
+  "frame": 30,
+  "kind": "pickup",
+  "near_part": "Main Drive Planet Gear",
+  "subject": "Ketan",
+  "direction": "assembly"
+ },
+ {
+  "file": "Ketan-Assembled-3__f006397__pickup.jpg",
+  "rec": "Ketan-Assembled-3",
+  "split": "train",
+  "frame": 6397,
+  "kind": "pickup",
+  "near_part": "Exhaust Casing",
+  "subject": "Ketan",
+  "direction": "assembly"
+ },
+ {
+  "file": "Ketan-Assembled-3__f004834__progress45.jpg",
+  "rec": "Ketan-Assembled-3",
+  "split": "train",
+  "frame": 4834,
+  "kind": "progress45",
+  "near_part": "",
+  "subject": "Ketan",
+  "direction": "assembly"
+ },
+ {
+  "file": "Ketan-Assembled-5__f007179__pickup.jpg",
+  "rec": "Ketan-Assembled-5",
+  "split": "train",
+  "frame": 7179,
+  "kind": "pickup",
+  "near_part": "Cowling Bracket",
+  "subject": "Ketan",
+  "direction": "assembly"
+ },
+ {
+  "file": "Ketan-Assembled-5__f002983__pickup.jpg",
+  "rec": "Ketan-Assembled-5",
+  "split": "train",
+  "frame": 2983,
+  "kind": "pickup",
+  "near_part": "Compressor Casing",
+  "subject": "Ketan",
+  "direction": "assembly"
+ },
+ {
+  "file": "Ketan-Assembled-5__f009804__progress80.jpg",
+  "rec": "Ketan-Assembled-5",
+  "split": "train",
+  "frame": 9804,
+  "kind": "progress80",
+  "near_part": "",
+  "subject": "Ketan",
+  "direction": "assembly"
+ },
+ {
+  "file": "Ketan-Assembled-8__f011703__pickup.jpg",
+  "rec": "Ketan-Assembled-8",
+  "split": "train",
+  "frame": 11703,
+  "kind": "pickup",
+  "near_part": "Propeller Cone Tip",
+  "subject": "Ketan",
+  "direction": "assembly"
+ },
+ {
+  "file": "Ketan-Assembled-8__f000030__pickup.jpg",
+  "rec": "Ketan-Assembled-8",
+  "split": "train",
+  "frame": 30,
+  "kind": "pickup",
+  "near_part": "Main Drive Planet Gear",
+  "subject": "Ketan",
+  "direction": "assembly"
+ },
+ {
+  "file": "Ketan-Assembled-8__f005870__progress45.jpg",
+  "rec": "Ketan-Assembled-8",
+  "split": "train",
+  "frame": 5870,
+  "kind": "progress45",
+  "near_part": "",
+  "subject": "Ketan",
+  "direction": "assembly"
+ },
+ {
+  "file": "Nahom-Assembled-1__f011893__pickup.jpg",
+  "rec": "Nahom-Assembled-1",
+  "split": "train",
+  "frame": 11893,
+  "kind": "pickup",
+  "near_part": "Propeller Cone plate",
+  "subject": "Nahom",
+  "direction": "assembly"
+ },
+ {
+  "file": "Nahom-Assembled-1__f006181__pickup.jpg",
+  "rec": "Nahom-Assembled-1",
+  "split": "train",
+  "frame": 6181,
+  "kind": "pickup",
+  "near_part": "Exhaust",
+  "subject": "Nahom",
+  "direction": "assembly"
+ },
+ {
+  "file": "Nahom-Assembled-1__f010015__progress80.jpg",
+  "rec": "Nahom-Assembled-1",
+  "split": "train",
+  "frame": 10015,
+  "kind": "progress80",
+  "near_part": "",
+  "subject": "Nahom",
+  "direction": "assembly"
+ },
+ {
+  "file": "Nahom-Assembled-3__f003041__pickup.jpg",
+  "rec": "Nahom-Assembled-3",
+  "split": "train",
+  "frame": 3041,
+  "kind": "pickup",
+  "near_part": "Compressor Casing",
+  "subject": "Nahom",
+  "direction": "assembly"
+ },
+ {
+  "file": "Nahom-Assembled-3__f001653__pickup.jpg",
+  "rec": "Nahom-Assembled-3",
+  "split": "train",
+  "frame": 1653,
+  "kind": "pickup",
+  "near_part": "Pop Control Sun Gear",
+  "subject": "Nahom",
+  "direction": "assembly"
+ },
+ {
+  "file": "Nahom-Assembled-3__f005593__progress45.jpg",
+  "rec": "Nahom-Assembled-3",
+  "split": "train",
+  "frame": 5593,
+  "kind": "progress45",
+  "near_part": "",
+  "subject": "Nahom",
+  "direction": "assembly"
+ },
+ {
+  "file": "Nahom-Assembled-3__f009944__progress80.jpg",
+  "rec": "Nahom-Assembled-3",
+  "split": "train",
+  "frame": 9944,
+  "kind": "progress80",
+  "near_part": "",
+  "subject": "Nahom",
+  "direction": "assembly"
+ },
+ {
+  "file": "Nahom-Assembled-4__f008266__pickup.jpg",
+  "rec": "Nahom-Assembled-4",
+  "split": "train",
+  "frame": 8266,
+  "kind": "pickup",
+  "near_part": "Propeller Cone plate",
+  "subject": "Nahom",
+  "direction": "assembly"
+ },
+ {
+  "file": "Nahom-Assembled-4__f008509__pickup.jpg",
+  "rec": "Nahom-Assembled-4",
+  "split": "train",
+  "frame": 8509,
+  "kind": "pickup",
+  "near_part": "Propeller Cone Tip",
+  "subject": "Nahom",
+  "direction": "assembly"
+ },
+ {
+  "file": "Nahom-Assembled-4__f001632__progress15.jpg",
+  "rec": "Nahom-Assembled-4",
+  "split": "train",
+  "frame": 1632,
+  "kind": "progress15",
+  "near_part": "",
+  "subject": "Nahom",
+  "direction": "assembly"
+ },
+ {
+  "file": "Nahom-Assembled-6__f009533__pickup.jpg",
+  "rec": "Nahom-Assembled-6",
+  "split": "train",
+  "frame": 9533,
+  "kind": "pickup",
+  "near_part": "Propeller Cone plate",
+  "subject": "Nahom",
+  "direction": "assembly"
+ },
+ {
+  "file": "Nahom-Assembled-6__f001579__pickup.jpg",
+  "rec": "Nahom-Assembled-6",
+  "split": "train",
+  "frame": 1579,
+  "kind": "pickup",
+  "near_part": "Pop Control Sun Gear",
+  "subject": "Nahom",
+  "direction": "assembly"
+ },
+ {
+  "file": "Nahom-Assembled-8__f000030__pickup.jpg",
+  "rec": "Nahom-Assembled-8",
+  "split": "train",
+  "frame": 30,
+  "kind": "pickup",
+  "near_part": "Main Drive Planet Gear",
+  "subject": "Nahom",
+  "direction": "assembly"
+ },
+ {
+  "file": "Nahom-Assembled-8__f007369__pickup.jpg",
+  "rec": "Nahom-Assembled-8",
+  "split": "train",
+  "frame": 7369,
+  "kind": "pickup",
+  "near_part": "Frame Subassembly",
+  "subject": "Nahom",
+  "direction": "assembly"
+ },
+ {
+  "file": "Nahom-Assembled-8__f005096__progress45.jpg",
+  "rec": "Nahom-Assembled-8",
+  "split": "train",
+  "frame": 5096,
+  "kind": "progress45",
+  "near_part": "",
+  "subject": "Nahom",
+  "direction": "assembly"
+ },
+ {
+  "file": "Nahom-Assembled-8__f009060__progress80.jpg",
+  "rec": "Nahom-Assembled-8",
+  "split": "train",
+  "frame": 9060,
+  "kind": "progress80",
+  "near_part": "",
+  "subject": "Nahom",
+  "direction": "assembly"
+ },
+ {
+  "file": "Nahom-Assembled-9__f010312__pickup.jpg",
+  "rec": "Nahom-Assembled-9",
+  "split": "train",
+  "frame": 10312,
+  "kind": "pickup",
+  "near_part": "Propeller Cone Tip",
+  "subject": "Nahom",
+  "direction": "assembly"
+ },
+ {
+  "file": "Nahom-Assembled-9__f008155__pickup.jpg",
+  "rec": "Nahom-Assembled-9",
+  "split": "train",
+  "frame": 8155,
+  "kind": "pickup",
+  "near_part": "Frame Subassembly",
+  "subject": "Nahom",
+  "direction": "assembly"
+ },
+ {
+  "file": "Nahom-Assembled-9__f001763__progress15.jpg",
+  "rec": "Nahom-Assembled-9",
+  "split": "train",
+  "frame": 1763,
+  "kind": "progress15",
+  "near_part": "",
+  "subject": "Nahom",
+  "direction": "assembly"
+ },
+ {
+  "file": "Nahom-Assembled-9__f005291__progress45.jpg",
+  "rec": "Nahom-Assembled-9",
+  "split": "train",
+  "frame": 5291,
+  "kind": "progress45",
+  "near_part": "",
+  "subject": "Nahom",
+  "direction": "assembly"
+ },
+ {
+  "file": "Nahom-Assembled-9__f009406__progress80.jpg",
+  "rec": "Nahom-Assembled-9",
+  "split": "train",
+  "frame": 9406,
+  "kind": "progress80",
+  "near_part": "",
+  "subject": "Nahom",
+  "direction": "assembly"
+ },
+ {
+  "file": "Nahom-disAssembled-2__f000030__pickup.jpg",
+  "rec": "Nahom-disAssembled-2",
+  "split": "train",
+  "frame": 30,
+  "kind": "pickup",
+  "near_part": "Propeller Cone Tip",
+  "subject": "Nahom",
+  "direction": "disassembly"
+ },
+ {
+  "file": "Nahom-disAssembled-2__f007336__pickup.jpg",
+  "rec": "Nahom-disAssembled-2",
+  "split": "train",
+  "frame": 7336,
+  "kind": "pickup",
+  "near_part": "Pop Control Ring Gear",
+  "subject": "Nahom",
+  "direction": "disassembly"
+ },
+ {
+  "file": "Nahom-disAssembled-2__f001261__progress15.jpg",
+  "rec": "Nahom-disAssembled-2",
+  "split": "train",
+  "frame": 1261,
+  "kind": "progress15",
+  "near_part": "",
+  "subject": "Nahom",
+  "direction": "disassembly"
+ },
+ {
+  "file": "Nahom-disAssembled-3__f006553__pickup.jpg",
+  "rec": "Nahom-disAssembled-3",
+  "split": "train",
+  "frame": 6553,
+  "kind": "pickup",
+  "near_part": "Pop Control Sun Gear",
+  "subject": "Nahom",
+  "direction": "disassembly"
+ },
+ {
+  "file": "Nahom-disAssembled-3__f007219__pickup.jpg",
+  "rec": "Nahom-disAssembled-3",
+  "split": "train",
+  "frame": 7219,
+  "kind": "pickup",
+  "near_part": "Pop Control Ring Gear",
+  "subject": "Nahom",
+  "direction": "disassembly"
+ },
+ {
+  "file": "Nahom-disAssembled-3__f003659__progress45.jpg",
+  "rec": "Nahom-disAssembled-3",
+  "split": "train",
+  "frame": 3659,
+  "kind": "progress45",
+  "near_part": "",
+  "subject": "Nahom",
+  "direction": "disassembly"
+ },
+ {
+  "file": "Nahom-disAssembled-3__f006506__progress80.jpg",
+  "rec": "Nahom-disAssembled-3",
+  "split": "train",
+  "frame": 6506,
+  "kind": "progress80",
+  "near_part": "",
+  "subject": "Nahom",
+  "direction": "disassembly"
+ },
+ {
+  "file": "Nahom-disAssembled-6__f003647__pickup.jpg",
+  "rec": "Nahom-disAssembled-6",
+  "split": "train",
+  "frame": 3647,
+  "kind": "pickup",
+  "near_part": "Exhaust",
+  "subject": "Nahom",
+  "direction": "disassembly"
+ },
+ {
+  "file": "Nahom-disAssembled-6__f007446__pickup.jpg",
+  "rec": "Nahom-disAssembled-6",
+  "split": "train",
+  "frame": 7446,
+  "kind": "pickup",
+  "near_part": "Pop Control Ring Gear",
+  "subject": "Nahom",
+  "direction": "disassembly"
+ },
+ {
+  "file": "Nahom-disAssembled-6__f001253__progress15.jpg",
+  "rec": "Nahom-disAssembled-6",
+  "split": "train",
+  "frame": 1253,
+  "kind": "progress15",
+  "near_part": "",
+  "subject": "Nahom",
+  "direction": "disassembly"
+ },
+ {
+  "file": "Nahom-disAssembled-6__f003761__progress45.jpg",
+  "rec": "Nahom-disAssembled-6",
+  "split": "train",
+  "frame": 3761,
+  "kind": "progress45",
+  "near_part": "",
+  "subject": "Nahom",
+  "direction": "disassembly"
+ },
+ {
+  "file": "Nahom-disAssembled-7__f008844__pickup.jpg",
+  "rec": "Nahom-disAssembled-7",
+  "split": "train",
+  "frame": 8844,
+  "kind": "pickup",
+  "near_part": "Main Drive Planet Gear",
+  "subject": "Nahom",
+  "direction": "disassembly"
+ },
+ {
+  "file": "Nahom-disAssembled-7__f003192__pickup.jpg",
+  "rec": "Nahom-disAssembled-7",
+  "split": "train",
+  "frame": 3192,
+  "kind": "pickup",
+  "near_part": "Exhaust Casing",
+  "subject": "Nahom",
+  "direction": "disassembly"
+ },
+ {
+  "file": "Nahom-disAssembled-7__f001360__progress15.jpg",
+  "rec": "Nahom-disAssembled-7",
+  "split": "train",
+  "frame": 1360,
+  "kind": "progress15",
+  "near_part": "",
+  "subject": "Nahom",
+  "direction": "disassembly"
+ },
+ {
+  "file": "Nahom-disAssembled-7__f004081__progress45.jpg",
+  "rec": "Nahom-disAssembled-7",
+  "split": "train",
+  "frame": 4081,
+  "kind": "progress45",
+  "near_part": "",
+  "subject": "Nahom",
+  "direction": "disassembly"
+ },
+ {
+  "file": "Nahom-disAssembled-7__f007255__progress80.jpg",
+  "rec": "Nahom-disAssembled-7",
+  "split": "train",
+  "frame": 7255,
+  "kind": "progress80",
+  "near_part": "",
+  "subject": "Nahom",
+  "direction": "disassembly"
+ },
+ {
+  "file": "Nahom-disAssembled-8__f002736__pickup.jpg",
+  "rec": "Nahom-disAssembled-8",
+  "split": "train",
+  "frame": 2736,
+  "kind": "pickup",
+  "near_part": "Exhaust Casing",
+  "subject": "Nahom",
+  "direction": "disassembly"
+ },
+ {
+  "file": "Nahom-disAssembled-8__f000673__pickup.jpg",
+  "rec": "Nahom-disAssembled-8",
+  "split": "train",
+  "frame": 673,
+  "kind": "pickup",
+  "near_part": "Propeller Cone plate",
+  "subject": "Nahom",
+  "direction": "disassembly"
+ },
+ {
+  "file": "Nahom-disAssembled-8__f001002__progress15.jpg",
+  "rec": "Nahom-disAssembled-8",
+  "split": "train",
+  "frame": 1002,
+  "kind": "progress15",
+  "near_part": "",
+  "subject": "Nahom",
+  "direction": "disassembly"
+ },
+ {
+  "file": "Nahom-disAssembled-8__f003007__progress45.jpg",
+  "rec": "Nahom-disAssembled-8",
+  "split": "train",
+  "frame": 3007,
+  "kind": "progress45",
+  "near_part": "",
+  "subject": "Nahom",
+  "direction": "disassembly"
+ },
+ {
+  "file": "Nahom-disAssembled-9__f001419__pickup.jpg",
+  "rec": "Nahom-disAssembled-9",
+  "split": "train",
+  "frame": 1419,
+  "kind": "pickup",
+  "near_part": "Frame Subassembly",
+  "subject": "Nahom",
+  "direction": "disassembly"
+ },
+ {
+  "file": "Nahom-disAssembled-9__f000030__pickup.jpg",
+  "rec": "Nahom-disAssembled-9",
+  "split": "train",
+  "frame": 30,
+  "kind": "pickup",
+  "near_part": "Propeller Cone Tip",
+  "subject": "Nahom",
+  "direction": "disassembly"
+ },
+ {
+  "file": "Nahom-disAssembled-9__f001194__progress15.jpg",
+  "rec": "Nahom-disAssembled-9",
+  "split": "train",
+  "frame": 1194,
+  "kind": "progress15",
+  "near_part": "",
+  "subject": "Nahom",
+  "direction": "disassembly"
+ },
+ {
+  "file": "Nahom-disAssembled-9__f003582__progress45.jpg",
+  "rec": "Nahom-disAssembled-9",
+  "split": "train",
+  "frame": 3582,
+  "kind": "progress45",
+  "near_part": "",
+  "subject": "Nahom",
+  "direction": "disassembly"
+ }
+]

@@ -1,0 +1,22 @@
+=== tmse1.0_drop0.25 ===
+Epoch  400 loss 0.0278 | Acc  93.45 | latency med +0.40s p90 +2.80s | within +-2s  85.5%
+done. final acc 93.45  (offline DiffAct reference: 96.24)
+raw argmax                     0.0   93.55   67.56   54.01   46.08    205      1   0.60   2.60   84.5
+viterbi lag=10 bias=6.0        2.0   94.15   83.29   71.35   58.76    142      2   0.60   2.60   83.5
+viterbi lag=25 bias=6.0        5.0   94.29   85.73   76.01   60.32    136      4   0.60   2.60   83.5
+
+=== tmse0.7_drop0.5 ===
+Epoch  400 loss 0.2363 | Acc  91.23 | latency med +0.60s p90 +3.42s | within +-2s  77.3%
+done. final acc 91.23  (offline DiffAct reference: 96.24)
+raw argmax                     0.0   91.22   59.01   45.10   29.13    240      0   0.90   3.40   76.4
+viterbi lag=10 bias=6.0        2.0   91.88   80.88   69.88   42.83    144      2   1.20   4.04   70.6
+viterbi lag=25 bias=6.0        5.0   92.01   85.46   72.35   43.04    130      3   1.20   3.84   67.9
+
+=== tmse2.0_drop0.5 ===
+Epoch  400 loss 0.0530 | Acc  92.51 | latency med +0.40s p90 +2.62s | within +-2s  85.5%
+done. final acc 92.51  (offline DiffAct reference: 96.24)
+raw argmax                     0.0   92.51   70.00   54.49   39.80    206      2   0.80   3.00   83.5
+viterbi lag=10 bias=6.0        2.0   93.23   83.11   67.91   49.58    145      2   0.70   3.06   81.5
+viterbi lag=25 bias=6.0        5.0   93.26   83.59   70.64   50.50    141      3   0.70   3.06   81.5
+
+GRID COMPLETE

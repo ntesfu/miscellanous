@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1"/>
+<title>Copilot camera</title>
+<style>
+  body{margin:0;background:#0f1115;color:#e6e9ef;font:15px/1.5 -apple-system,Helvetica,Arial,sans-serif}
+  #wrap{padding:14px;display:flex;flex-direction:column;gap:12px;height:100dvh;box-sizing:border-box}
+  video{width:100%;border-radius:10px;background:#000;flex:1;object-fit:cover}
+  button{padding:15px;border-radius:10px;border:0;background:#5b8def;color:#fff;font-size:16px;font-weight:600}
+  button.stop{background:#e05f5f}
+  button.lens{flex:0 0 auto;padding:9px 16px;background:#1b1f28;color:#8b93a3;font-size:14px;
+              border:1px solid #262b36}
+  button.lens.on{background:#5b8def;color:#fff;border-color:#5b8def}
+  #stat{font-size:13px;color:#8b93a3}
+  .ok{color:#3fbf7f}
+</style>
+</head>
+<body>
+<div id="wrap">
+  <b>Assembly Copilot — camera</b>
+  <video id="v" autoplay playsinline muted></video>
+  <div id="lensrow" style="display:flex;gap:8px;flex-wrap:wrap"></div>
+  <button id="go">Start streaming</button>
+  <div id="stat">idle</div>
+</div>
+<script>
+// The phone does exactly ONE thing: publish the camera over WebRTC, encoded in
+// hardware. It deliberately does NOT also grab JPEGs for the model.
+//
+// It used to do both, and that was the cause of the stutter: drawImage() from a
+// live <video> forces a GPU->CPU readback on iOS, and doing that 10x/second
+// starves the H.264 encoder feeding WebRTC. The reference recorder was smooth
+// precisely because publishing was all it ever asked the phone to do.
+//
+// The dashboard now derives the model's 10 fps frames from the stream it already
+// receives -- it runs on a desktop with CPU to spare.
+const v=document.getElementById('v'), go=document.getElementById('go'), stat=document.getElementById('stat');
+const ICE={iceServers:[{urls:'stun:stun.l.google.com:19302'}]};
+const myId='phone_'+Math.random().toString(36).slice(2,10);
+let pcs=new Map(), sig=null, stream=null, lenses=[], curLens=null;
+
+// Lens classification lifted from the reference recorder: iOS exposes the physical
+// lenses as separate videoinput devices, and hides them behind virtual "Dual/Triple"
+// combos when both are present.
+function classifyLens(d){
+  const l=(d.label||'').toLowerCase();
+  if(l.includes('front')) return {deviceId:d.deviceId, group:'front', zoom:'Front', order:100, virtual:false};
+  const virtual=l.includes('dual')||l.includes('triple');
+  let zoom='1×', order=1;
+  if(l.includes('ultra')){ zoom='0.5×'; order=0; }
+  else if(l.includes('tele')){ zoom='2×'; order=2; }
+  return {deviceId:d.deviceId, group:'back', zoom, order, virtual};
+}
+
+async function enumerateLenses(){
+  let devs=[]; try{ devs=await navigator.mediaDevices.enumerateDevices(); }catch(_){ return; }
+  let list=devs.filter(d=>d.kind==='videoinput'&&d.deviceId).map(classifyLens);
+  if(list.some(x=>x.group==='back'&&x.zoom!=='1×')) list=list.filter(x=>!x.virtual);
+  const seen=new Set();
+  lenses=list.filter(x=>{ const k=x.group+x.zoom; if(seen.has(k)) return false; seen.add(k); return true; })
+             .sort((a,b)=>a.order-b.order);
+  renderLensButtons();
+  send(null,'lenses',{lenses, active:curLens});     // let the dashboard show them too
+}
+
+async function selectLens(deviceId){
+  try{
+    const ns=await navigator.mediaDevices.getUserMedia({
+      video:{deviceId:{exact:deviceId}, width:{ideal:1280}, height:{ideal:720}, frameRate:{ideal:30}},
+      audio:false});
+    const old=stream; stream=ns; v.srcObject=ns; curLens=deviceId;
+    // swap the outgoing track in place: renegotiation is not needed, so the
+    // dashboard's video keeps playing without a black frame
+    const track=ns.getVideoTracks()[0];
+    pcs.forEach(pc=>{ const sdr=pc.getSenders().find(x=>x.track&&x.track.kind==='video');
+                      if(sdr) sdr.replaceTrack(track); });
+    if(old) old.getTracks().forEach(t=>t.stop());
+    renderLensButtons();
+    send(null,'lenses',{lenses, active:curLens});
+  }catch(e){ stat.textContent='lens switch failed: '+e; }
+}
+
+function renderLensButtons(){
+  const row=document.getElementById('lensrow'); row.innerHTML='';
+  lenses.forEach(l=>{
+    const b=document.createElement('button');
+    b.textContent=l.zoom; b.className='lens'+(l.deviceId===curLens?' on':'');
+    b.onclick=()=>selectLens(l.deviceId);
+    row.appendChild(b);
+  });
+}
+
+const send=(to,type,payload)=>fetch('/rtc/signal',{method:'POST',
+  headers:{'Content-Type':'application/json'},
+  body:JSON.stringify({from:myId,role:'phone',to,type,payload})});
+
+async function offerTo(viewerId){
+  const old=pcs.get(viewerId); if(old) old.close();
+  const pc=new RTCPeerConnection(ICE); pcs.set(viewerId,pc);
+  stream.getTracks().forEach(t=>pc.addTrack(t,stream));
+  pc.onicecandidate=e=>{ if(e.candidate) send(viewerId,'ice',e.candidate.toJSON()); };
+  pc.onconnectionstatechange=()=>{
+    stat.innerHTML = pc.connectionState==='connected'
+      ? '<span class="ok">streaming — WebRTC connected</span>'
+      : 'peer: '+pc.connectionState;
+  };
+  const o=await pc.createOffer();
+  await pc.setLocalDescription(o);
+  send(viewerId,'offer',{sdp:pc.localDescription.sdp,type:pc.localDescription.type});
+}
+
+go.onclick=async()=>{
+  if(sig){ pcs.forEach(p=>p.close()); pcs.clear(); sig.close(); sig=null;
+           stream&&stream.getTracks().forEach(t=>t.stop());
+           go.textContent='Start streaming'; go.classList.remove('stop');
+           stat.textContent='stopped'; return; }
+  try{
+    stream=await navigator.mediaDevices.getUserMedia({
+      video:{facingMode:'environment', width:{ideal:1280}, height:{ideal:720}, frameRate:{ideal:30}},
+      audio:false});
+    v.srcObject=stream;
+  }catch(e){ stat.textContent='camera denied: '+e; return; }
+
+  sig=new EventSource('/rtc/events?role=phone&id='+myId);
+  sig.onopen=()=>send(null,'phone-here',{});     // announce only once REGISTERED,
+                                                // otherwise a dashboard's reply can
+                                                // race ahead of our SSE registration
+  curLens=stream.getVideoTracks()[0].getSettings().deviceId||null;
+  enumerateLenses();                     // labels are only populated after permission
+  sig.onmessage=async m=>{
+    const e=JSON.parse(m.data);
+    if(e.type==='viewer-here'){ offerTo(e.from); send(e.from,'lenses',{lenses, active:curLens}); }
+    else if(e.type==='set_lens') selectLens(e.payload.deviceId);
+    else if(e.type==='answer'){ const pc=pcs.get(e.from); if(pc) await pc.setRemoteDescription(e.payload); }
+    else if(e.type==='ice'){ const pc=pcs.get(e.from);
+      if(pc) try{ await pc.addIceCandidate(e.payload); }catch(_){} }
+  };
+  go.textContent='Stop'; go.classList.add('stop');
+  stat.innerHTML='<span class="ok">publishing…</span>';
+};
+</script>
+</body>
+</html>

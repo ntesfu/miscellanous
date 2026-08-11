@@ -1,0 +1,1462 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Bounding-Box Image Labeler</title>
+<style>
+  :root{
+    --ink:#17211c;--paper:#eeece5;--panel:#faf9f5;--line:#d7d5cd;--acid:#d9ff57;--orange:#ff6b35;
+    --muted:#69716c;--dark:#142019;--blue:#4b82f0;--red:#db4b3f;--teal:#178a78;--gold:#b47a10;
+    --mono:Consolas,'SFMono-Regular','Cascadia Mono',Menlo,monospace;
+    --sans:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;min-height:100%;background:var(--paper);color:var(--ink);font-family:var(--sans)}
+  button,input,select,textarea{font:inherit}
+  [hidden]{display:none!important}
+  .shell{min-height:100vh;padding:16px 20px 24px}
+  .top{min-height:48px;display:flex;align-items:center;justify-content:space-between;gap:16px;border-bottom:1px solid var(--line);padding-bottom:10px}
+  .brand{display:flex;align-items:center;gap:10px;font-weight:700;letter-spacing:-.02em}
+  .mark{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:var(--ink);color:var(--acid);font:600 10px var(--mono)}
+  .brand .mono{font:400 10px var(--mono);color:var(--muted);font-weight:400}
+  .status{display:flex;align-items:center;gap:8px;font:500 10px var(--mono);text-transform:uppercase}
+  .dot{width:8px;height:8px;border-radius:50%;background:#aeb2ad;flex:0 0 auto}
+  .dot.live{background:#5fd46c;box-shadow:0 0 0 5px rgba(95,212,108,.14)}
+  .headline{padding:14px 0 12px}
+  .headline h1{font-size:26px;line-height:1.1;letter-spacing:-.02em;margin:0 0 4px;font-weight:700}
+  .headline p{max-width:640px;margin:0;color:var(--muted);font-size:12px;line-height:1.5}
+  .toolbar{display:flex;flex-wrap:wrap;align-items:flex-start;gap:8px;margin:12px 0}
+  .toolgroup{display:flex;align-items:center;gap:6px;padding:6px;border:1px solid var(--line);background:rgba(250,249,245,.72);border-radius:10px}
+  .tool-label{font:600 8px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding:0 4px}
+  .btn{border:1px solid var(--line);background:var(--panel);color:var(--ink);padding:8px 11px;border-radius:8px;cursor:pointer;font-size:11px;font-weight:650}
+  .btn:hover{border-color:var(--ink)}
+  .btn.primary{background:var(--acid);border-color:#abc941}
+  .btn.dark{background:var(--dark);color:#fff;border-color:var(--dark)}
+  .btn.warn{color:var(--red)}
+  .btn:disabled{opacity:.4;cursor:not-allowed}
+  .btn.sm{padding:5px 8px;font-size:10px}
+  .layout{display:grid;grid-template-columns:230px minmax(480px,1fr) 340px;gap:12px;align-items:start}
+  .left,.right{display:flex;flex-direction:column;gap:12px}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:13px}
+  .card h3{font-size:11px;text-transform:uppercase;letter-spacing:.06em;margin:0}
+  .card-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px}
+  .mono{font:400 9px var(--mono);color:var(--muted)}
+
+  .tray{height:640px;display:flex;flex-direction:column}
+  .drop{padding:14px 8px;border:1px dashed #aaa99f;border-radius:9px;text-align:center;font-size:10px;color:var(--muted);margin-bottom:9px}
+  .drop.drag{border-color:var(--orange);background:#fff2ec}
+  .progress{height:4px;background:#dddcd5;border-radius:3px;overflow:hidden;margin-top:7px}
+  .progress i{display:block;height:100%;width:0;background:var(--orange);transition:width .15s}
+  .thumb-list{overflow:auto;min-height:0;flex:1;display:flex;flex-direction:column;gap:5px}
+  .thumb{display:flex;gap:8px;align-items:center;padding:6px;border:1px solid transparent;border-radius:8px;cursor:pointer}
+  .thumb:hover{background:#f0eee8}
+  .thumb.active{border-color:#acc73f;background:#f3f9d8}
+  .thumb img,.thumb .ph{width:52px;height:39px;object-fit:contain;background:#101812;border-radius:5px;flex:0 0 auto}
+  .thumb .ph{display:grid;place-items:center;color:#556;font:9px var(--mono)}
+  .thumb .meta{min-width:0;flex:1}
+  .thumb b{display:block;font-size:10px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:600}
+  .badge{font:600 8.5px var(--mono);padding:2px 6px;border-radius:999px;display:inline-block;margin-top:2px}
+  .badge.empty{background:#e6e4dd;color:var(--muted)}
+  .badge.partial{background:#fff0cf;color:#8a6100}
+  .badge.complete{background:#d9ff57;color:#3c4a17}
+  .badge.error{background:#f8d7d3;color:var(--red)}
+
+  .stage-card{padding:0;overflow:hidden}
+  .stage{height:clamp(440px,72vh,960px);background:#101812;position:relative;display:grid;place-items:center}
+  /* Absolutely positioned so the canvas fills the stage exactly. With normal
+     flow, a <canvas> falls back to its intrinsic 300x150 (2:1) aspect ratio
+     whenever height:100% can't resolve, so on wide windows it computed
+     height = width/2 > stage height, overflowed, and got clipped by
+     .stage-card's overflow:hidden -- cutting off the top and bottom of the
+     photo. inset:0 removes that feedback loop entirely. */
+  .stage canvas{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none;cursor:crosshair}
+  .stage .empty{position:absolute;inset:0;display:grid;place-items:center;text-align:center;background:radial-gradient(circle at 50% 35%,#34463b,#17211c 67%);color:#fff}
+  .stage .empty.hidden{display:none}
+  .stage .empty div{max-width:420px;padding:24px}
+  .stage .empty strong{display:block;font-size:20px;margin-bottom:8px}
+  .stage .empty p{font-size:12px;line-height:1.5;color:#b9c1bc}
+  .stage-top{position:absolute;top:9px;left:9px;right:9px;display:flex;justify-content:space-between;pointer-events:none;gap:8px}
+  .stage-badge{padding:6px 9px;border-radius:6px;background:rgba(11,18,14,.78);border:1px solid rgba(255,255,255,.2);color:#fff;font:9px var(--mono)}
+  .stage-bottom{position:absolute;bottom:9px;left:9px;right:9px;display:flex;justify-content:space-between;pointer-events:none;gap:8px}
+
+  .checklist{display:flex;flex-direction:column;gap:4px;max-height:260px;overflow:auto}
+  .cl-row{display:flex;align-items:center;gap:8px;padding:6px 7px;border-radius:7px;cursor:pointer;border:1px solid transparent}
+  .cl-row:hover{background:#f0eee8}
+  .cl-row.active{border-color:#acc73f;background:#f3f9d8}
+  .cl-swatch{width:11px;height:11px;border-radius:3px;flex:0 0 auto}
+  .cl-name{flex:1;font-size:11px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .cl-count{font:600 9px var(--mono);color:var(--muted)}
+  .cl-check{width:15px;height:15px;border-radius:50%;flex:0 0 auto;display:grid;place-items:center;font-size:9px;background:#e6e4dd;color:transparent}
+  .cl-row.done .cl-check{background:var(--teal);color:#fff}
+
+  .boxlist{display:flex;flex-direction:column;gap:5px;max-height:220px;overflow:auto;margin-top:8px}
+  .box-row{display:flex;align-items:center;gap:6px;padding:5px 6px;border-radius:7px;border:1px solid var(--line);background:#fff}
+  .box-row.selected{border-color:var(--orange);background:#fff5f0}
+  .box-row .cl-swatch{width:9px;height:9px}
+  .box-row select{flex:1;min-width:0;padding:4px 5px;border:1px solid var(--line);border-radius:5px;font-size:10px;background:#fff}
+  .inst-tag{font:700 9px var(--mono);color:var(--ink);background:#e5e3dc;border-radius:4px;padding:2px 5px;flex:0 0 auto}
+  .box-row.selected .inst-tag{background:var(--orange);color:#fff}
+  .box-row button{border:0;background:transparent;color:var(--red);cursor:pointer;font-size:12px;padding:2px 4px}
+
+  label.field{display:block;font-size:9px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin:9px 0 4px}
+  .input{width:100%;padding:7px 8px;border:1px solid var(--line);border-radius:6px;background:#fff;font-size:11px}
+  textarea.input{height:118px;resize:vertical;font:10px var(--mono)}
+  .row{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+  .small-actions{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}
+  .small-actions .btn{flex:1;min-width:90px}
+  .hint{font-size:9.5px;color:var(--muted);line-height:1.45;margin:8px 0 0}
+  .notice{padding:8px;border-radius:7px;background:#fff4ce;font-size:9px;line-height:1.45;margin-top:8px}
+  .notice.good{background:#eef8d1}
+  .shortcut{font:8px var(--mono);background:#e5e3dc;padding:2px 5px;border-radius:3px}
+  .metrics{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:4px}
+  .metric{padding:8px 7px;background:#eeece5;border-radius:8px}
+  .metric b{display:block;font:600 16px var(--mono)}
+  .metric span{font-size:8px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+  .details summary{cursor:pointer;font:600 9px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);padding:8px 0;border-top:1px solid #e3e1da}
+  .details[open] summary{margin-bottom:6px}
+
+  .toast{position:fixed;right:16px;bottom:16px;z-index:30;background:var(--dark);color:#fff;border-radius:9px;padding:10px 13px;font-size:10px;transform:translateY(80px);opacity:0;transition:.2s}
+  .toast.show{transform:none;opacity:1}
+  .toast.error{background:#722d28}
+  .modal{position:fixed;inset:0;background:rgba(10,15,12,.65);z-index:20;display:none;place-items:center}
+  .modal.show{display:grid}
+  .modal-box{width:min(720px,92vw);max-height:86vh;display:flex;flex-direction:column;background:var(--panel);padding:18px;border-radius:14px}
+  .modal pre{max-height:520px;overflow:auto;background:#19221c;color:#d9ff57;padding:12px;border-radius:8px;font:9.5px/1.5 var(--mono);white-space:pre-wrap;margin:0}
+
+  @media(max-width:1240px){
+    .layout{grid-template-columns:200px 1fr}
+    .right{grid-column:1/-1;display:grid;grid-template-columns:repeat(2,1fr)}
+    .tray{height:auto;max-height:340px}
+  }
+  @media(max-width:820px){
+    .layout{grid-template-columns:1fr}
+    .left,.right{display:flex}
+    .stage{height:440px}
+    .row{grid-template-columns:1fr}
+  }
+</style>
+</head>
+<body>
+<main class="shell">
+  <nav class="top">
+    <div class="brand"><span class="mark">BB</span>Bounding-Box Labeler <span class="mono">/ IMAGE PARTS</span></div>
+    <div class="status"><span id="dot" class="dot"></span><span id="appStatus">No project loaded</span></div>
+  </nav>
+  <section class="headline">
+    <h1>Box the parts, one label at a time.</h1>
+    <p>Guided per-image bounding-box annotation for a fixed part vocabulary. Draw one box per label, autosaves locally, exports to COCO / YOLO / native JSON.</p>
+  </section>
+
+  <div class="toolbar" aria-label="Primary actions">
+    <div class="toolgroup">
+      <span class="tool-label">Load</span>
+      <button class="btn primary" id="folderBtn">Import folder</button>
+      <button class="btn" id="openProjectBtn">Import project JSON</button>
+    </div>
+    <div class="toolgroup">
+      <span class="tool-label">Edit</span>
+      <button class="btn" id="undoBtn" disabled>Undo</button>
+      <button class="btn" id="redoBtn" disabled>Redo</button>
+    </div>
+    <div class="toolgroup">
+      <span class="tool-label">Save</span>
+      <button class="btn" id="saveProjectBtn">Save project (JSON)</button>
+      <button class="btn primary" id="validateBtn">Validate</button>
+      <button class="btn dark" id="exportBtn">Export bundle (ZIP)</button>
+    </div>
+    <input hidden id="folderInput" type="file" webkitdirectory multiple>
+    <input hidden id="projectInput" type="file" accept=".json,application/json">
+  </div>
+
+  <section class="layout">
+    <aside class="left">
+      <div class="card tray">
+        <div class="card-head"><h3>Images</h3><span class="mono" id="imageCount">0 loaded</span></div>
+        <div class="drop" id="drop">Drop an image folder here<br><span>or use Import folder</span><div class="progress"><i id="importProgress"></i></div></div>
+        <div class="thumb-list" id="thumbList"></div>
+      </div>
+      <div class="card">
+        <div class="card-head"><h3>Progress</h3><span class="mono" id="progressText">0 / 0</span></div>
+        <div class="metrics">
+          <div class="metric"><b id="metricImagesDone">0</b><span>Images complete</span></div>
+          <div class="metric"><b id="metricBoxesDone">0</b><span>Boxes drawn</span></div>
+        </div>
+        <div class="progress"><i id="globalProgress"></i></div>
+      </div>
+    </aside>
+
+    <section class="card stage-card">
+      <div class="stage" id="stage">
+        <canvas id="canvas"></canvas>
+        <div class="empty" id="emptyState"><div><strong>Import a folder of photos to begin.</strong><p>Annotations autosave to this browser. Reopen a saved project, then re-select the image folder to relink files by name.</p></div></div>
+        <div class="stage-top">
+          <span class="stage-badge" id="imageBadge">NO IMAGE</span>
+          <span class="stage-badge" id="activeLabelBadge">NO LABEL</span>
+        </div>
+        <div class="stage-bottom">
+          <span class="stage-badge" id="zoomBadge">100%</span>
+          <span class="stage-badge" id="selectionBadge"></span>
+        </div>
+      </div>
+    </section>
+
+    <aside class="right">
+      <div class="card">
+        <div class="card-head"><h3>Label checklist</h3><span class="mono" id="checklistCount">0 / 0</span></div>
+        <div class="checklist" id="checklist"></div>
+        <p class="hint">Click a label (or press <span class="shortcut">1</span>-<span class="shortcut">0</span>) to make it active, then drag on the image. A new box auto-picks the next unfinished label. Parts needing two boxes show <b>1/2</b> and stay active until both are drawn.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-head"><h3>Boxes on this image</h3><span class="mono" id="boxCount">0</span></div>
+        <div class="boxlist" id="boxList"></div>
+        <p class="hint">Click a row or a box to select it. <span class="shortcut">Delete</span> removes the selection. With a box selected, <span class="shortcut">1</span>-<span class="shortcut">0</span> relabels it.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-head"><h3>Project</h3><span class="mono">bbox_labeler/1.0.0</span></div>
+        <label class="field">Project name</label><input class="input project-setting" id="projectName" value="engine_parts_detection">
+        <label class="field">Annotator ID</label><input class="input project-setting" id="annotatorId" placeholder="Nahom">
+        <details class="details" id="labelDetails">
+          <summary>Label list (editable)</summary>
+          <label class="field">Labels (one <code>id | Display name | boxes</code> per line; <code>boxes</code> optional, default 1; order fixes class_id)</label>
+          <textarea class="input" id="labelsText">main_drive_planet_gear | Main Drive Planet Gear | 1
+pop_control_ring_gear | Pop Control Ring Gear | 1
+pop_control_sun_gear | Pop Control Sun Gear | 1
+compressor_casing | Compressor Casing | 1
+exhaust | Exhaust | 2
+exhaust_casing | Exhaust Casing | 1
+cowling_bracket | Cowling Bracket | 1
+frame_subassembly | Frame Subassembly | 1
+propeller_cone_plate | Propeller Cone plate | 2
+propeller_cone_tip | Propeller Cone Tip | 1</textarea>
+          <div class="small-actions">
+            <button class="btn" id="applyLabelsBtn" type="button">Apply labels</button>
+            <button class="btn" id="resetLabelsBtn" type="button">Reset to defaults</button>
+          </div>
+          <p class="hint">Existing boxes keep their label by id. A box whose label was removed is flagged by Validate, not deleted. Order must match <code>assembly_labeler_local/label_serve.py</code>'s <code>PARTS</code> so class_ids agree across tools.</p>
+        </details>
+        <div class="notice good">Autosave keeps a local recovery copy in this browser (IndexedDB). Use <b>Save project</b> for a portable checkpoint you can reopen anywhere.</div>
+      </div>
+    </aside>
+  </section>
+</main>
+
+<div class="toast" id="toast"></div>
+<div class="modal" id="modal"><div class="modal-box"><div class="card-head"><h3>Validation report</h3><button class="btn" id="closeModal">Close</button></div><pre id="report"></pre></div></div>
+
+<script>
+(function(){
+  'use strict';
+
+  // ==========================================================================
+  // Constants, tiny utilities
+  // ==========================================================================
+  const SCHEMA = 'bbox_labeler/1.0.0';
+  const APP_VERSION = '1.0.0';
+  const DB_NAME = 'bbox_labeler';
+  const DB_STORE = 'projects';
+  const LAST_PROJECT_KEY = 'bbox_labeler_last_project';
+  const IMAGE_EXT = /\.(jpe?g|png|webp)$/i;
+  const MIN_BOX_NORM = 0.004; // ignore accidental clicks smaller than this in either dimension
+  const HANDLE_PX = 7;        // resize-handle hit radius, CSS px
+  const HISTORY_LIMIT = 60;
+  const PALETTE = ['#ff6b35','#4b82f0','#d9ff57','#db4b3f','#178a78','#b47a10','#a875ff','#ff8dbc','#33c2ff','#8bc34a','#ff4081','#795548'];
+
+  const $ = (sel) => document.querySelector(sel);
+  const $$ = (sel) => [...document.querySelectorAll(sel)];
+  const clamp = (x, a, b) => Math.max(a, Math.min(b, x));
+  const nowIso = () => new Date().toISOString();
+  const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const slug = (s) => String(s || '').trim().toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_|_$/g, '') || 'x';
+
+  function makeId(prefix) {
+    const bytes = new Uint8Array(8);
+    if (globalThis.crypto?.getRandomValues) globalThis.crypto.getRandomValues(bytes);
+    else for (let i = 0; i < bytes.length; i++) bytes[i] = Math.floor(Math.random() * 256);
+    const hex = [...bytes].map((x) => x.toString(16).padStart(2, '0')).join('');
+    return (prefix || 'id') + '_' + hex;
+  }
+
+  // Natural sort so "2.jpg" sorts before "10.jpg".
+  function naturalCompare(a, b) {
+    const ax = String(a).match(/(\d+|\D+)/g) || [];
+    const bx = String(b).match(/(\d+|\D+)/g) || [];
+    const len = Math.max(ax.length, bx.length);
+    for (let i = 0; i < len; i++) {
+      const av = ax[i] ?? '', bv = bx[i] ?? '';
+      const an = /^\d+$/.test(av), bn = /^\d+$/.test(bv);
+      if (an && bn) { const d = Number(av) - Number(bv); if (d) return d; }
+      else if (av !== bv) return av < bv ? -1 : 1;
+    }
+    return 0;
+  }
+
+  function toast(msg, bad) {
+    const el = $('#toast');
+    el.textContent = msg;
+    el.className = 'toast show' + (bad ? ' error' : '');
+    clearTimeout(el._t);
+    el._t = setTimeout(() => { el.className = 'toast'; }, 3200);
+  }
+  function setStatus(text, live) {
+    $('#appStatus').textContent = text;
+    $('#dot').classList.toggle('live', !!live);
+  }
+  function download(blob, name) {
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = name;
+    a.click();
+    setTimeout(() => URL.revokeObjectURL(a.href), 30000);
+  }
+
+  // ==========================================================================
+  // State
+  // ==========================================================================
+  const state = {
+    projectName: 'engine_parts_detection',
+    annotatorId: '',
+    createdAt: nowIso(),
+    labels: [],          // [{class_id, id, name}]
+    images: [],          // image records, see makeImageRecord()
+    activeImageId: null,
+    activeLabelId: null,
+    selectedBoxId: null,
+    history: [],
+    future: [],
+    drag: null,           // in-progress pointer interaction, see onPointerDown
+    dbReady: null,
+  };
+
+  // The label list shipped in the markup is the single source of truth for
+  // "Reset to defaults". Captured once, before any autosave can overwrite it.
+  const DEFAULT_LABELS_TEXT = $('#labelsText').value;
+
+  // Mirrors assembly_labeler_local/label_serve.py's `part_id(i) = 3 + 3*i`
+  // (the IndustReal install-state id), so a box exported here can be joined to
+  // the video labeler's completion events. Only meaningful while this label
+  // list matches that app's PARTS list in the same order.
+  function industrealId(classId) { return 3 + 3 * classId; }
+
+  // Line format: "id | Display name | count"  (count optional, defaults to 1)
+  // `count` is how many boxes this part needs per image -- e.g. Exhaust is
+  // visible as two separate pieces, so it expects 2.
+  function parseLabels(text) {
+    const rows = String(text || '').split(/\n/).map((x) => x.trim()).filter(Boolean).map((line) => {
+      const parts = line.split('|');
+      const id = parts[0];
+      let name = (parts[1] || '').trim();
+      let count = 1;
+      if (parts.length >= 3) {
+        const n = parseInt(parts[2].trim(), 10);
+        if (Number.isFinite(n) && n > 0) count = n;
+      }
+      if (!name) name = String(id || '').trim();
+      return { id: slug(id), name, count };
+    });
+    const seen = new Set();
+    const unique = rows.filter((r) => !seen.has(r.id) && seen.add(r.id));
+    return unique.map((r, i) => ({ class_id: i, id: r.id, name: r.name, count: r.count, industreal_id: industrealId(i) }));
+  }
+  // Per-label default box counts, keyed by id. Used to migrate projects saved
+  // before `count` existed: without this, an older autosave restores every
+  // label as count=1 and the multi-box parts stop waiting for their 2nd box.
+  const DEFAULT_LABEL_COUNTS = new Map(parseLabels(DEFAULT_LABELS_TEXT).map((l) => [l.id, l.count]));
+
+  function expectedCount(labelId) { return labelById(labelId)?.count || 1; }
+  function expectedBoxesPerImage() { return state.labels.reduce((n, l) => n + (l.count || 1), 0); }
+
+  // Stable 1-based index of a box among the boxes sharing its label on the same
+  // image, ordered by creation. This is what makes two "Exhaust" boxes tellable
+  // apart -- in the UI, and in every saved/exported record.
+  function boxInstance(img, box) {
+    const siblings = boxesForLabel(img, box.label_id)
+      .slice()
+      .sort((a, b) => String(a.created_at).localeCompare(String(b.created_at)) || String(a.box_id).localeCompare(String(b.box_id)));
+    return siblings.findIndex((b) => b.box_id === box.box_id) + 1;
+  }
+  // "Exhaust #2" when the label can have several boxes, plain "Exhaust" when not.
+  function boxDisplayName(img, box) {
+    const label = labelById(box.label_id);
+    const base = label ? label.name : (box.label_id + ' (missing label)');
+    const many = (label && label.count > 1) || boxesForLabel(img, box.label_id).length > 1;
+    return many ? `${base} #${boxInstance(img, box)}` : base;
+  }
+  function labelById(id) { return state.labels.find((l) => l.id === id) || null; }
+  function labelColor(labelId) {
+    const idx = state.labels.findIndex((l) => l.id === labelId);
+    return PALETTE[(idx < 0 ? 0 : idx) % PALETTE.length];
+  }
+  function applyLabels(text, recordUndo) {
+    if (recordUndo) recordHistory();
+    state.labels = parseLabels(text);
+    // Re-stamp class_id on every existing box so it always matches current label order.
+    for (const img of state.images) {
+      for (const b of img.boxes) {
+        const l = labelById(b.label_id);
+        b.class_id = l ? l.class_id : -1;
+      }
+      recomputeImageStatus(img);
+    }
+    if (!state.activeLabelId || !labelById(state.activeLabelId)) {
+      state.activeLabelId = state.labels[0]?.id || null;
+    }
+    renderAll();
+    queueAutosave();
+  }
+
+  function activeImage() { return state.images.find((i) => i.image_id === state.activeImageId) || null; }
+  function selectedBox() {
+    const img = activeImage();
+    if (!img) return null;
+    return img.boxes.find((b) => b.box_id === state.selectedBoxId) || null;
+  }
+
+  function makeImageRecord(fileName) {
+    return {
+      image_id: makeId('img'),
+      file_name: fileName,
+      width: 0, height: 0,
+      sha256: null,
+      status: 'empty',
+      boxes: [],
+      created_at: nowIso(),
+      updated_at: nowIso(),
+      // runtime-only, never persisted:
+      _file: null,
+      _thumbUrl: null,
+      _error: null,
+    };
+  }
+
+  function boxesForLabel(img, labelId) { return img.boxes.filter((b) => b.label_id === labelId); }
+  // A label is satisfied once it has its expected number of boxes.
+  function labelSatisfied(img, labelId) { return boxesForLabel(img, labelId).length >= expectedCount(labelId); }
+  function satisfiedLabelCount(img) { return state.labels.filter((l) => labelSatisfied(img, l.id)).length; }
+  function recomputeImageStatus(img) {
+    if (!state.labels.length) { img.status = img.boxes.length ? 'in_progress' : 'empty'; return; }
+    const satisfied = satisfiedLabelCount(img);
+    img.status = img.boxes.length === 0 ? 'empty' : (satisfied >= state.labels.length ? 'complete' : 'in_progress');
+  }
+  function firstMissingLabel(img) {
+    for (const l of state.labels) if (!labelSatisfied(img, l.id)) return l.id;
+    return state.labels[0]?.id || null;
+  }
+
+  // ==========================================================================
+  // Persistence: build / restore the portable document (schema in the plan, §7)
+  // ==========================================================================
+  function plainImage(img) {
+    return {
+      image_id: img.image_id, file_name: img.file_name, width: img.width, height: img.height,
+      sha256: img.sha256, status: img.status,
+      // `instance` / `instance_key` are stamped on save so two boxes sharing a
+      // label (e.g. the two Exhaust pieces) are individually identifiable in the
+      // saved file -- you can delete "exhaust#2" without ambiguity.
+      boxes: img.boxes.map((b) => {
+        const instance = boxInstance(img, b);
+        return { ...b, instance, instance_key: `${b.label_id}#${instance}` };
+      }),
+      created_at: img.created_at, updated_at: img.updated_at,
+    };
+  }
+  function projectDocument() {
+    return {
+      schema: SCHEMA,
+      project_name: slug(state.projectName),
+      annotator_id: state.annotatorId,
+      created_at: state.createdAt,
+      labels: state.labels.map((l) => ({ ...l })),
+      images: state.images.map(plainImage),
+      provenance: { annotator_id: state.annotatorId, reviewer_id: null, guideline_version: '1.0.0', app_version: APP_VERSION },
+    };
+  }
+  function restoreDocument(doc, preserveRuntimeHandles) {
+    const handles = new Map(state.images.map((i) => [i.image_id, { _file: i._file, _thumbUrl: i._thumbUrl }]));
+    state.projectName = doc.project_name || 'engine_parts_detection';
+    state.annotatorId = doc.annotator_id || '';
+    state.createdAt = doc.created_at || nowIso();
+    state.labels = Array.isArray(doc.labels) && doc.labels.length
+      ? doc.labels.map((l, i) => ({ class_id: i, id: l.id, name: l.name, count: l.count || DEFAULT_LABEL_COUNTS.get(l.id) || 1, industreal_id: l.industreal_id ?? industrealId(i) }))
+      : parseLabels($('#labelsText').value);
+    state.images = (doc.images || []).map((raw) => {
+      const rec = makeImageRecord(raw.file_name);
+      Object.assign(rec, {
+        image_id: raw.image_id || rec.image_id, width: raw.width || 0, height: raw.height || 0,
+        sha256: raw.sha256 || null, boxes: (raw.boxes || []).map((b) => ({ ...b })),
+        created_at: raw.created_at || nowIso(), updated_at: raw.updated_at || nowIso(),
+      });
+      if (preserveRuntimeHandles) {
+        const h = handles.get(rec.image_id);
+        if (h) Object.assign(rec, h);
+      }
+      recomputeImageStatus(rec);
+      return rec;
+    });
+    state.activeImageId = state.images[0]?.image_id || null;
+    state.selectedBoxId = null;
+    state.activeLabelId = state.activeImageId ? firstMissingLabel(activeImage()) : (state.labels[0]?.id || null);
+    $('#projectName').value = state.projectName;
+    $('#annotatorId').value = state.annotatorId;
+    $('#labelsText').value = state.labels.map((l) => `${l.id} | ${l.name} | ${l.count || 1}`).join('\n');
+  }
+
+  // ---- IndexedDB (autosave only; never stores image bytes) ----
+  function openDb() {
+    if (state.dbReady) return state.dbReady;
+    state.dbReady = new Promise((resolve, reject) => {
+      if (!('indexedDB' in window)) return reject(new Error('IndexedDB unavailable'));
+      const req = indexedDB.open(DB_NAME, 1);
+      req.onupgradeneeded = () => { req.result.createObjectStore(DB_STORE, { keyPath: 'project_name' }); };
+      req.onsuccess = () => resolve(req.result);
+      req.onerror = () => reject(req.error || new Error('IndexedDB open failed'));
+    });
+    return state.dbReady;
+  }
+  async function dbPut(doc) {
+    const db = await openDb();
+    return new Promise((resolve, reject) => {
+      const tx = db.transaction(DB_STORE, 'readwrite');
+      tx.objectStore(DB_STORE).put(doc);
+      tx.oncomplete = () => resolve();
+      tx.onerror = () => reject(tx.error);
+    });
+  }
+  async function dbGet(projectName) {
+    const db = await openDb();
+    return new Promise((resolve, reject) => {
+      const tx = db.transaction(DB_STORE, 'readonly');
+      const req = tx.objectStore(DB_STORE).get(projectName);
+      req.onsuccess = () => resolve(req.result || null);
+      req.onerror = () => reject(req.error);
+    });
+  }
+
+  let autosaveTimer = null;
+  function queueAutosave() {
+    clearTimeout(autosaveTimer);
+    autosaveTimer = setTimeout(saveAutosaveNow, 500);
+  }
+  async function saveAutosaveNow() {
+    try {
+      const doc = projectDocument();
+      await dbPut(doc);
+      try { localStorage.setItem(LAST_PROJECT_KEY, doc.project_name); } catch (e) {}
+      setStatus('Autosaved · ' + doc.project_name, !!state.images.length);
+    } catch (e) {
+      setStatus('Autosave unavailable: ' + e.message);
+    }
+  }
+  async function restoreAutosave() {
+    try {
+      const lastName = localStorage.getItem(LAST_PROJECT_KEY);
+      if (!lastName) return false;
+      const doc = await dbGet(lastName);
+      if (!doc || !doc.schema) return false;
+      restoreDocument(doc, false);
+      toast('Restored autosaved project "' + doc.project_name + '" — re-import its image folder to relink photos');
+      return true;
+    } catch (e) { return false; }
+  }
+
+  function saveProjectFile() {
+    const blob = new Blob([JSON.stringify(projectDocument(), null, 2)], { type: 'application/json' });
+    download(blob, slug(state.projectName) + '_bbox_project.json');
+    toast('Portable project JSON saved');
+  }
+  async function openProjectFile(file) {
+    try {
+      const doc = JSON.parse(await file.text());
+      if (!doc || !doc.schema || !Array.isArray(doc.images)) throw new Error('Not a bbox_labeler project file');
+      recordHistory();
+      restoreDocument(doc, true);
+      renderAll();
+      queueAutosave();
+      toast('Project opened — import the matching image folder to relink photos');
+    } catch (e) {
+      toast('Could not open project: ' + e.message, true);
+    }
+  }
+
+  // ==========================================================================
+  // Image import (folder input + drag/drop) and on-demand decode
+  // ==========================================================================
+  function mergeIncomingFiles(files) {
+    // Matches an incoming file to an existing record by basename (relink),
+    // otherwise appends it as a new image. One function serves both first
+    // import and "reopen project, relink folder" per the plan's model.
+    recordHistory();
+    const byName = new Map(state.images.map((i) => [i.file_name, i]));
+    const added = [];
+    for (const f of files) {
+      if (!IMAGE_EXT.test(f.name)) continue;
+      let rec = byName.get(f.name);
+      if (!rec) { rec = makeImageRecord(f.name); state.images.push(rec); byName.set(f.name, rec); added.push(rec); }
+      rec._file = f;
+      rec._error = null;
+    }
+    state.images.sort((a, b) => naturalCompare(a.file_name, b.file_name));
+    if (!state.activeImageId && state.images.length) state.activeImageId = state.images[0].image_id;
+    renderAll();
+    queueAutosave();
+    return added;
+  }
+
+  async function prepareImages(records) {
+    // Show the active photo BEFORE thumbnailing the rest: at ~100 images the
+    // sequential thumbnail pass takes a while, and the annotator should be able
+    // to start boxing image 1 immediately instead of watching a progress bar.
+    if (state.activeImageId) await showActiveImage();
+    // Sequential on purpose: decodes + thumbnails one image at a time so we
+    // never hold more than one full-resolution bitmap in memory.
+    const bar = $('#importProgress');
+    let done = 0;
+    for (const rec of records) {
+      try {
+        const bitmap = await decodeFile(rec._file);
+        rec.width = bitmap.width || rec.width;
+        rec.height = bitmap.height || rec.height;
+        rec._thumbUrl = await makeThumbUrl(bitmap);
+        closeBitmap(bitmap);
+      } catch (e) {
+        rec._error = e.message || 'decode failed';
+      }
+      done++;
+      bar.style.width = Math.round((done / records.length) * 100) + '%';
+      if (done % 4 === 0 || done === records.length) renderTray();
+    }
+    setTimeout(() => { bar.style.width = '0'; }, 600);
+    renderAll();
+    queueAutosave();
+    // The active image's own dimensions may have only just been measured by the
+    // loop above; redraw so its boxes land on the correct letterboxed rect.
+    if (state.activeImageId) await showActiveImage();
+  }
+
+  function closeBitmap(bitmap) { if (bitmap && typeof bitmap.close === 'function') bitmap.close(); }
+
+  async function decodeFile(file) {
+    if (typeof createImageBitmap === 'function') {
+      try { return await createImageBitmap(file); } catch (e) { /* fall through to <img> path */ }
+    }
+    const url = URL.createObjectURL(file);
+    try {
+      const img = new Image();
+      await new Promise((resolve, reject) => { img.onload = resolve; img.onerror = () => reject(new Error('unsupported image')); img.src = url; });
+      img.width = img.naturalWidth; img.height = img.naturalHeight;
+      return img;
+    } finally { URL.revokeObjectURL(url); }
+  }
+
+  function makeThumbUrl(bitmap) {
+    const maxSide = 200;
+    const scale = Math.min(1, maxSide / Math.max(bitmap.width, bitmap.height));
+    const w = Math.max(1, Math.round(bitmap.width * scale));
+    const h = Math.max(1, Math.round(bitmap.height * scale));
+    const c = document.createElement('canvas');
+    c.width = w; c.height = h;
+    c.getContext('2d').drawImage(bitmap, 0, 0, w, h);
+    return new Promise((resolve) => c.toBlob((blob) => resolve(blob ? URL.createObjectURL(blob) : null), 'image/jpeg', 0.72));
+  }
+
+  // One decoded full-resolution bitmap lives at a time, for the active image only.
+  let activeBitmap = null;
+  let activeBitmapForImageId = null;
+  async function showActiveImage() {
+    const img = activeImage();
+    $('#emptyState').classList.toggle('hidden', !!img);
+    if (!img) { activeBitmap = null; activeBitmapForImageId = null; scheduleRedraw(); updateStageBadges(); return; }
+    if (activeBitmapForImageId === img.image_id && activeBitmap) { scheduleRedraw(); updateStageBadges(); return; }
+    closeBitmap(activeBitmap);
+    activeBitmap = null; activeBitmapForImageId = null;
+    if (!img._file) { scheduleRedraw(); updateStageBadges(); return; } // needs relink
+    try {
+      activeBitmap = await decodeFile(img._file);
+      activeBitmapForImageId = img.image_id;
+      if (!img.width || !img.height) { img.width = activeBitmap.width; img.height = activeBitmap.height; }
+    } catch (e) {
+      img._error = 'Could not decode this image';
+    }
+    scheduleRedraw();
+    updateStageBadges();
+  }
+
+  // ==========================================================================
+  // Coordinate math (imageRect / pointerNorm) — mirrors web/labeler.html's
+  // videoRect()/pointerNorm() letterbox math, applied to a static image.
+  // ==========================================================================
+  const canvas = $('#canvas');
+  const ctx = canvas.getContext('2d');
+
+  function imageRect(stageW, stageH, imgW, imgH) {
+    if (!imgW || !imgH) return { x: 0, y: 0, w: stageW, h: stageH, scale: 1 };
+    const s = Math.min(stageW / imgW, stageH / imgH);
+    const rw = imgW * s, rh = imgH * s;
+    return { x: (stageW - rw) / 2, y: (stageH - rh) / 2, w: rw, h: rh, scale: s };
+  }
+  function currentRect() {
+    const img = activeImage();
+    const w = canvas.clientWidth || 1, h = canvas.clientHeight || 1;
+    if (!img || !img.width || !img.height) return { x: 0, y: 0, w, h, scale: 1 };
+    return imageRect(w, h, img.width, img.height);
+  }
+  function pointerNorm(evt) {
+    const r = canvas.getBoundingClientRect();
+    const ir = currentRect();
+    return { x: (evt.clientX - r.left - ir.x) / ir.w, y: (evt.clientY - r.top - ir.y) / ir.h, rect: r, ir };
+  }
+
+  // ==========================================================================
+  // Drawing
+  // ==========================================================================
+  let redrawScheduled = false;
+  function scheduleRedraw() {
+    if (redrawScheduled) return;
+    redrawScheduled = true;
+    requestAnimationFrame(() => { redrawScheduled = false; draw(); });
+  }
+
+  function resizeBackingStore() {
+    const dpr = window.devicePixelRatio || 1;
+    const w = canvas.clientWidth, h = canvas.clientHeight;
+    const pw = Math.max(1, Math.round(w * dpr)), ph = Math.max(1, Math.round(h * dpr));
+    if (canvas.width !== pw || canvas.height !== ph) {
+      canvas.width = pw; canvas.height = ph;
+    }
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+
+  function boxHandles(px) {
+    const { x, y, w, h } = px;
+    const mx = x + w / 2, my = y + h / 2;
+    return [
+      { id: 'nw', x, y }, { id: 'n', x: mx, y }, { id: 'ne', x: x + w, y },
+      { id: 'w', x, y: my }, { id: 'e', x: x + w, y: my },
+      { id: 'sw', x, y: y + h }, { id: 's', x: mx, y: y + h }, { id: 'se', x: x + w, y: y + h },
+    ];
+  }
+  function boxToPixels(box, ir) {
+    const n = box.bbox_norm;
+    return { x: ir.x + n.x * ir.w, y: ir.y + n.y * ir.h, w: n.w * ir.w, h: n.h * ir.h };
+  }
+
+  function draw() {
+    resizeBackingStore();
+    const w = canvas.clientWidth, h = canvas.clientHeight;
+    ctx.clearRect(0, 0, w, h);
+    const img = activeImage();
+    if (!img) return;
+    const ir = currentRect();
+    ctx.fillStyle = '#101812';
+    ctx.fillRect(0, 0, w, h);
+    if (activeBitmapForImageId === img.image_id && activeBitmap) {
+      ctx.drawImage(activeBitmap, ir.x, ir.y, ir.w, ir.h);
+    } else {
+      ctx.fillStyle = 'rgba(255,255,255,.55)';
+      ctx.font = '12px sans-serif';
+      ctx.fillText(img._error ? 'Could not decode this image' : 'Relink the image folder to view this photo', ir.x + 12, ir.y + 20);
+    }
+
+    for (const box of img.boxes) {
+      const px = boxToPixels(box, ir);
+      const color = labelColor(box.label_id);
+      const selected = box.box_id === state.selectedBoxId;
+      ctx.lineWidth = selected ? 2.6 : 1.8;
+      ctx.strokeStyle = color;
+      ctx.fillStyle = color + '33';
+      ctx.fillRect(px.x, px.y, px.w, px.h);
+      ctx.strokeRect(px.x, px.y, px.w, px.h);
+
+      const text = boxDisplayName(img, box);
+      ctx.font = '600 11px sans-serif';
+      const tw = ctx.measureText(text).width + 10;
+      const tagY = Math.max(0, px.y - 17);
+      ctx.fillStyle = color;
+      ctx.fillRect(px.x, tagY, tw, 17);
+      ctx.fillStyle = '#101812';
+      ctx.fillText(text, px.x + 5, tagY + 12);
+
+      if (selected) {
+        ctx.fillStyle = '#ffffff';
+        ctx.strokeStyle = '#101812';
+        for (const hpt of boxHandles(px)) {
+          ctx.beginPath();
+          ctx.rect(hpt.x - 4, hpt.y - 4, 8, 8);
+          ctx.fill();
+          ctx.stroke();
+        }
+      }
+    }
+
+    if (state.drag && state.drag.mode === 'create') {
+      const a = state.drag.startNorm, b = state.drag.currentNorm;
+      const x0 = clamp(Math.min(a.x, b.x), 0, 1), y0 = clamp(Math.min(a.y, b.y), 0, 1);
+      const x1 = clamp(Math.max(a.x, b.x), 0, 1), y1 = clamp(Math.max(a.y, b.y), 0, 1);
+      const px = { x: ir.x + x0 * ir.w, y: ir.y + y0 * ir.h, w: (x1 - x0) * ir.w, h: (y1 - y0) * ir.h };
+      ctx.setLineDash([6, 4]);
+      ctx.strokeStyle = labelColor(state.activeLabelId);
+      ctx.lineWidth = 2;
+      ctx.strokeRect(px.x, px.y, px.w, px.h);
+      ctx.setLineDash([]);
+    }
+  }
+
+  function updateStageBadges() {
+    const img = activeImage();
+    $('#imageBadge').textContent = img ? `${state.images.indexOf(img) + 1} / ${state.images.length} · ${img.file_name}` : 'NO IMAGE';
+    const label = labelById(state.activeLabelId);
+    $('#activeLabelBadge').textContent = label ? 'ACTIVE: ' + label.name.toUpperCase() : 'NO LABEL';
+    const sel = selectedBox();
+    $('#selectionBadge').textContent = sel ? 'SELECTED: ' + boxDisplayName(img, sel) : '';
+  }
+
+  // ==========================================================================
+  // Pointer interactions: create / select / move / resize
+  // ==========================================================================
+  function hitTestHandle(box, ir, evt, rect) {
+    const px = boxToPixels(box, ir);
+    for (const hpt of boxHandles(px)) {
+      const dx = evt.clientX - rect.left - hpt.x, dy = evt.clientY - rect.top - hpt.y;
+      if (Math.hypot(dx, dy) <= HANDLE_PX) return hpt.id;
+    }
+    return null;
+  }
+  function hitTestBox(norm) {
+    const img = activeImage();
+    if (!img) return null;
+    let best = null, bestArea = Infinity;
+    for (const b of img.boxes) {
+      const n = b.bbox_norm;
+      if (norm.x >= n.x && norm.x <= n.x + n.w && norm.y >= n.y && norm.y <= n.y + n.h) {
+        const area = n.w * n.h;
+        if (area < bestArea) { bestArea = area; best = b; }
+      }
+    }
+    return best;
+  }
+
+  canvas.addEventListener('pointerdown', (evt) => {
+    const img = activeImage();
+    if (!img) return;
+    const p = pointerNorm(evt);
+    const sel = selectedBox();
+
+    if (sel) {
+      const handle = hitTestHandle(sel, p.ir, evt, p.rect);
+      if (handle) {
+        canvas.setPointerCapture(evt.pointerId);
+        recordHistory();
+        state.drag = { mode: 'resize', boxId: sel.box_id, handle, orig: { ...sel.bbox_norm } };
+        return;
+      }
+    }
+
+    const hit = hitTestBox(p);
+    if (hit) {
+      state.selectedBoxId = hit.box_id;
+      canvas.setPointerCapture(evt.pointerId);
+      recordHistory();
+      state.drag = { mode: 'move', boxId: hit.box_id, startNorm: { x: p.x, y: p.y }, orig: { ...hit.bbox_norm } };
+      renderBoxList(); renderChecklist(); updateStageBadges(); scheduleRedraw();
+      return;
+    }
+
+    if (!state.activeLabelId) { toast('Add at least one label first', true); return; }
+    state.selectedBoxId = null;
+    canvas.setPointerCapture(evt.pointerId);
+    state.drag = { mode: 'create', startNorm: { x: clamp(p.x, 0, 1), y: clamp(p.y, 0, 1) }, currentNorm: { x: p.x, y: p.y } };
+    renderBoxList(); scheduleRedraw();
+  });
+
+  canvas.addEventListener('pointermove', (evt) => {
+    if (!state.drag) return;
+    const p = pointerNorm(evt);
+    if (state.drag.mode === 'create') {
+      state.drag.currentNorm = { x: p.x, y: p.y };
+      scheduleRedraw();
+      return;
+    }
+    const img = activeImage();
+    const box = img && img.boxes.find((b) => b.box_id === state.drag.boxId);
+    if (!box) return;
+    if (state.drag.mode === 'move') {
+      const dx = p.x - state.drag.startNorm.x, dy = p.y - state.drag.startNorm.y;
+      const o = state.drag.orig;
+      box.bbox_norm = {
+        x: clamp(o.x + dx, 0, 1 - o.w), y: clamp(o.y + dy, 0, 1 - o.h), w: o.w, h: o.h,
+      };
+      box.updated_at = nowIso();
+      scheduleRedraw();
+    } else if (state.drag.mode === 'resize') {
+      applyResize(box, state.drag.handle, state.drag.orig, p);
+      box.updated_at = nowIso();
+      scheduleRedraw();
+    }
+  });
+
+  function applyResize(box, handle, orig, p) {
+    let x0 = orig.x, y0 = orig.y, x1 = orig.x + orig.w, y1 = orig.y + orig.h;
+    const nx = clamp(p.x, 0, 1), ny = clamp(p.y, 0, 1);
+    if (handle.includes('w')) x0 = nx;
+    if (handle.includes('e')) x1 = nx;
+    if (handle.includes('n')) y0 = ny;
+    if (handle.includes('s')) y1 = ny;
+    // Two unconditional passes: clamp x0/y0 into [0, 1-MIN] first, then clamp
+    // x1/y1 into [x0+MIN, 1] using that final x0/y0 — this guarantees the
+    // result stays inside [0,1] with at least MIN_BOX_NORM size, regardless
+    // of how close the dragged handle gets to an image edge.
+    x0 = clamp(x0, 0, 1 - MIN_BOX_NORM);
+    y0 = clamp(y0, 0, 1 - MIN_BOX_NORM);
+    x1 = clamp(x1, x0 + MIN_BOX_NORM, 1);
+    y1 = clamp(y1, y0 + MIN_BOX_NORM, 1);
+    box.bbox_norm = { x: x0, y: y0, w: x1 - x0, h: y1 - y0 };
+  }
+
+  canvas.addEventListener('pointerup', () => {
+    if (!state.drag) return;
+    if (state.drag.mode === 'create') {
+      const a = state.drag.startNorm, b = state.drag.currentNorm;
+      const x = clamp(Math.min(a.x, b.x), 0, 1), y = clamp(Math.min(a.y, b.y), 0, 1);
+      const w = clamp(Math.max(a.x, b.x), 0, 1) - x, h = clamp(Math.max(a.y, b.y), 0, 1) - y;
+      if (w >= MIN_BOX_NORM && h >= MIN_BOX_NORM) {
+        recordHistory();
+        commitNewBox(x, y, w, h);
+      }
+    } else {
+      queueAutosave();
+      const img = activeImage();
+      if (img) recomputeImageStatus(img);
+    }
+    state.drag = null;
+    renderAll();
+  });
+
+  function commitNewBox(x, y, w, h) {
+    const img = activeImage();
+    if (!img) return;
+    const label = labelById(state.activeLabelId);
+    const box = {
+      box_id: makeId('b'), label_id: state.activeLabelId, class_id: label ? label.class_id : -1,
+      bbox_norm: { x: +x.toFixed(5), y: +y.toFixed(5), w: +w.toFixed(5), h: +h.toFixed(5) },
+      occluded: false, truncated: false, confidence: 1.0,
+      created_at: nowIso(), updated_at: nowIso(),
+    };
+    img.boxes.push(box);
+    img.updated_at = nowIso();
+    state.selectedBoxId = box.box_id;
+    recomputeImageStatus(img);
+    // Guided flow: finish the current part before moving on. A part needing two
+    // boxes stays active until both are drawn -- otherwise, labelling out of
+    // order would bounce you back to the first unfinished label after box #1
+    // and you would have to return for #2 manually.
+    if (!labelSatisfied(img, state.activeLabelId)) {
+      // keep the current label active; it still needs more boxes
+    } else {
+      const next = firstMissingLabel(img);
+      if (next) state.activeLabelId = next;
+    }
+    queueAutosave();
+    toast(img.status === 'complete' ? 'Image complete' : 'Box added — next: ' + (labelById(state.activeLabelId)?.name || ''));
+  }
+
+  function deleteSelectedBox() {
+    const img = activeImage();
+    const box = selectedBox();
+    if (!img || !box) return;
+    recordHistory();
+    img.boxes = img.boxes.filter((b) => b.box_id !== box.box_id);
+    state.selectedBoxId = null;
+    recomputeImageStatus(img);
+    renderAll();
+    queueAutosave();
+  }
+  function relabelBox(box, labelId) {
+    const label = labelById(labelId);
+    if (!label) return;
+    recordHistory();
+    box.label_id = labelId;
+    box.class_id = label.class_id;
+    box.updated_at = nowIso();
+    const img = activeImage();
+    if (img) recomputeImageStatus(img);
+    renderAll();
+    queueAutosave();
+  }
+
+  // ==========================================================================
+  // Undo / redo — bounded stack of full-document snapshots (same shape as
+  // web/labeler.html's recordHistory()/undo()/redo() pattern).
+  // ==========================================================================
+  function snapshot() { return JSON.stringify(projectDocument()); }
+  function updateHistoryButtons() {
+    $('#undoBtn').disabled = !state.history.length;
+    $('#redoBtn').disabled = !state.future.length;
+  }
+  function recordHistory() {
+    state.history.push(snapshot());
+    if (state.history.length > HISTORY_LIMIT) state.history.shift();
+    state.future = [];
+    updateHistoryButtons();
+  }
+  function undo() {
+    if (!state.history.length) return;
+    state.future.push(snapshot());
+    restoreDocument(JSON.parse(state.history.pop()), true);
+    updateHistoryButtons();
+    renderAll();
+    showActiveImage();
+    queueAutosave();
+    toast('Undone');
+  }
+  function redo() {
+    if (!state.future.length) return;
+    state.history.push(snapshot());
+    restoreDocument(JSON.parse(state.future.pop()), true);
+    updateHistoryButtons();
+    renderAll();
+    showActiveImage();
+    queueAutosave();
+    toast('Redone');
+  }
+
+  // ==========================================================================
+  // Rendering: tray, checklist, box list, progress
+  // ==========================================================================
+  function statusBadge(status) {
+    if (status === 'complete') return '<span class="badge complete">complete</span>';
+    if (status === 'in_progress') return '<span class="badge partial">in progress</span>';
+    return '<span class="badge empty">empty</span>';
+  }
+  function renderTray() {
+    $('#imageCount').textContent = state.images.length + ' loaded';
+    const list = $('#thumbList');
+    list.innerHTML = state.images.map((img) => {
+      const covered = state.labels.length ? state.labels.filter((l) => boxesForLabel(img, l.id).length > 0).length : 0;
+      const thumb = img._thumbUrl ? `<img src="${img._thumbUrl}" alt="">` : `<div class="ph">${img._error ? 'ERR' : (img._file ? '…' : 'RELINK')}</div>`;
+      return `<div class="thumb ${img.image_id === state.activeImageId ? 'active' : ''}" data-id="${img.image_id}">
+        ${thumb}
+        <div class="meta">
+          <b>${esc(img.file_name)}</b>
+          ${img._error ? '<span class="badge error">decode error</span>' : statusBadge(img.status)}
+          <span class="mono">${covered}/${state.labels.length}</span>
+        </div>
+      </div>`;
+    }).join('');
+    list.querySelectorAll('.thumb').forEach((el) => { el.onclick = () => selectImage(el.dataset.id); });
+  }
+  async function selectImage(id) {
+    if (state.drag) return; // don't navigate mid-drag
+    if (id === state.activeImageId) return;
+    state.activeImageId = id;
+    state.selectedBoxId = null;
+    const img = activeImage();
+    state.activeLabelId = img ? firstMissingLabel(img) : state.activeLabelId;
+    renderAll();
+    await showActiveImage();
+  }
+
+  function renderChecklist() {
+    const img = activeImage();
+    const el = $('#checklist');
+    el.innerHTML = state.labels.map((l) => {
+      const have = img ? boxesForLabel(img, l.id).length : 0;
+      const want = l.count || 1;
+      const done = have >= want;
+      // Show "1/2" for any multi-box part so it is obvious one is still missing;
+      // show "x3" if the annotator drew more than expected.
+      const counter = want > 1 ? `${have}/${want}` : (have > 1 ? `×${have}` : '');
+      return `<div class="cl-row ${done ? 'done' : ''} ${l.id === state.activeLabelId ? 'active' : ''}" data-id="${l.id}">
+        <span class="cl-swatch" style="background:${labelColor(l.id)}"></span>
+        <span class="cl-name">${esc(l.name)}</span>
+        ${counter ? `<span class="cl-count">${esc(counter)}</span>` : ''}
+        <span class="cl-check">✓</span>
+      </div>`;
+    }).join('');
+    el.querySelectorAll('.cl-row').forEach((row) => { row.onclick = () => { state.activeLabelId = row.dataset.id; renderChecklist(); updateStageBadges(); }; });
+    const satisfied = img ? satisfiedLabelCount(img) : 0;
+    $('#checklistCount').textContent = `${satisfied} / ${state.labels.length}`;
+  }
+
+  function renderBoxList() {
+    const img = activeImage();
+    const el = $('#boxList');
+    const boxes = img ? img.boxes : [];
+    $('#boxCount').textContent = String(boxes.length);
+    el.innerHTML = boxes.map((b) => {
+      const label = labelById(b.label_id);
+      const options = state.labels.map((l) => `<option value="${esc(l.id)}" ${l.id === b.label_id ? 'selected' : ''}>${esc(l.name)}</option>`).join('');
+      // The "#n" badge is the whole point of instance numbering: with two
+      // Exhaust boxes, this row tells you which one you are about to delete.
+      const many = (label && label.count > 1) || boxesForLabel(img, b.label_id).length > 1;
+      const tag = many ? `<span class="inst-tag">#${boxInstance(img, b)}</span>` : '';
+      return `<div class="box-row ${b.box_id === state.selectedBoxId ? 'selected' : ''}" data-id="${b.box_id}">
+        <span class="cl-swatch" style="background:${labelColor(b.label_id)}"></span>
+        ${tag}
+        <select data-role="relabel">${options || `<option>${esc(label ? label.name : b.label_id)}</option>`}</select>
+        <button data-role="delete" title="Delete box">✕</button>
+      </div>`;
+    }).join('');
+    el.querySelectorAll('.box-row').forEach((row) => {
+      const id = row.dataset.id;
+      row.addEventListener('click', (e) => { if (e.target.dataset.role) return; state.selectedBoxId = id; renderBoxList(); updateStageBadges(); scheduleRedraw(); });
+      row.querySelector('[data-role="relabel"]').addEventListener('change', (e) => { const box = img.boxes.find((b) => b.box_id === id); relabelBox(box, e.target.value); });
+      row.querySelector('[data-role="delete"]').addEventListener('click', () => { state.selectedBoxId = id; deleteSelectedBox(); });
+    });
+  }
+
+  function renderProgress() {
+    const total = state.images.length, complete = state.images.filter((i) => i.status === 'complete').length;
+    const boxesDrawn = state.images.reduce((n, i) => n + i.boxes.length, 0);
+    const boxesExpected = total * expectedBoxesPerImage();
+    $('#progressText').textContent = `${complete} / ${total}`;
+    $('#metricImagesDone').textContent = String(complete);
+    $('#metricBoxesDone').textContent = `${boxesDrawn} / ${boxesExpected}`;
+    $('#globalProgress').style.width = total ? Math.round((complete / total) * 100) + '%' : '0%';
+  }
+
+  function renderAll() {
+    renderTray();
+    renderChecklist();
+    renderBoxList();
+    renderProgress();
+    updateStageBadges();
+    updateHistoryButtons();
+    scheduleRedraw();
+  }
+
+  // ==========================================================================
+  // Validation (rules mirror the plan's §12)
+  // ==========================================================================
+  function runValidation() {
+    const issues = [];
+    if (!state.labels.length) issues.push('ERROR: no labels defined');
+    if (!state.images.length) issues.push('ERROR: no images loaded');
+    const labelIds = new Set(state.labels.map((l) => l.id));
+    const classIds = state.labels.map((l) => l.class_id).sort((a, b) => a - b);
+    const contiguous = classIds.every((v, i) => v === i);
+    if (!contiguous) issues.push('ERROR: label class_id values are not contiguous 0..N-1');
+
+    const incomplete = [];
+    for (const img of state.images) {
+      const tag = img.file_name;
+      if (img._error) issues.push(`ERROR ${tag}: image failed to decode`);
+      if (img.status !== 'complete') incomplete.push(tag);
+      const seenLabels = new Map();
+      for (const b of img.boxes) {
+        if (!(b.bbox_norm.w > 0 && b.bbox_norm.h > 0)) issues.push(`ERROR ${tag}: box on "${b.label_id}" has non-positive width/height`);
+        const n = b.bbox_norm;
+        if (n.x < 0 || n.y < 0 || n.x + n.w > 1.0001 || n.y + n.h > 1.0001) issues.push(`ERROR ${tag}: box on "${b.label_id}" is out of [0,1] bounds`);
+        if (!labelIds.has(b.label_id)) issues.push(`ERROR ${tag}: box references unknown label_id "${b.label_id}"`);
+        if (n.w * n.h < 0.001) issues.push(`WARN ${tag}: box on "${b.label_id}" is suspiciously tiny (possible misclick)`);
+        seenLabels.set(b.label_id, (seenLabels.get(b.label_id) || 0) + 1);
+      }
+      // Each label has an expected box count (1 by default, 2 for the parts
+      // that appear as two pieces). Flag both shortfalls and surpluses.
+      for (const l of state.labels) {
+        const have = seenLabels.get(l.id) || 0;
+        const want = l.count || 1;
+        if (have < want) {
+          issues.push(have === 0
+            ? `WARN ${tag}: missing box for label "${l.id}"${want > 1 ? ` (needs ${want})` : ''}`
+            : `WARN ${tag}: label "${l.id}" has ${have} of ${want} expected boxes`);
+        } else if (have > want) {
+          issues.push(`WARN ${tag}: label "${l.id}" has ${have} boxes but only ${want} expected — delete the extra (shown as #${want + 1}+ in the box list)`);
+        }
+      }
+    }
+    if (incomplete.length) issues.push(`INFO: ${incomplete.length} image(s) incomplete — ${incomplete.slice(0, 12).join(', ')}${incomplete.length > 12 ? ', …' : ''}`);
+
+    const errors = issues.filter((x) => x.startsWith('ERROR')).length;
+    const warns = issues.filter((x) => x.startsWith('WARN')).length;
+    if (!issues.length) issues.push('PASS: all images complete, all boxes in range, no duplicates.');
+    else issues.unshift(`${errors ? 'FAIL' : 'PASS WITH WARNINGS'}: ${errors} error(s), ${warns} warning(s).`);
+    $('#report').textContent = issues.join('\n');
+    $('#modal').classList.add('show');
+    return errors === 0;
+  }
+
+  // ==========================================================================
+  // Export: native JSON, COCO, YOLO — bundled as a ZIP (hand-rolled, store-only,
+  // per the plan's no-CDN fallback in §11).
+  // ==========================================================================
+  function cocoPayload() {
+    const images = [], annotations = [];
+    const categories = state.labels.map((l) => ({ id: l.class_id + 1, name: l.name, supercategory: 'part' }));
+    let iid = 1, aid = 1;
+    for (const img of state.images) {
+      images.push({ id: iid, file_name: img.file_name, width: img.width, height: img.height });
+      for (const b of img.boxes) {
+        const label = labelById(b.label_id);
+        if (!label) continue;
+        const px = { x: b.bbox_norm.x * img.width, y: b.bbox_norm.y * img.height, w: b.bbox_norm.w * img.width, h: b.bbox_norm.h * img.height };
+        const instance = boxInstance(img, b);
+        annotations.push({
+          id: aid++, image_id: iid, category_id: label.class_id + 1,
+          bbox: [round2(px.x), round2(px.y), round2(px.w), round2(px.h)],
+          area: round2(px.w * px.h), iscrowd: 0,
+          occluded: !!b.occluded, truncated: !!b.truncated,
+          instance, instance_key: `${b.label_id}#${instance}`,
+        });
+      }
+      iid++;
+    }
+    return { info: { description: 'bbox_labeler export', version: APP_VERSION }, images, annotations, categories };
+  }
+  function round2(x) { return Math.round(x * 100) / 100; }
+
+  function yoloTxtFor(img) {
+    return img.boxes.filter((b) => labelById(b.label_id)).map((b) => {
+      const n = b.bbox_norm;
+      const cx = n.x + n.w / 2, cy = n.y + n.h / 2;
+      const label = labelById(b.label_id);
+      return `${label.class_id} ${cx.toFixed(6)} ${cy.toFixed(6)} ${n.w.toFixed(6)} ${n.h.toFixed(6)}`;
+    }).join('\n') + (img.boxes.length ? '\n' : '');
+  }
+  function yoloClassesTxt() { return state.labels.map((l) => l.name).join('\n') + '\n'; }
+  function yoloDataYaml(root) {
+    return `path: .\ntrain: images\nval: images\nnames:\n${state.labels.map((l) => `  ${l.class_id}: ${l.name}`).join('\n')}\n# generated by bbox_labeler for project "${root}"\n`;
+  }
+
+  async function exportBundle() {
+    if (!runValidation()) { toast('Fix validation errors before export (see report)', true); return; }
+    const root = slug(state.projectName);
+    const files = [];
+    files.push(['annotations/native_project.json', JSON.stringify(projectDocument(), null, 2)]);
+    files.push(['annotations/coco.json', JSON.stringify(cocoPayload(), null, 2)]);
+    files.push(['yolo/classes.txt', yoloClassesTxt()]);
+    files.push(['yolo/data.yaml', yoloDataYaml(root)]);
+    for (const img of state.images) {
+      const base = img.file_name.replace(/\.[^.]+$/, '');
+      files.push([`yolo/labels/${base}.txt`, yoloTxtFor(img)]);
+    }
+    files.push(['README.txt', `bbox_labeler export\nProject: ${root}\nImages: ${state.images.length}  Labels: ${state.labels.length}\n\nCOCO bbox = [x,y,w,h] in pixels. YOLO lines = "class_id cx cy w h" normalized, center-based.\nImage bytes are not included — this bundle is annotations only.\n`]);
+    try {
+      const blob = buildZip(files);
+      download(blob, root + '_bbox_labels.zip');
+      toast('Export bundle downloaded');
+    } catch (e) {
+      toast('ZIP export failed: ' + e.message, true);
+    }
+  }
+
+  // ---- Minimal store-only (uncompressed) ZIP writer -----------------------
+  const CRC_TABLE = (() => {
+    const table = new Uint32Array(256);
+    for (let n = 0; n < 256; n++) {
+      let c = n;
+      for (let k = 0; k < 8; k++) c = (c & 1) ? (0xEDB88320 ^ (c >>> 1)) : (c >>> 1);
+      table[n] = c >>> 0;
+    }
+    return table;
+  })();
+  function crc32(bytes) {
+    let c = 0xFFFFFFFF;
+    for (let i = 0; i < bytes.length; i++) c = CRC_TABLE[(c ^ bytes[i]) & 0xFF] ^ (c >>> 8);
+    return (c ^ 0xFFFFFFFF) >>> 0;
+  }
+  function dosDateTime(d) {
+    const time = ((d.getHours() & 0x1F) << 11) | ((d.getMinutes() & 0x3F) << 5) | ((d.getSeconds() >> 1) & 0x1F);
+    const date = (((d.getFullYear() - 1980) & 0x7F) << 9) | (((d.getMonth() + 1) & 0xF) << 5) | (d.getDate() & 0x1F);
+    return { time, date };
+  }
+  function buildZip(files) {
+    // files: [ [path, textContent], ... ]. Method 0 = store (no compression),
+    // so there is no deflate implementation to get wrong.
+    const enc = new TextEncoder();
+    const { time, date } = dosDateTime(new Date());
+    const localParts = [], centralParts = [];
+    let offset = 0;
+    for (const [path, text] of files) {
+      const nameBytes = enc.encode(path);
+      const dataBytes = enc.encode(text);
+      const crc = crc32(dataBytes);
+      const local = new Uint8Array(30 + nameBytes.length);
+      const lv = new DataView(local.buffer);
+      lv.setUint32(0, 0x04034b50, true);
+      lv.setUint16(4, 20, true);      // version needed
+      lv.setUint16(6, 0, true);       // flags
+      lv.setUint16(8, 0, true);       // method: store
+      lv.setUint16(10, time, true);
+      lv.setUint16(12, date, true);
+      lv.setUint32(14, crc, true);
+      lv.setUint32(18, dataBytes.length, true); // compressed size
+      lv.setUint32(22, dataBytes.length, true); // uncompressed size
+      lv.setUint16(26, nameBytes.length, true);
+      lv.setUint16(28, 0, true);      // extra field length
+      local.set(nameBytes, 30);
+      localParts.push(local, dataBytes);
+
+      const central = new Uint8Array(46 + nameBytes.length);
+      const cv = new DataView(central.buffer);
+      cv.setUint32(0, 0x02014b50, true);
+      cv.setUint16(4, 20, true);      // version made by
+      cv.setUint16(6, 20, true);      // version needed
+      cv.setUint16(8, 0, true);
+      cv.setUint16(10, 0, true);
+      cv.setUint16(12, time, true);
+      cv.setUint16(14, date, true);
+      cv.setUint32(16, crc, true);
+      cv.setUint32(20, dataBytes.length, true);
+      cv.setUint32(24, dataBytes.length, true);
+      cv.setUint16(28, nameBytes.length, true);
+      cv.setUint16(30, 0, true);      // extra length
+      cv.setUint16(32, 0, true);      // comment length
+      cv.setUint16(34, 0, true);      // disk number start
+      cv.setUint16(36, 0, true);      // internal attrs
+      cv.setUint32(38, 0, true);      // external attrs
+      cv.setUint32(42, offset, true); // local header offset
+      central.set(nameBytes, 46);
+      centralParts.push(central);
+
+      offset += local.length + dataBytes.length;
+    }
+    const centralStart = offset;
+    let centralSize = 0;
+    for (const c of centralParts) centralSize += c.length;
+
+    const eocd = new Uint8Array(22);
+    const ev = new DataView(eocd.buffer);
+    ev.setUint32(0, 0x06054b50, true);
+    ev.setUint16(4, 0, true);
+    ev.setUint16(6, 0, true);
+    ev.setUint16(8, files.length, true);
+    ev.setUint16(10, files.length, true);
+    ev.setUint32(12, centralSize, true);
+    ev.setUint32(16, centralStart, true);
+    ev.setUint16(20, 0, true);
+
+    return new Blob([...localParts, ...centralParts, eocd], { type: 'application/zip' });
+  }
+
+  // ==========================================================================
+  // Drag & drop folder import (recursive directory entry reading)
+  // ==========================================================================
+  function readEntryFiles(entry) {
+    return new Promise((resolve) => {
+      if (entry.isFile) {
+        entry.file((file) => resolve([file]), () => resolve([]));
+      } else if (entry.isDirectory) {
+        const reader = entry.createReader();
+        const all = [];
+        const readBatch = () => {
+          reader.readEntries(async (entries) => {
+            if (!entries.length) {
+              const nested = await Promise.all(all.map(readEntryFiles));
+              resolve(nested.flat());
+              return;
+            }
+            all.push(...entries);
+            readBatch();
+          }, () => resolve([]));
+        };
+        readBatch();
+      } else resolve([]);
+    });
+  }
+  async function handleDataTransfer(dt) {
+    if (dt.items && dt.items.length && typeof dt.items[0].webkitGetAsEntry === 'function') {
+      const entries = [...dt.items].map((it) => it.webkitGetAsEntry()).filter(Boolean);
+      const groups = await Promise.all(entries.map(readEntryFiles));
+      return groups.flat();
+    }
+    return [...dt.files];
+  }
+
+  // ==========================================================================
+  // Keyboard shortcuts
+  // ==========================================================================
+  window.addEventListener('keydown', (e) => {
+    if (e.target.matches('input,textarea,select')) return;
+    const key = e.key;
+    if (key === 'Delete' || key === 'Backspace') { e.preventDefault(); deleteSelectedBox(); return; }
+    if ((e.ctrlKey || e.metaKey) && key.toLowerCase() === 'z') { e.preventDefault(); e.shiftKey ? redo() : undo(); return; }
+    if (key === 'ArrowRight' || key === ']') { e.preventDefault(); stepImage(1); return; }
+    if (key === 'ArrowLeft' || key === '[') { e.preventDefault(); stepImage(-1); return; }
+    if (key === 'Escape') { state.selectedBoxId = null; renderAll(); return; }
+    if (/^[0-9]$/.test(key)) {
+      const idx = key === '0' ? 9 : (Number(key) - 1);
+      const label = state.labels[idx];
+      if (!label) return;
+      const box = selectedBox();
+      if (box) relabelBox(box, label.id);
+      else { state.activeLabelId = label.id; renderChecklist(); updateStageBadges(); }
+    }
+  });
+  function stepImage(delta) {
+    if (state.drag || !state.images.length) return;
+    const idx = state.images.findIndex((i) => i.image_id === state.activeImageId);
+    const next = clamp(idx + delta, 0, state.images.length - 1);
+    selectImage(state.images[next].image_id);
+  }
+
+  // ==========================================================================
+  // Wiring
+  // ==========================================================================
+  $('#folderBtn').onclick = () => $('#folderInput').click();
+  $('#folderInput').onchange = async (e) => {
+    const files = [...e.target.files].filter((f) => IMAGE_EXT.test(f.name));
+    if (!files.length) { toast('No .jpg/.jpeg/.png/.webp files found in that folder', true); return; }
+    mergeIncomingFiles(files);
+    // Reprocess anything relinked-but-not-yet-thumbnailed in THIS session --
+    // covers brand-new images and images relinked after a reload (their
+    // width/height came back from the restored project doc, but a fresh
+    // page load has no blob URL for their thumbnail yet).
+    await prepareImages(state.images.filter((i) => i._file && !i._thumbUrl));
+    toast(`${files.length} image(s) imported/relinked`);
+    e.target.value = '';
+  };
+  $('#openProjectBtn').onclick = () => $('#projectInput').click();
+  $('#projectInput').onchange = (e) => { if (e.target.files[0]) openProjectFile(e.target.files[0]); e.target.value = ''; };
+  $('#saveProjectBtn').onclick = saveProjectFile;
+  $('#undoBtn').onclick = undo;
+  $('#redoBtn').onclick = redo;
+  $('#validateBtn').onclick = runValidation;
+  $('#exportBtn').onclick = exportBundle;
+  $('#closeModal').onclick = () => $('#modal').classList.remove('show');
+  $('#applyLabelsBtn').onclick = () => applyLabels($('#labelsText').value, true);
+  $('#resetLabelsBtn').onclick = () => {
+    // Escape hatch when an older autosave restored a stale label vocabulary.
+    if (!confirm('Replace the label list with the current defaults?\n\nExisting boxes are kept, but any box whose label is not in the new list will be flagged by Validate.')) return;
+    $('#labelsText').value = DEFAULT_LABELS_TEXT;
+    applyLabels(DEFAULT_LABELS_TEXT, true);
+    toast('Labels reset to defaults');
+  };
+  $('#projectName').addEventListener('change', (e) => { state.projectName = e.target.value; queueAutosave(); });
+  $('#annotatorId').addEventListener('change', (e) => { state.annotatorId = e.target.value; queueAutosave(); });
+
+  const drop = $('#drop');
+  ['dragenter', 'dragover'].forEach((n) => drop.addEventListener(n, (e) => { e.preventDefault(); drop.classList.add('drag'); }));
+  ['dragleave', 'drop'].forEach((n) => drop.addEventListener(n, (e) => { e.preventDefault(); drop.classList.remove('drag'); }));
+  drop.addEventListener('drop', async (e) => {
+    const files = (await handleDataTransfer(e.dataTransfer)).filter((f) => IMAGE_EXT.test(f.name));
+    if (!files.length) { toast('No .jpg/.jpeg/.png/.webp files found in the drop', true); return; }
+    mergeIncomingFiles(files);
+    // Reprocess anything relinked-but-not-yet-thumbnailed in THIS session --
+    // covers brand-new images and images relinked after a reload (their
+    // width/height came back from the restored project doc, but a fresh
+    // page load has no blob URL for their thumbnail yet).
+    await prepareImages(state.images.filter((i) => i._file && !i._thumbUrl));
+    toast(`${files.length} image(s) imported/relinked`);
+  });
+
+  window.addEventListener('resize', scheduleRedraw);
+  window.addEventListener('beforeunload', saveAutosaveNow);
+
+  // ==========================================================================
+  // Boot
+  // ==========================================================================
+  async function boot() {
+    state.labels = parseLabels($('#labelsText').value);
+    state.activeLabelId = state.labels[0]?.id || null;
+    const restored = await restoreAutosave();
+    if (!restored) setStatus('Ready — import an image folder');
+    renderAll();
+    await showActiveImage();
+  }
+  boot();
+})();
+</script>
+</body>
+</html>

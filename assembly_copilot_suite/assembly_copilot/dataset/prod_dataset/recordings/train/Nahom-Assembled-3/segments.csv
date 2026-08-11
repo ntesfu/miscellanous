@@ -1,0 +1,11 @@
+part,action,start_frame,end_frame,start_sec,end_sec
+Main Drive Planet Gear,install,0,550,0.0,18.348
+Pop Control Ring Gear,install,550,1623,18.348,54.11
+Pop Control Sun Gear,install,1623,3011,54.11,100.382
+Compressor Casing,install,3011,4419,100.382,147.291
+Exhaust,install,4419,7738,147.291,257.938
+Exhaust Casing,install,7738,8508,257.938,283.617
+Cowling Bracket,install,8508,9278,283.617,309.281
+Frame Subassembly,install,9278,10795,309.281,359.828
+Propeller Cone plate,install,10795,11296,359.828,376.546
+Propeller Cone Tip,install,11296,12100,376.546,403.33

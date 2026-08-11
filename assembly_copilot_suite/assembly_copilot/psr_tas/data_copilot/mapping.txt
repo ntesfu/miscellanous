@@ -1,0 +1,11 @@
+0 background
+1 Main_Drive_Planet_Gear
+2 Pop_Control_Ring_Gear
+3 Pop_Control_Sun_Gear
+4 Compressor_Casing
+5 Exhaust
+6 Exhaust_Casing
+7 Cowling_Bracket
+8 Frame_Subassembly
+9 Propeller_Cone_plate
+10 Propeller_Cone_Tip
