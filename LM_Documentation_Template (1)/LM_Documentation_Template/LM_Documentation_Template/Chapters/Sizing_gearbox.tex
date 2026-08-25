@@ -1,0 +1,668 @@
+\chapter{Sizing of an Aerospace Helicopter Main Gearbox}
+\section{Helicopter Transmission Architectures and the UH-60 Black Hawk MGB}
+    In rotorcraft engineering, the Main Gearbox (MGB) is the mechanical heart of the aircraft. 
+    It must safely transmit thousands of kilowatts of power from high-speed gas turbine engines 
+    (typically running between 6,000 and 21,000 RPM) down to the slow, extremely high-torque 
+    operational speeds dictated by the main rotor blades (typically 250 to 400 RPM). To achieve 
+    this immense reduction while remaining light enough for flight, helicopter transmissions 
+    universally employ a multi-stage architecture.
+
+    The standard, most reliable MGB configuration consists of a horizontal double-input 
+    engine stage transitioning through a 90° spiral bevel reduction into a vertical, high-torque 
+    final planetary (epicyclic) stage as shown in \autoref{fig:gearbox6}.
+    	\begin{figure}[h]
+			\centering
+			\includegraphics[width=0.9\textwidth]{gearbox/gearbox6}
+			\caption{Helicopter MGB Configuration}
+			\label{fig:gearbox6}
+		\end{figure}
+		\FloatBarrier
+
+    A prime operational example of this configuration is found in the Sikorsky UH-60 Black Hawk. 
+    The Black Hawk uses a modular, triple-stage main transmission. Power enters horizontally from 
+    two General Electric T700 turboshaft engines into two independent input modules. Each module 
+    uses high-speed helical gears to combine the engine inputs, which then drive a Spiral Bevel 
+    Gear mesh. This bevel mesh executes a 90-degree axis flip, turning the horizontal engine power 
+    into a vertical spinning axis. This vertical core shaft feeds directly into a final, 
+    single-stage planetary gear system located beneath the main rotor mast. The planetary stage 
+    uses a fixed outer ring gear and five power-splitting planet gears mounted to a forged steel 
+    planet carrier, which directly rotates the main rotor shaft to lift the aircraft.
+
+\section{Sizing Input Parameters}
+    To build an MGB, every baseline physical input, material limit, and structural factor must 
+    be explicitly stated. The following section defines the variables required, along with their 
+    standard engineering ranges for aerospace and heavy-duty drivetrain applications:
+    	\begin{enumerate}
+			\item \textbf{Operational Inputs}\par
+                \begin{itemize}
+                    \item \textbf{P [W] (Nominal Input Power):} The total rated mechanical power delivered by the driving gas turbine engine modules.
+                    \item \textbf{$n_{in}$ [RPM] (Input Engine Speed):} The rotational speed entering the horizontal input module. Typical turboshaft outputs range from 6,000 to 21,000 $RPM$.
+                    \item \textbf{$n_{out}$ [RPM] (Target Main Rotor Speed):} The final required speed of the rotor mast, strictly bounded by blade radius aerodynamics to prevent supersonic tip shockwaves. Typical limits range from 250 to 400 $RPM$.
+                    \item \textbf{$N_{p}$ (Number of Planet Gears):} The integer count of power-splitting planet channels evenly spaced inside the ring gear. Typical configurations utilize 3 to 6 planets; the UH-60 Black Hawk utilizes 5 planets.
+                \end{itemize}
+
+            \item \textbf{Material Strength and Density Limits}\par
+                \begin{itemize}
+                    \item \textbf{$\sigma_{allow,F}$ [Pa] (Allowable Bending Stress Limit):} The maximum tensile fatigue stress the tooth root can handle over millions of cycles before fracturing. For aerospace-grade carburized steels, this ranges from 400 MPa to 550 MPa.
+                    \item \textbf{$\sigma_{allow,H}$ [Pa] (Allowable Contact Stress Limit):} The maximum baseline surface pressure the tooth faces can handle before pitting. For case-hardened aerospace steels, this ranges from 1,400 MPa to 1,750 MPa.
+                    \item \textbf{$\sigma_{allow,shaft}$ [Pa] (Allowable Shaft Fatigue Limit):} The fully modified endurance limit of the shaft metal under reversed loading. Typical bounds range from 100 MPa to 180 MPa.
+                    \item \textbf{$Z_{E}$ [\text{[Pa$^{0.5}$]}] (Material Elastic Coefficient):} Combines Young's Modulus and Poisson's ratio to govern micro-contact strain flattening.
+                    \item \textbf{$\rho_{g}$ [$\text{kg}/\text{m}^3$] (Gear Material Density):} High-strength carburized alloy gear steel matches a hard constant of approximately 7,850 $\text{kg}/\text{m}^3$.
+                    \item \textbf{$\rho_{s}$ [$\text{kg}/\text{m}^3$] (Shaft Material Density):} Forged steel structural shafts match a constant of approximately 7,850 $\text{kg}/\text{m}^3$.
+                    \item \textbf{$\rho_{h}$ [$\text{kg}/\text{m}^3$] (Housing Material Density):} To minimize flight mass, helicopter casings utilize ultra-lightweight magnesium alloys 1,800 $\text{kg}/\text{m}^3$ or high-grade aluminum alloys 2,700 $\text{kg}/\text{m}^3$.
+                \end{itemize}
+            
+            \item \textbf{Geometric and Structural Factors}\par
+            	\begin{itemize}
+                    \item \textbf{$\alpha_n$ [Degrees] (Normal Pressure Angle):} The base angle cut of the gear profile teeth. Standard industrial hobs default to ($20^\circ\text{C}$ or $25^\circ\text{C}$).
+                    \item \textbf{$\beta$ [Degrees] (Helix Angle):} The angle of the helical teeth cut relative to the shaft axis. Standard industrial limits range from ($10^\circ\text{C}$ to $30^\circ\text{C}$); a setting of ($0^\circ\text{C}$) reduces the algorithm to a basic spur profile.
+			        \item \textbf{$\lambda_d$ (Planetary Face-Width-to-Diameter Ratio):} The chosen aspect ratio of the gear width relative to its sun diameter. To maintain structural stiffness against shaft deflection, standard practice enforces $0.5-2.0$.
+			        \item \textbf{$\lambda_b$ (Bevel Face Width-to-Diameter Ratio):} Aspect ratio bounding the spiral bevel stage cone width. Standard Aerospace Range: 0.25 to 0.35.
+			        \item \textbf{$I_b$ and $I_p$ (AGMA Geometry Factors):} Dimensionless indices mapping localized involute curvature profiles for the planetary and bevel teeth respectively. Planetary Range: Evaluated via ratio kinematics (0.11 to 0.15). Spiral Bevel Range: Catalog/standard fixed constant (0.07 to 0.085).
+			        \item \textbf{$C_w$ (Weight Correction Factor):} The percentage multiplier modelling material precision-machined out of the gear blank core to create lightweight flight webs. A solid blank is 1.0, while pocketed aerospace blanks range from 0.4 to 0.7.
+			        \item \textbf{$C_t$ (Ring Wall Thickness Factor):} The ratio of the ring gear outer wall thickness relative to the standard module size, sized to prevent radial hoop fatigue. Valid boundaries enforce 3.5 to 6.0.
+			        \item \textbf{$C_c$ (Carrier Plate Width Factor):} Sizes the width of the structural plates flanking the gears as a percentage of the face width. Standard packaging balances between 0.2 and 0.4.
+			        \item \textbf{$K_a$ (Application/Overload Factor):} A designer-selected safety cushion multiplier that increases sizing limits to handle sudden engine torque surges or aerodynamic rotor blade shocks. Standard boundaries dictate1.2 to 1.5.
+			        \item \textbf{$K_t$ (Temperature Factor):} An environmental fatigue scaling modifier. Set to a constant of 1.0 for all operational gearboxes running under a thermal ceiling of ($120^\circ\text{C}$).
+			        \item \textbf{$n_s$ (Shaft Factor of Safety):} The explicit safety margin index applied to the shaft diameters to handle multi-plane loading uncertainty. Standard practice ranges from 1.5 to 3.0.
+                \end{itemize}
+
+            \item \textbf{Geometric and Structural Factors}\par
+            	\begin{itemize}
+			        \item \textbf{$t_{case}$ [m] (Perimeter Wall Thickness):} The casting wall thickness of the main outer gearbox body barrel shell. Standard bounds measure between 6 mm to 14 mm.
+			        \item \textbf{$t_{plate}$ [m] (Face Plate Thickness):} The structural thickness of the casing end caps enclosing the assembly. Standard bounds range between 10 mm and 20 mm.
+			        \item \textbf{$L_{clearance}$ [m] (Assembly Clearance Space):} The baseline physical gap length allowed on each end of the gear stacks to clear supporting oil seals, retaining snap-rings, and bearing inner caps. Standard spacing defaults between 20 mm and 50 mm.
+                \end{itemize}
+		\end{enumerate}
+
+\section{Kinematic Speed Mapping}
+    To find the weight and size of the MGB, the entire transmission is modelled as a unified 
+    structural closed loop. Sizing begins by tracing how torque and rotational velocities scale 
+    across the system zones based on nominal input power (P), input engine speed ($n_{in}$), bevel 
+    reduction ratio ($u_{b}$), and planetary reduction ratio ($u_{p}$). 
+
+    The total kinematic reduction ratio ($u_{overall}$) is the strict product of both internal stages:
+        \begin{equation}
+            \label{eq:totalkinematicreductionratio}
+            u_{\text{overall}}
+            \;=\;
+            u_{\text{b}} \cdot u_{\text{p}}
+            \;=\;
+            \frac{n_{\text{in}}}{n_{\text{rotor}}}
+        \end{equation}
+
+    The intermediate velocity on the vertical transition shaft between the bevel output and planetary input is 
+    calculated automatically once the optimal bevel ratio is resolved by the global optimization loop
+        \begin{equation}
+            \label{eq:optimalbevelratio}
+            u_{\text{vertical}}
+            \;=\;
+            \frac{n_{\text{in}}}{n_{\text{b}}}
+        \end{equation}
+
+    The nominal torque profiles at each independent checkpoint are established by applying the AGMA 
+    application overload factor ($K_{a}$) and temperature factor ($K_{t}$):
+        \begin{equation}
+            \label{eq:torquedesignbevela}
+            T_{\text{design bevel}}
+            \;=\;
+            \frac{30\,P}{\pi\, n_{\text{in}}}
+            \;\cdot\;
+            K_{\text{a}}\;\cdot\;
+            K_{\text{t}}
+        \end{equation}    
+ 
+        \begin{equation}
+            \label{eq:torquedesignbevelb}
+            T_{\text{design planet}}
+            \;=\;
+            \frac{30\,P}{\pi\, n_{\text{in}}}
+            \;\cdot\;
+            K_{\text{a}}\;\cdot\;
+            K_{\text{t}}\;\cdot\;
+            \eta_{\text{b}}\;\cdot\;
+            u_{\text{b}}
+        \end{equation}
+    
+    Where $\eta_{b}$ represents the localized mechanical transmission efficiency of the spiral bevel mesh.
+
+\section{Mathematical Derivation of Component Weights}
+    To avoid traditional \text{'guess-and-check'} verification routines, we invert the standard governing stress 
+    and strain inequalities. By isolating geometric parameters (such as the standard module ($m_{std}$) and 
+    pitch diameters (d)) as dependent functions of material strength limits, we can calculate physical 
+    component mass directly from upfront preliminary specifications. Sizing calculations for every primary 
+    component flow step-by-step from the fundamental mass-volume relationship:
+        \begin{equation}
+            \label{eq:massvolume}
+            W
+            \;=\;
+            \rho\;\cdot\;
+            V
+        \end{equation}
+
+    \subsection{Gears Mass}
+        The total rotating gear mass is the sum of the material volumes of the spiral bevel pinion and gear, 
+        plus the planetary sun, planets, and outer ring gear shells multiplied by the gear steel density $\rho_{g}$:
+            \begin{equation}
+                \label{eq:steeldensity}
+                W_{\text{gears}}
+                \;=\;
+                W_{\text{bevel}} + W_{\text{planetary gears}}
+            \end{equation}
+    
+            \begin{itemize}
+                \item \textbf{Spiral Bevel Stage Sizing:}
+                Spiral bevel gears are modelled as conical disks. According to standard AGMA 2003 criteria, their outer 
+                pitch diameters must scale to satisfy surface contact fatigue (Hertzian pitting) thresholds under heavy 
+                combined thrust loads. The minimum pinion outer pitch diameter:
+                    \begin{equation}
+                        \label{eq:minpinionouterpitchdia}
+                        d_{\text{b,\,pinion}}
+                        \;=\;
+                        \left(\frac{\,2\,\;\cdot\;\;T_{\text{design bevel}}}
+                        {\lambda_{\text{b}}\;\cdot\; I_{\text{b}}\;\cdot\;
+                        \left(\dfrac{\sigma_{\text{allow, H, bevel}}}{Z_{\text{E}}}\right)^{\!2}}\right)^{\!1/3}
+                    \end{equation}
+
+                Integrating the conical volumes yields the combined mass envelope:
+                    \begin{equation}
+                        \label{eq:massenvelopea}
+                        W_{\text{bevel}}
+                        \;=\;
+                        \bigl(\;\frac{\pi}{6}\cdot \rho_{\text{g}}\cdot C_{\text{w}}\cdot \lambda_{\text{b}}
+                        \bigr)\;\cdot\;
+                        \bigl(1 + u_{\text{b}}^{\,3}\bigr)\;\cdot\;
+                        \bigl(d_{\text{b,\,pinion}}\bigr)^{3}
+                    \end{equation}
+
+                Substituting the outer pitch diameter boundary profile directly into the volume calculation eliminates 
+                the face width ratio ($\lambda_{\text{b}}$), isolating the weight footprint strictly to raw torque and 
+                material parameters:
+                    \begin{equation}
+                        \label{eq:massenvelopeb}
+                        W_{\text{bevel}}
+                        \;=\;
+                        \biggl(\frac{\pi\;\cdot\;\rho_{\text{g}}\;\cdot\;C_{\text{w}}\;\cdot\;
+                        Z_{\text{E}}^{\!2}\;\cdot\;
+                        \bigl(1 + u_{\text{b}}^{\,3}\bigr)}{3\;\cdot\;I_{\text{b}}\;\cdot\;
+                        \Bigl(\sigma_{\text{allow, H, bevel}}\Bigr)^{\!2}}\biggr)\;\cdot\;T_{\text{design bevel}}
+                    \end{equation}
+
+                \item \textbf{Planetary Stage Sizing:}
+                The planetary stage consists of 1 central Sun gear (s), $N_{\text{p}}$ orbiting Planet gears (p), 
+                and 1 stationary internal Ring gear (r). The base volume of the gear blanks is defined by summing 
+                the individual cylindrical envelopes:
+                    \begin{equation}
+                        \label{eq:volumeplanetarya}
+                        V_{\text{planetary}}
+                        \;=\;
+                        V_{\text{sun}}
+                        \;+\;
+                        N_{\text{p}}   \;\cdot\; V_{\text{planets}}
+                        \;+\;
+                        V_{\text{ring}}
+                    \end{equation}
+
+                    \begin{equation}
+                        \label{eq:volumeplanetaryb}
+                        V_{\text{planetary}}
+                        \;=\;
+                        \pi\;\cdot\;\frac{d_{\text{s}}^{\,2}}{4}\;\cdot\;FC_{\text{w}}
+                        \;+\;
+                        N_{\text{p}}\;\cdot\;\Bigl(\pi\;\cdot\;\frac{d_{\text{p}}^{\,2}}{4}\Bigr)\;\cdot\;FC_{\text{w}}
+                        \;+\;
+                        \frac{\pi}{4}\;\cdot\;\bigl(d_{\text{outer, ring}}^{\,2}\;-\;d_{\text{r}}^{\,2}\bigr)\;\cdot\;FC_{\text{w}}
+                    \end{equation}
+
+                Where F is the face width. To prevent severe radial strain from opening up the gear meshes as the planets pass by, 
+                the outer ring gear envelope is modelled as a realistic hollow shell with a protective wall thickness proportional 
+                to the tooth module:
+                    \begin{equation}
+                        \label{eq:outerringdia}
+                        d_{\text{outer, ring}}
+                        \;=\;
+                        d_{\text{r}}
+                        \;+\;
+                        2C_{\text{t}}\;\cdot\;m_{\text{std}}
+                    \end{equation}
+
+                Expressing all diameters using the metric standard module (\( d = m_{\text{std}}\!\cdot\! z \))
+                and substituting the coaxial kinematic rules (\( z_{\text{r}} = (u_{\text{p}}-1)\,z_{\text{s}}\))
+                and (\( z_{\text{p}} = \frac{u_{\text{p}}-2}{2}\,z_{\text{s}} \)), for fixed ring gear 
+                configuration, the total planetary gear weight simplifies to:
+                    \begin{equation}
+                        \label{eq:totalplanetarygearsmass1}
+                        W_{\text{planetary gears}}
+                        = \bigl(\tfrac{\pi}{4}\;\cdot \rho_{\text{g}}\;\cdot C_{\text{w}}\;\cdot \lambda_{\text{d}}\bigr)\;
+                        m_{\text{std}}^{\,3}\;\cdot
+                        \bigl(z_{\text{s}}^{\,3}\;
+                        \bigl( 1 + N_{\text{p}}\,
+                        \bigl(\tfrac{u_{\text{p}}-2}{2}\bigr)^{\,2}\bigr)
+                        \;+\;
+                        \bigl(4C_{\text{t}}\,(u_{\text{p}}-1)\,z_{\text{s}}^{\,2} + 4C_{\text{t}}^{\,2}\,z_{\text{s}}\bigr)\bigr)
+                    \end{equation}
+                
+                To establish the boundaries, the required module must satisfy both AGMA root bending fatigue and contact 
+                pressure simultaneously:
+                    \begin{equation}
+                        \label{eq:mbending}
+                        m_{\text{bending}}
+                        \;=\;
+                        \Bigl(
+                            \frac{2\,\;\cdot\;T_{\text{design planet}}}{N_{\text{p}}
+                            \;\cdot\;
+                            z_{\text{s}}^{\,2}
+                            \;\cdot\;
+                            \lambda_{\text{d}}
+                            \;\cdot\;
+                            \sigma_{\text{allow, F}}
+                            \;\cdot\;
+                            Y}
+                        \Bigr)^{\,1/3}
+                    \end{equation}
+
+                    \begin{equation}
+                        \label{eq:mcontact}
+                        m_{\text{contact}}
+                        \;=\;
+                        \Bigl(
+                        \frac{2\,\;\cdot\;z_{\text{E}}^{\,2}\;\cdot\;T_{\text{design planet}}}{N_{\text{p}}
+                        \;\cdot\;
+                        z_{\text{s}}^{\,3}
+                        \;\cdot\;
+                        \lambda_{\text{d}}
+                        \;\cdot\;
+                        I_{\text{p}}
+                        \;\cdot\;
+                        \sigma_{\text{allow, H, planet}}^{\,2}}
+                        \Bigr)^{\,1/3}
+                    \end{equation}
+
+                Where Y is the Lewis form factor, and $\lambda_{\text{d}}$ is the face-width-to-diameter ratio (F / $d_{\text{s}}$).  
+
+                To ensure complete non-linear closure, the sun teeth parameter is locked to its absolute geometric floor 
+                to eliminate manufacturing tool undercutting:
+                    \begin{equation}
+                        \label{eq:zs}
+                        z_{\text{s}}
+                        \;=\;
+                        \frac{2\,\cos^{\,3}\beta}{\sin^{\,2}\alpha_{n}}
+                    \end{equation}
+
+                The constraint is determined via the maximum envelope function \autoref{eq:maxenvelopefunction}
+                which is rounded up to the nearest discrete tool cutter size from 
+                the standard ISO-metric catalog \((m_{\text{std}} \ge m_{\text{calc}})\).
+                    \begin{equation}
+                        \label{eq:maxenvelopefunction}
+                        m_{\text{calc}}
+                        \;=\;
+                        \max\!\bigl(m_{\text{bending}},\,m_{\text{contact}}\bigr)
+                    \end{equation}
+
+                Substituting the dominant contact-driven module expression into the cubic core completely eliminates 
+                the tooth count placeholders from the baseline diameter, yielding the substituted gear mass function:
+                    \begin{equation}
+                    \label{eq:planetarygearsmass}
+                    W_{\text{planetary gears}}
+                    =
+                    \left(\frac{\pi\,\rho_{\text{g}}\,C_{\text{w}}\,T_{\text{design planet}}}
+                    {2\,N_{\text{p}}\,I_{\text{p}}\,
+                    \sigma_{\text{allow, H, planet}}^{\,2}}\right)
+                    \;\cdot
+                    \bigl(\left( 1 + N_{\text{p}}
+                    \left(\frac{u_{\text{p}}-2}{2}\right)^{\,2}\right)
+                    + \frac{4C_{\text{t}}\,(u_{\text{p}}-1)}{z_{\text{s}}}
+                    + \frac{4C_{\text{t}}^{\,2}}{z_{\text{s}}^{\,2}}\bigr)
+                    \end{equation}
+                \end{itemize}
+
+    \subsection{Structural Transmission Shafts and Pins Mass}
+        The MGB shaft assembly weight tracks three active loading paths: the horizontal engine input shafts, the 
+        vertical transition sun shaft, and the planet pins.
+
+        Because the planet gears encircle the central sun axis symmetrically, their radial separation vectors push 
+        inward from opposite directions simultaneously, causing the net global bending moments on the main line 
+        components to cancel completely to zero. Thus, the sun and carrier shafts experience pure torsion (T).
+
+        Sized using the ASME transmission shaft design code, their safe diameters match the distortion 
+        energy (von Mises) fatigue criteria: 
+            \begin{equation}
+                \label{eq:torsiondia}
+                d_{\text{torsion}}
+                \;=\;
+                \biggl( \frac{\,16\,\sqrt{3}\;\cdot\;n_{\text{s}}\;\cdot\;T}
+                {\pi\,\cdot\,\sigma_{\text{allow shaft}}}\biggr)^{1/3}
+            \end{equation}
+
+        The physical lengths of your shafts are strictly bound by the width of the gears mounted on them plus 
+        a fixed assembly clearance ($L_{\text{clearance}}$) for bearings and oil seals: 
+            \begin{itemize}
+				\item Sun Shaft Length ($L_{\text{s}}$), must stretch across the gear face width:
+                    \begin{equation}
+                        \label{eq:sunshaftlength}
+                        L_{\text{s}}
+                        \;=\;
+                        F
+                        \;=\;
+                        \lambda_{\text{d}}\;\cdot\;m_{\text{std}}\;\cdot\;z_{\text{s}}
+                    \end{equation}
+
+                \item Carrier Shaft Length ($L_{\text{c}}$), must clear the gear face width plus the thickness 
+                of the two structural carrier plates capping it:
+                    \begin{equation}
+                        \label{eq:carriershaftlength}
+                        L_{\text{c}}
+                        \;=\;
+                        F\;+\;2\,\cdot\,t_{\text{plate carrier}}
+                        \;=\;
+                        \lambda_{\text{d}}\;\cdot\;m_{\text{std}}\;\cdot\;z_{\text{s}}\;
+                        \cdot\,\bigl(1\;+\;2\,\cdot\,C_{\text{c}}\bigr)
+                    \end{equation}
+			\end{itemize}
+
+        By substituting the gear-blank face width definition ($F\;=\;\lambda_{\text{d}}\;\cdot\;m_{\text{std}}\;\cdot\;z_{\text{s}}$) 
+        to define the physical shaft spans, we eliminate the independent length variables. The linear scaling weights 
+        for the input and output shafts are defined strictly by torque, tooth count, module, and material bounds:
+            \begin{equation}
+                \label{eq:sunshaftmassa}
+                W_{\text{sun shaft}}
+                = \frac{\pi}{4}\; \rho_{\text{s}}
+                \;\cdot\; \lambda_{\text{d}}
+                \;\cdot\; m_{\text{std}}
+                \;\cdot\; z_{\text{s}}
+                \;\cdot\;
+                \biggl( \frac{\,16\,\sqrt{3}\;\cdot\;n_{\text{s}}\;\cdot\;T_{\text{design bevel}}}
+                {\pi\,\cdot\,\sigma_{\text{allow shaft}}}\biggr)^{2/3}
+            \end{equation}
+
+            \begin{equation}
+                \label{eq:sunshaftmassb}
+                W_{\text{sun shaft}}
+                = \frac{\pi}{4}\; \rho_{\text{s}}
+                \;\cdot\; \lambda_{\text{d}}
+                \;\cdot\; m_{\text{std}}
+                \;\cdot\; z_{\text{s}}
+                \cdot\,\bigl(1\;+\;2\,\cdot\,C_{\text{c}}\bigr)
+                \;\cdot\;
+                \biggl( \frac{\,16\,\sqrt{3}\;\cdot\;n_{\text{s}}\;\cdot\;u_{\text{p}}\;\cdot\;T_{\text{design bevel}}}
+                {\pi\,\cdot\,\sigma_{\text{allow shaft}}}\biggr)^{2/3}
+            \end{equation}
+        
+        \textit{Note: The only unknown left inside these bracket structures is the planetary stage 
+        gear ratio ($u_{\text{p}}$), as the module ($m_{\text{std}}$), and sun teeth ($z_{\text{s}}$) are resolved beforehand.}
+
+        Conversely, the individual planet pins are not balanced. Each pin acts as a short, localized beam of 
+        length F supporting a heavy mechanical bending load. The net radial force concentrated on each pin is:
+            \begin{equation}
+                \label{eq:pinmass}
+                W_{\text{pin}}
+                \;=\;
+                \frac{4T_{\text{design planet}}}
+                {m_{\text{std}}\;\cdot\;z_{\text{s}}\;\cdot\;N_{\text{p}}}
+            \end{equation}
+        
+        Treating the pin as supported on both ends by the rigid carrier walls, the peak internal 
+        bending moment occurs at the center of the pin span ($M_{\text{pin}}\;=\frac{\;W_{\text{pin}}\;\cdot\;F}{4}$) 
+        simplifies directly to:
+            \begin{equation}
+                \label{eq:pinmoment}
+                M_{\text{pin}}
+                \;=\;
+                \frac{\lambda_{\text{d}}\;\cdot\;T_{\text{design planet}}}{N_{\text{p}}}
+            \end{equation}
+
+        Sized under pure bending fatigue (T = 0), the total pin mass across all ($N_{\text{p}}$) paths scales as: 
+            \begin{equation}
+                \label{eq:pinsmass}
+                W_{\text{pins}} =
+                \frac{\pi}{4}\;
+                \cdot\; \rho_{\text{s}}
+                \;\cdot\; N_{\text{p}}
+                \;\cdot\; \lambda_{\text{d}}
+                \;\cdot\; m_{\text{std}}
+                \;\cdot\; z_{\text{s}}
+                \;\cdot\;
+                \biggl(\frac{\,32\;\cdot\;n_{\text{s}}\;\cdot\;
+                \bigl(\frac{\lambda_{\text{d}}\;\cdot\;T_{\text{design planet}}}{N_{\text{p}}}\bigr)}
+                {\pi\,\cdot\,\sigma_{\text{allow shaft}}}\biggr)^{2/3}
+            \end{equation}
+
+    \subsection{Rigid Planet Carrier Mass}
+        The planet carrier is a structural frame flanking the gears that collects the planet pin loads to rotate 
+        the main rotor mast. To protect the gear meshes from edge-loading stress concentrations, it must be highly 
+        rigid against torsional twist strain. Sized as twin circular plates of diameter matching the outer 
+        ring boundary ($d_{\text{outer ring}}$) and plate thicknesses proportional to 
+        the gear width ($t_{\text{plate carrier}}\;=\;C_{\text{c}}\;\cdot\;F$), its structural mass is 
+        derived directly from its geometric envelope:
+            \begin{equation}
+                \label{eq:carriermassa}
+                W_{\text{carrier}}
+                = 2\,\bigl(\frac{\pi}{4}\,d_{\text{outer ring}}^{2}
+                \bigl(C_{\text{c}}\!\cdot\!F\bigr)\bigr)
+                \;\cdot\;\rho_{\text{s}}\;\cdot\;K_{\text{web}}
+            \end{equation}
+    
+        Where $K_{\text{web}}$ is the geometric modifier accounting for weight-reduction pockets 
+        pocketed out of the carrier web plates \(0.60 \leq K_{\text{web}} \leq 0.75\).
+        
+        By substituting the gear-blank face width and pitch diameter parameters under the assumption 
+        that contact stress governs the active sizing envelope, the carrier mass equation simplifies to:
+            \begin{equation}
+                \label{eq:carriermassb}
+                W_{\text{planetary gears}}
+                =
+                \bigl(\frac{\pi \;\cdot\; \rho_{\text{s}}
+                \;\cdot\; C_{\text{c}}
+                \;\cdot\; K_{\text{web}}
+                \;\cdot\; Z_{\text{E}}^{2}
+                \;\cdot\; {(u_{\text{p}}-1)}^{2}}
+                {N_{\text{p}}\;\cdot\;I_{\text{p}}\;\cdot\;\sigma_{\text{allow, H, planet}}^{2}}
+                \bigr)\;\cdot\; T_{\text{design planet}}
+            \end{equation}
+
+    \subsection{Bearings Mass}
+        Sized using an analytical load-scaling law calibrated from aerospace bearing catalogs, the mass of 
+        rolling elements scales with the net localized radial force vector raised to the 1.2 power. 
+        Expressing the radial forces on the planet pins and the main lines directly via torque, speed, and 
+        standard module variables results in the combined bearing mass expression:
+            \begin{equation}
+                \label{eq:bearingsmass}
+                W_{\text{bearings}}
+                = N_{\text{p}}\;\cdot\;
+                \bigl(X_{\text{planet}}\;\cdot\;
+                \bigl{(\frac{4\;\cdot\;T_{\text{design planet}}}
+                {m_{\text{std}}\;\cdot\;z_{\text{s}}\;\cdot\;N_{\text{p}}}\bigr)}^{1.2}\bigr)
+                + X_{\text{shaft}}\;\cdot\;
+                \bigl{(u_{\text{overall}}\;\cdot\;T_{\text{design bevel}}\bigr)}^{0.8}
+            \end{equation}
+        
+        Where $X_{\text{planet}}$ and $X_{\text{shaft}}$ represent empirical lookup constants calibrated 
+        relative to the primary shaft dimensions.
+
+    \subsection{Structural Housing Casing Mass}
+        The casing forms the environmental boundary layer, structural load path, and pressure shell enclosing 
+        both the spiral bevel input meshes and the final planetary stage. To minimize structural dead-weight, 
+        the housing is modeled as a unified, tapered Conical Tower Shell rather than a uniform cylinder, 
+        matching the tapering force profile of the internally stacked stages.
+
+        Sized using an ultra-lightweight magnesium alloy, the total housing mass is calculated as 
+        the sum of the upper planetary cylinder barrel, the lower tapered bevel cone frustum shell, and 
+        the structural sealing end plates:
+            \begin{equation}
+                \label{eq:housingmass}
+                W_{\text{housing}}
+                = \rho_{\text{h}}\;\cdot\;\pi\;\cdot\;K_{\text{rib}}\;\cdot\;
+                \!\!
+                \begin{aligned}[t]
+                    &\bigl(\bigl(D_{\text{h, planet}}\;\cdot\;t_{\text{case}}\;\cdot\;L_{\text{h, planet}}\bigr)
+                    \\[4pt]
+                    &+\,\bigl(t_{\text{case}}\;\cdot\;L_{\text{h,bevel}}
+                    \;\cdot\;\frac{D_{\text{h, planet}}+d_{\text{b,pinion}}}{2}\bigr)
+                    \\[4pt]
+                    &+\,\bigl(\tfrac{t_{\text{plate}}}{2}\;\cdot\;D_{\text{h, planet}}^{\,2}\bigr)\bigr)
+                \end{aligned}
+            \end{equation}
+
+        Where the active boundary diameter and length profiles are mapped strictly from your standard 
+        module and integer tooth boundaries:
+			\begin{itemize}
+				\item Planetary Upper Housing Diameter:
+                    \begin{equation}
+                        \label{eq:planetaryupperhousingdia}
+                        D_{\text{h, planet}}
+                        = \bigl( m_{\text{std}}\!\cdot\! z_{\text{s}}
+                        + 2\,C_{\text{t}}\!\cdot\! m_{\text{std}} \bigr)
+                        + 2\,t_{\text{case}}
+                    \end{equation}
+
+				\item Planetary Stage Housing Length:
+                    \begin{equation}
+                        \label{eq:planetarystagehousinglength}
+                        L_{\text{h, planet}}
+                        = \lambda_{\text{d}}\cdot m_{\text{std}}\cdot z_{\text{s}}\cdot
+                        \bigl(1+2\,C_{\text{c}}\bigr) + L_{\text{clearance}}
+                    \end{equation}
+
+				\item Bevel Stage Housing Length:
+                    \begin{equation}
+                        \label{eq:bevelstagehousinglength}
+                        L_{\text{h, bevel}}
+                        = d_{\text{b, pinion}} \;\cdot\; \tan\!\bigl(\delta_{\text{gear}}\bigr)
+                        \;+\; 2 \;\cdot\; L_{\text{clearance}}
+                    \end{equation}
+			\end{itemize}
+        
+        The factor ($K_{\text{rib}} \approx 1.20$) is the structural multiplier that adds the 
+        physical weight of the deep external grid-stiffness ribs cast onto both the cylinder and 
+        conical perimeter walls to prevent casing deflection under flight loads.
+
+\section{Global Multi-Stage Ratio Optimization Split}
+    The global multi-stage ratio optimization ensures minimum system mass by deriving a 
+    weight minimization penalty function, focusing on the bevel ratio ($u_{\text{b}}$) and planetary ratio ($u_{\text{p}}$). 
+    By expanding the derivative of this system function with respect to $u_{\text{b}}$, a master optimization of 
+    quintic polynomial is established.
+
+    From our previous derivations, we proved that the physical mass of a gear blank scales directly 
+    with its torque capacity, which is controlled by its gear ratio.
+		\begin{enumerate}
+            \item The Spiral Bevel Stage Weight: Scales cubically with its own ratio because 
+            it is a solid conical wheel setup: $W_{\text{b}}\propto u_{\text{b}}^{3}$.
+            
+            \item The Planetary Stage Ring Gear Weight: The outer ring gear envelope dominates the 
+            final planetary weight. Its diameter scales linearly with its ratio, and its volume 
+            scales cubically with that diameter: $W_{\text{ring}}\propto {\bigl(u_{\text{p}}-1\bigr)}^{3}$.
+
+            Because the planetary stage is downstream, it receives the torque multiplied 
+            by the first stage. Therefore, we must multiply the planetary weight by the 
+            input stage ratio ($u_{\text{b}}$) to account for the torque scale-up:
+            $W_{\text{planetary scaled}}\propto u_{\text{b}}\;\cdot\;{\bigl(u_{\text{p}}-1\bigr)}^{3}$.
+            
+            \item Shaft Assembly Mass:
+                \begin{itemize}
+                    \item Bevel Shafts: $\propto u_{\text{b}}^{2/3}$
+                    \item Planetary Shafts: Constant relative to the split
+                    \item Pins: $W_{\text{pins}}\propto u_{\text{b}}^{4/3}$
+                \end{itemize}
+
+            \item Planet Carrier Mass: $\propto u_{\text{b}}\;\cdot\;{\bigl(\frac{u_{\text{overall}}}{u_{\text{b}}} - 1\bigr)}^{2}$
+
+            \item Bearings Mass: Constant relative to the split
+
+            \item Housing Casing Mass: $\propto \frac{u_{\text{overall}}}{u_{\text{b}}}$
+        \end{enumerate}
+
+    If we add the structural scaling metrics of the housing, carrier, and shafts to our baseline 
+    gear blank equations, the comprehensive mass penalty function $f(u_{\text{b}})$ expands to:
+        \begin{equation}
+            \label{eq:masspenaltyfunction}
+            f(u_{\text{b}})
+            = \begin{aligned}[t]
+                &(1 + u_{\text{b}}^{3}) \\[4pt]
+                &\quad + u_{\text{b}}\;
+                \Bigl(\frac{u_{\text{overall}}}{u_{\text{b}}} - 1 \Bigr)^{3} \\[4pt]
+                &\quad + \gamma_{1}\,u_{\text{b}}^{\frac{2}{3}}
+                + \gamma_{2}\,u_{\text{b}}\;
+                \Bigl(\frac{u_{\text{overall}}}{u_{\text{b}}} - 1 \Bigr)^{2} \\[4pt]
+                &\quad + \gamma_{3}\;
+                \Bigl(\frac{u_{\text{overall}}}{u_{\text{b}}}\Bigr)
+                + \gamma_{4}\,u_{\text{b}}^{\frac{4}{3}}
+            \end{aligned}
+        \end{equation}
+
+    Where $\gamma_{1}$, $\gamma_{2}$, $\gamma_{3}$, and $\gamma_{4}$ are structural mass distribution 
+    constants determined by your material choices and geometric properties.
+
+\section{Analytical Minimization and Derivation of the Master Quintic Polynomial}
+    To resolve the precise architectural configuration that yields the absolute minimum mass 
+    for the entire assembled Main Gearbox (MGB), calculus must be applied to the comprehensive system function.
+
+    To locate the absolute minimum mass floor, we evaluate the first derivative of the expanded system mass 
+    function with respect to our primary design variable ($u_{\text{b}}$), setting the resulting 
+    expression equal to zero: $\frac{\partial f}{\partial u_{\text{b}}}=0$.
+    
+    Once your optimization code calculates $u_{\text{b}}$, the engineering sequence unlocks completely.
+
+    The software can now run down the line to calculate the exact tooth sizes, shaft dimensions, 
+    and material volumes for every single component in your transmission tower. 
+    A final linear summation of all five computed sub-assembly blocks to output the exact flight weight 
+    of the finished transmission assembly.
+
+\section{Comprehensive Housing Size}
+    To calculate the spatial bounding box of the complete, fully enclosed helicopter main gearbox tower, 
+    we translate our discrete design coordinates ($m_{\text{std}}$, $z_{\text{s}}$, $z_{\text{r}}$, and $d_{\text{b, pinion}}$) 
+    straight into a physical three-dimensional envelope. Because the architecture wraps both the narrower 
+    horizontal spiral bevel input and the wider vertical planetary cell into a single, cohesive structural shell, 
+    the geometric package is completely defined by two primary parameters: the Maximum System 
+    Outer Housing Diameter ($d_{\text{h, planet}}$) and the Total Assembly Tower Height ($H_{\text{sys}}$).
+
+    \subsection{The Maximum System Outer Diameter}
+        The maximum width across the circular perimeter profile of the transmission occurs at the 
+        upper cylindrical section flanking the stationary planetary ring gear:
+            \begin{equation}
+                \label{eq:maxsystemouterdia}
+                D_{\text{h, planet}}
+                = m_{\text{std}}\!\cdot\! z_{\text{s}}\!\cdot\!
+                \bigl( (u_{\text{p}}-1)
+                + \frac{2\,C_{\text{t}}}{z_{\text{s}}} \bigr)
+                + 2\,t_{\text{case}}
+            \end{equation}
+
+    \subsection{The Total Housing Tower Height}
+        The total axial length of the gearbox shell represents the direct stacking of the vertical 
+        planetary stage thickness, the spiral bevel cone drop length, and the required internal 
+        bearing arrangement clearances.
+            \begin{equation}
+                \label{eq:totalhousingtowerheighta}
+                H_{\text{sys}}
+                = L_{\text{h, planet}} + L_{\text{h, bevel}}
+            \end{equation}
+
+            \begin{equation}
+                \label{eq:totalhousingtowerheightb}
+                H_{\text{sys}}
+                = \bigl(\lambda_{\text{d}}\;\cdot\; m_{\text{std}}\;\cdot\; z_{\text{s}}
+                \;\cdot\; \bigl(1 + 2\;\cdot\;C_{\text{c}}\bigr)
+                +  L_{\text{clearance}}\bigr)
+                + \bigl(d_{\text{b, pinion}}\;\cdot\;\tan\delta_{\text{gear}}
+                + 2\;\cdot\; L_{\text{clearance}}\bigr)
+            \end{equation}
+
+\newpage
+    \subsection{Total Volumetric Size}
+        By treating the casing structure as an upper cylinder intersecting a lower tapered cone 
+        frustum shell, the literal volumetric space occupied is:
+            \begin{equation}
+            \label{eq:totalvolumetricsize}
+            V_{\text{envelope}}
+            =
+            \frac{\pi}{4}\;\cdot\;D_{\text{h, planet}}^{2}\;\cdot\;L_{\text{h, planet}}
+            \;+\;
+            \frac{\pi}{12}\;\cdot\;L_{\text{h, bevel}}\;\cdot\;
+                \bigl(
+                    D_{\text{h, planet}}^{2}
+                    \;+\;
+                    D_{\text{h, planet}}\;\cdot\;d_{\text{b, pinion}}
+                    \;+\;
+                    d_{\text{b, pinion}}^{2}
+                \bigr)
+            \end{equation}

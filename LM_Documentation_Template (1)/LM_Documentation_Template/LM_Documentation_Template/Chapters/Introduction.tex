@@ -1,0 +1,335 @@
+\chapter{Introduction}
+\section{Introduction to Industrial Gearboxes}
+	Industrial gear reducers are specialized mechanical assemblies designed to alter the rotational speeds and torque profiles 
+    between a power source and driven industrial machinery. They serve two fundamental purposes: reducing the shaft velocity 
+    and increasing the output torque proportionally. In practice, these sub-assemblies function as critical interface 
+    nodes that connect different operating ends:
+		\begin{itemize}
+			\item \textbf{Prime Movers:} High-speed electric motors, internal combustion engines, or steam and fluid turbines.
+			\item \textbf{Driven Machinery:} Heavy industrial plant equipment including material conveyors, pulverizing mills, 
+			paper processing lines, commercial elevators, liquid mixers, and high-displacement screw pumps.
+		\end{itemize}
+	Standard industrial gearboxes are engineered for mainstream commercial infrastructure that demands reliable operational lifespans and conservative 
+	safety margins. To distinguish them from high-performance drivetrains (such as aerospace propulsion or high-speed marine setups), their pitch line 
+	velocity is usually restricted to under 25 m/s.
+
+\section{Practical Challenges in Gearbox Engineering}
+	To an engineer relying solely on textbook mechanics formulas, drafting a gearbox might seem trivial. However, developing a 
+    reliable, manufacturable, and cost-effective gearbox requires managing highly coupled, non-linear failure modes. 
+    Without practical experience, a designer can easily overlook systemic interactions, causing premature structural failures. 
+
+    Developing a modern transmission requires balancing multiple coupled and often conflicting performance criteria simultaneously 
+    for example: 
+		\begin{itemize}
+			\item \textbf{Weight vs. Efficiency and Packaging:}
+			Thinning housing walls minimizes raw material costs and overall mass. 
+			However, the resulting reduction in structural stiffness amplifies shaft misalignment. This misalignment triggers 
+			uneven gear wear, edge loading, and higher power losses.
+		\end{itemize}
+
+\section{Traditional Gearbox Design}
+	Drivetrain engineering relied on an empirical, handbook-driven methodology. This legacy pipeline leverages standardized physical manuals, historical layout 
+	templates, and discrete look-up matrices to establish a mathematically viable gearbox layout. The workflow operates as a highly sensitive, sequential process 
+	executed through manual calculation stages. 
+
+	\subsection{System Input Metrics}
+		Before executing any analytical calculations, the master input data matrix must be established from the application requirements. 
+
+		A synthesis of cross-disciplinary aerospace programs, industrial engineering textbooks, and international gear standards (including NASA's A.R.T. methodologies, 
+		AGMA 6013-B14, and ISO 6336) demonstrates a clear consensus on the foundational requirements for manual drivetrain synthesis. 
+
+		Regardless of whether the application demands an ultra-lightweight helicopter 
+		transmission or a heavy-duty industrial reduction drive, the absolute core 
+		input variables that all engineering papers and design manuals agree upon are: 
+
+		\subsubsection{Input Kinetic and Operational Boundaries}
+			\begin{itemize}
+				\item \textbf{P:} Nominal input power transmitted by the prime mover (expressed in kW or hp)
+				\item \textbf{$n_{in}$:} Rotational speed of the high-speed input shaft in RPM
+				\item \textbf{$n_{out}$:} Target rotational speed of the low-speed output shaft in RPM
+				\item \textbf{$k_{a}$:} Empirical application service factor (accounts for prime mover and driven machine shock profiles)
+				\item \textbf{$k_{t}$:} Lifecycle duty factor (normalizes operating hours per day against target lifespan)
+			\end{itemize}
+
+		\subsubsection{Material Mechanics Inputs}
+			\begin{itemize}
+				\item \textbf{$\rho$:} Mass density of the component material
+				\item \textbf{E:} Modulus of Elasticity / Young's Modulus
+				\item \textbf{$\nu$:} Poisson's ratio
+				\item \textbf{$\sigma_b$:} Maximum allowable AGMA root bending fatigue stress
+				\item \textbf{$\sigma_c$:} Maximum allowable AGMA surface compressive contact stress
+				\item \textbf{$S_{y}$:} Tensile yield strength limit of the shaft material
+				\item \textbf{$S_{n}$:} Fully corrected fatigue endurance limit of the shaft material
+				\item \textbf{Lubrication and Thermal Limits:} Specific oil viscosity indexes, fluid properties, 
+				and targeted operating temperatures required to prevent overheating and maintain oil-film thickness 
+			\end{itemize}
+
+		\subsubsection{Basic Geometric Setup Choices}
+			\begin{itemize}
+				\item \textbf{$\alpha_n$ Standardized Normal Pressure Angle:} The cutting profile orientation, 
+				standardized internationally at ($20^\circ\text{C}$ or $25^\circ\text{C}$) that governs 
+				contact force direction and controls tooth undercutting limits.
+				\item \textbf{$\beta$ Helix Angle:} The angle of the gear teeth ($0^\circ\text{C}$) for spur gears; 
+				typically $15^\circ\text{C}$ to $30^\circ\text{C}$ for helical setups, which introduces 
+				axial thrust components into the load paths.
+				\item \textbf{$\psi$ Face Width Factor:} The empirical ratio linking tooth width to module size, 
+				dictating the width available to spread out mechanical loads. It is a designer-selected constraint 
+				variable found by applying strict empirical lookup tables, mechanical stiffness boundaries, and 
+				alignment of safety rules.
+			\end{itemize}
+
+	\subsection{Kinematic Gear Ratio Determination}
+		The absolute target reduction ratio $u_{overall}$ is calculated from the input and output rotational velocities: 
+			\begin{equation}
+				\label{eq:reductionratio}
+				u_{\text{overall}}
+				\;=\;
+				\frac{n_{\text{in}}}{\,n_{\text{out}}}
+			\end{equation}
+		This value defines the total kinematic reduction ratio. It establishes the exact multiplier by which the 
+		rotational input speed drops, and the output torque increases. 
+
+	\subsection{Design Torque Calculation}
+		The opening stage of gearbox layout design demands calculating the nominal operating torque at the 
+		output shaft ($T_{nominal}$) which is derived from the absorbed torque of the driven machine, or from the 
+		nominal output torque of the prime mover ($T_{motor}$) scaled by the total reduction ratio ($u_{overall}$) 
+		and mechanical efficiency ($\eta$):
+			\begin{equation}
+				\label{eq:nominaltorque}
+				T_{\text{nominal}}
+				\;=\;
+				\frac{P}{\,n_{\text{in}}\!\Bigl(\frac{2\pi}{60}\Bigr)}
+				\;\eta\;
+				u_{\text{overall}}
+			\end{equation}
+		Where: 
+			\begin{itemize}
+				\item \textbf{$\eta$} represents the dimensionless mechanical efficiency coefficient of the gearbox. 
+				This factor accounts for internal energy losses turned to heat, rolling resistance inside the shaft 
+				bearings, and hydrodynamic churning resistance from the oil lubricant.
+			\end{itemize}
+
+		To safeguard against unpredictable real-world operating environments, this nominal torque value must be 
+		multiplied by an empirical application (service) factor ($k_{a}$) and a life duty factor ($k_{t}$): 
+			\begin{equation}
+				\label{eq:designtorque}
+				T_{\text{design}}
+				\;=\;
+				T_{\text{nominal}}\; k_a \; k_t
+			\end{equation}
+
+	\subsection{Preliminary Center Distance Estimation}
+		Once the design torque is established, engineers estimate the initial center distance between gear axes 
+		using empirical output torque curves: 
+			\begin{equation}
+				\label{eq:aestimate}
+				\alpha_{\text{estimate}}  
+				\;=\; 
+				f(T_{\text{design}})
+			\end{equation}
+		This initial baseline geometry provides a starting point before running detailed strength calculations 
+		under standards like AGMA or ISO.
+
+	\subsection{Reduction Stage Determination}
+		To preserve reliable gear tooth geometry and avoid overly slender pinions that twist or bend under load, the total 
+		reduction ratio must be divided across an optimal number of intermediate reduction stages \autoref{tab:Table1}. 
+			\begin{table}[ht]
+				\renewcommand{\arraystretch}{1.5}
+				\centering
+				\caption{Ratio Range Selection}
+				\label{tab:Table1}
+				\small
+				\begin{tabular}{|c|c|}
+					\hline
+        			\textbf{Number of Reductions} & \textbf{Economical Overall Ratio Range} \\					
+					\hline
+					Single Reduction   & Up to 6:1  \\
+					\hline
+					Double Reduction   & 5:1 to 25:1  \\
+					\hline
+					Triple Reduction   & 25:1 to 125:1  \\
+					\hline
+					Quadruple Reduction   & 125:1 to 625:1  \\
+					\hline
+				\end{tabular}
+			\end{table}
+
+		To distribute material costs and torque capacity efficiently, multi-stage gearboxes typically implement a larger reduction 
+		ratio at the high-speed input stage, progressively decreasing the ratio toward the lower-speed output stages. 
+
+		When splitting a total required reduction ratio ($u_{overall}$) across a multi-stage compound gear 
+		train (such as a triple-stage reducer), handbook guidelines recommend establishing identical ratio sizing targets 
+		across each stage. This balanced approach helps ensure uniform shafting diameters, uniform bearing sizing, and consistent 
+		mounting methods throughout the assembly. 
+
+		To determine the initial target ratio ($u_{stage}$) for each intermediate reduction step prior to tooth selection, 
+		calculate the root of the overall ratio corresponding to the total number of reductions ($N_{stages}$):
+			\begin{equation}
+				\label{eq:initialtargetratio}
+				u_{\text{stage}}
+				\;=\;
+				N_{\text{stages}}\;\sqrt{\,u_{\text{overall}}\,}
+			\end{equation}
+
+	\subsection{Pinion Tooth Selection and Undercutting Boundaries}
+		The tooth count of the input pinion ($z_{1}$) cannot be chosen arbitrarily. To avoid undercutting during manufacturing—which 
+		removes material from the tooth root base and severely weakens it—the engineer utilizes the analytical geometry formula 
+		matching the selected helix angle ($\beta$) and normal pressure angle ($\alpha_{n}$). First, the transverse pressure angle 
+		($\alpha_{t}$) is determined: 	
+			\begin{equation}
+				\label{eq:transversepressureangle}
+				\alpha_{t}
+				= \operatorname{\arctan}\!\left(
+				\frac{\tan(\alpha_{n})}{\cos(\beta)}
+				\right)
+			\end{equation}
+
+		Using the transverse pressure angle, the engineer solves for the absolute minimum number of teeth ($z_{\min}$) required to prevent undercutting: 
+			\begin{equation}
+				\label{eq:absoluteminnumofteeth}
+				z_{\min}
+				\;=\;
+				\frac{2\,\cos(\beta)}{\sin^{\,2}\!\bigl(\alpha_t\bigr)}
+			\end{equation}
+		The engineer consults minimum tooth count reference charts and sets the pinion tooth selection to meet the safety margin. 
+
+	\subsection{Parametric Module Trial and Standardization}
+		Next, the framework defines the physical dimensions and structural pitch of the individual gear teeth, quantified as the 
+		normal module ($m_{n}$). The engineer references minimum tooth count charts to estimate a pinion tooth number ($z_{1}$) that avoids undercutting 
+		at specified speeds. They evaluate standard analytical formulas to yield a theoretical module: 
+			\begin{equation}
+				\label{eq:theoreticalmodule}
+				m_{\text{theo}}
+				\;=\;
+				\left(\frac{2\,T_{\text{design}}}{\,z_{1}\;\psi\;\sigma_{b}\;Y}\right)^{1/3}
+			\end{equation}
+		Where ($\psi$) is the face width factor selected by the engineer from standard handbook look-up rows 
+		and Y is the dimensionless Lewis form factor located manually via handbook tables matching the 
+		chosen tooth count ($z_{1}$) and pressure angle ($\alpha_{n}$).
+	
+		Because manufacturing tooling is strictly constrained to specific integer intervals, the engineer must consult a 
+		Preferred Metric Modules index. The calculated theoretical module is rounded upward to the nearest approved commercial designation.  
+			\begin{equation}
+				\label{eq:normalmodule}
+				m_{\text{n}}
+				\;=\;
+				\operatorname{Standardized}\!\bigl(m_{\text{theo}}\bigr)
+			\end{equation}
+		Shifting to a standardized module alters the pitch diameters. The engineer must manually re-evaluate the entire 
+		geometric stack to compute a modified center distance, completely overriding the initial chart-derived guess: 
+			\begin{equation}
+				\label{eq:angle}
+				a \;=\;
+				\frac{\,m_{\text{n}}\;z_{\text{1}}
+				\;+\;m_{\text{n}}\;
+				\bigl( z_{\text{1}}\;u_{\text{overall}} \bigr)}{2}
+			\end{equation}
+		Once the standardized module is locked, the true structural face width of the gear teeth is calculated: 
+			\begin{equation}
+				\label{eq:truestructuralfacewidth}
+				b \;=\; \psi\,m_{\text{n}}
+			\end{equation}
+
+	\subsection{Spatial Boundary Audit and Interference Verification}
+		The final phase of the pipeline overlays the calculated component 
+		volumes (gear tip diameters, shaft dimensions, and raw bearing widths) directly onto the vehicle's structural 
+		envelope. The engineer evaluates the absolute outermost tip diameter of the largest gear assemblies: 
+			\begin{equation}
+				\label{eq:absoluteoutermosttipdiameter}
+				D_{\text{tip}}
+				\;=\;
+				m_{\text{n}}\;\bigl(z_{\text{2}} + 2\bigr)
+			\end{equation}
+		They physically verify if the rotating elements clear the static airframe frame and fit within 
+		the designated housing box. 
+
+	\subsection{AGMA Gear Tooth Bending Failure Analysis}
+		Once the standardized geometry is finalized, the engineer evaluates the mechanical stresses at the tooth 
+		contact points to ensure safety margins are met. To calculate the stress concentrations pulling at the 
+		base of the tooth root, the tangential load ($F_{t}$) is determined: 
+			\begin{equation}
+				\label{eq:tangentialload}
+				F_{\text{t}}
+				\;=\;
+				2 \cdot \frac{T_{\text{design}}}{d_{1}}
+			\end{equation}
+		The complete AGMA root bending stress ($\sigma_{b}$) equation incorporates dynamic adjustments for operational variables: 
+			\begin{equation}
+				\label{eq:agmarootbendingstress}
+				\sigma_{b}
+				\;=\;
+				\frac{F_{\text{t}}\,K_{\text{a}}\,K_{\text{v}}\,K_{\text{m}}}
+				{\,b\,m_{\text{n}}\,J}
+			\end{equation}
+		Where: 
+			\begin{itemize}
+				\item \textbf{$K_{a}$:} External application shock factor
+				\item \textbf{$K_{v}$:} Dynamic velocity multiplier tracking tooth profiling errors
+				\item \textbf{$K_{m}$:} Load distribution factor mapping shaft misalignment
+				\item \textbf{b:} Structural face width of the gear mesh
+				\item \textbf{J:} AGMA geometry factor for root bending
+			\end{itemize}
+		The safety criteria requires that the calculated stress remains below the material's allowable threshold. 
+
+	\subsection{AGMA Surface Compressive Contact Fatigue Analysis}
+		To protect the tooth profiles from compressive contact pitting, the Hertzian contact stress ($\sigma_{c}$)
+		across the fluid film interface is calculated: 
+			\begin{equation}
+				\label{eq:hertziancontactstress}
+				\sigma_{c}
+				\;=\;
+				Z_{\text{E}} 
+				\,\sqrt{\frac{F_{\text{t}}\, K_{\text{a}}\, K_{\text{v}}\, K_{\text{m}}} {\,b\,d_{\text{1}}\,I}}
+			\end{equation}
+		Where: 
+			\begin{itemize}
+				\item \textbf{$Z_{E}$:} Elasticity coefficient matching the combined material moduli
+				\item \textbf{I:} AGMA geometry factor for surface contact pitting resistance
+			\end{itemize}
+
+	\subsection{Dual-Shaft Fatigue Sizing via the ASME Elliptic Criterion}
+		With the center distance locked, the engineer sizes the solid support shaft segments ($D_{1}$, $D_{2}$) 
+		to resist catastrophic failure under combined loading conditions. The gear tooth loading vectors 
+		generate a severe alternating bending moment (M) along the shaft, while the rotation transmits a 
+		steady torsional shear torque (T). To calculate the absolute minimum safe shaft diameter ($d_{\min}$)
+		required under a design safety factor (N), apply the ASME Elliptic Fatigue framework: 
+			\begin{equation}
+				\label{eq:absoluteminimumsafeshaftdiameter}
+				d_{\min}
+				\;=\;
+				\left(\frac{32\,N}{\pi}\,\sqrt{\left(\frac{K_{\text{f}}\, M}{S_{\text{n}}}\right)^{\,2}
+				\;+\;
+				\frac{3}{4}\,\left(\frac{T}{S_{\text{y}}}\right)^{\,2}}
+				\right)^{\!1/3}
+			\end{equation}
+		Where: 
+			\begin{itemize}
+				\item \textbf{$K_{f}$:} Fatigue stress concentration factor
+			\end{itemize}
+
+ 		The manual shaft dimensioning must satisfy this sizing boundary: 
+			\begin{equation}
+				\label{eq:sizingboundary}
+				D_{\text{shaft}} \;\ge\; d_{\min}
+			\end{equation}
+
+	\subsection{Sizing Limitations and Analytical Realities}
+		These macro-sizing calculations provide only a preliminary estimation of the gearbox envelope under 
+		idealized conditions. In practice, this represents a highly simplified starting point; an engineer 
+		cannot rely solely on these broad formulas to finalize a design. Transitioning to a field-ready unit 
+		requires extensive multi-physics iterations, as localized tooth stresses, dynamic misalignments, and 
+		housing flex will fundamentally alter the system's real-world performance. A summary of the stages of 
+		the gear design workflow is shown in \autoref{fig:gearbox2}.
+			\begin{figure}[h]
+				\centering
+				\includegraphics[width=0.9\textwidth]{gearbox/gearbox2}
+				\caption{Gear Design Workflow}
+				\label{fig:gearbox2}
+			\end{figure}
+			\FloatBarrier
+
+		While this baseline workflow suffices standard commercial gearboxes, it falls short in high-performance 
+		sectors like aerospace, where weight and acoustic constraints are severe. To push past these classical 
+		boundaries, specialized research initiatives are required to redefine standard optimization rules. A prime 
+		example of this transition from standard commercial sizing to advanced drivetrain engineering is the 
+		Advanced Rotorcraft Transmission (A.R.T.) program.

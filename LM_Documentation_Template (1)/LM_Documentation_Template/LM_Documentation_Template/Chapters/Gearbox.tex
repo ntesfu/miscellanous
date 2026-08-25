@@ -1,0 +1,202 @@
+\chapter{Gearbox}
+\section{Introduction}
+    Gear-driven components: turboprop engine propellers, helicopter main and tail rotors, and various engine 
+    auxiliaries coordinate the speeds of power-consuming shafts with the engine rotor. Because propellers and 
+    most auxiliaries run at lower speeds, a gearbox (reduction drive) is required to reduce the engine's peripheral 
+    rotation. While basic gearbox design principles are taught in “Mechanics,” aircraft gearboxes possess 
+    distinctive characteristics: they demand higher cooling intensity due to increased oiling; operate in 
+    multi-mode, shortening their service life; face challenges maintaining precise steady modes, especially 
+    for turboprop (TPE) and turboshaft (TShE) engines due to torque-metering unit difficulties; suffer 
+    installation complications at the engine front, affecting velocity triangles and stressing the compressor 
+    face; and must be as light as possible.
+
+\section{Gearbox Limitations}
+    The most crucial parameters of the gearbox are mass and diameter. Mass of modern TPE gearboxes makes up 
+    25--30\,\% of the overall engine mass. The gearbox of a helicopter is usually two or three times heavier 
+    than the TShE itself. The greater the transmitted power and the gear ratio, the heavier the gearbox is. 
+    The specific mass of the TPE gearbox (ratio of the gearbox mass to the power transmitted) ranges 
+    within \(0.05\text{-}0.1\,\mathrm{kg}\;\mathrm{kW}^{-1}\).
+
+    Diametrical size must be minimal. This is of great importance for the gearbox inside the engine. 
+    If the gearbox diameter exceeds the diameter of the compressor, it is very hard to guide air to axial 
+    compressor inlet with minimal hydraulic losses.
+
+    Thus, the task for the engineers is to design a light, reliable, and small gearbox able to transfer power 
+    at high efficiency. The problem becomes complicated if the gearbox is expected to transmit great power 
+    values or when its gear ratio is high.
+
+    The gearboxes driving a single lift rotor or double lift rotor are designed using simple, planetary and 
+    differential gears. They can be single-stage or multiple-stage depending on gear ratio.
+
+\section{Classification of Gearbox}
+    Gearboxes can be classified by different features: 
+		\begin{enumerate}
+			\item \textbf{Number of input drive shafts}\par
+            Conventional gearboxes have one input and one output shaft. However, designers often use alternative 
+            configurations: a single input with two (usually coaxial) outputs for high-power engines (e.g., NK-12); 
+            a branched diagram with two outputs for helicopters with a lift and tail rotor; a gearbox with two 
+            inputs and one output when two turboprop engines drive a single propeller; and a single gearbox serving 
+            two engines (e.g., Mi-24's VR-24) that powers lift and tail rotors or coaxial lift rotors (Ka-25). 
+            Thus, gearboxes can feature combinations such as two inputs and two outputs, as seen in the RV-3F 
+            driven by GTD-3F engines.
+			\item \textbf{Shaft arrangement}\par
+			Turboprop engines use coaxial gearboxes. In twin-engine configurations, the gearbox uses two parallel 
+            input shafts, whereas gearboxes with two intersecting shafts are used exclusively in helicopter power plants.
+			\item \textbf{Number of stages}\par
+			Gearboxes may comprise one, two, three, or four stages, with the four-stage configuration reserved for 
+            helicopter power plants. The arrangement of the stages can vary between designs.
+            \item \textbf{Kinetics of the stage}\par
+            Stages of gearboxes can be grouped into three types: simple, planetary, and differential. Differential 
+            stages are further divided into loop (single degree of freedom) and two-degree-of-freedom variants.
+            \item \textbf{Gear type}\par
+            Most gearboxes use spur gears of diverse sizes, while bevel wheel trains appear only in configurations 
+            with crossing input shafts, such as the gear trains found in helicopters.
+		\end{enumerate}
+
+\section{Fundamentals for Designing the Gearbox}
+    \subsection{Choose the Gear Type}
+        \begin{itemize}
+			\item \textbf{Spur Gears}\par
+            Simple gears with straight teeth. Best for low-speed, high-torque applications.
+			\item \textbf{Helical Gears}\par
+            Teeth are cut at an angle, allowing for smoother and quieter operation. Used for higher speed applications.
+			\item \textbf{Bevel Gears}\par
+            Used for transmitting power at a 90 degree angle.
+            \item \textbf{Worm Gears}\par
+            A gear arrangement where a worm (a gear with a screw-like thread) meshes with a worm wheel, providing high reduction ratios and compact design.
+            \item \textbf{Rack and Pinion}\par
+            Used to convert rotational motion into linear motion.
+		\end{itemize}
+
+    \subsection{Determine Gear Ratio}
+        The gear ratio is crucial for controlling the speed and torque at the output shaft. The formula for calculating the 
+        ratio will differ depending on the type of gearbox arrangement. The formula for a worm gearbox is different for that 
+        of an epicyclic gearbox.
+            \begin{equation}
+                \label{eq:singlestagegearratio}
+                m \;=\; \frac{T_{\text{G}}}{T_{\text{P}}}
+            \end{equation}
+
+        \autoref{eq:singlestagegearratio} represents a single stage gearbox and would be ideal when designing a worm gearbox or a 
+        compound gear train. A note to keep in mind is a higher gear ratio provides more torque but reduces speed, while 
+        a lower ratio gives higher speed with less torque. 
+            \begin{equation}
+                \label{eq:triplestagegearratio}
+                m \;=\;
+                \frac{G_{\text{2}}}{G_{\text{1}}}
+                \;\cdot\;
+                \frac{G_{\text{4}}}{G_{\text{3}}}
+                \;\cdot\;
+                \frac{G_{\text{6}}}{G_{\text{5}}}
+            \end{equation}
+        
+        \autoref{eq:triplestagegearratio} would be applied for a multistage compound gearbox. The three stages represent 
+        the reduction between each set of shafts. Another important aspect to keep in mind is maintaining the size 
+        and weight of the gearbox. For example, a total reduction ratio of 15:1 is desired to reduce the speed of 3000 rpm.
+            \begin{equation}
+                \label{eq:speedreduction}
+                n_{\text{output}}
+                \;=\;
+                \frac{n_{\text{input}}}{m}
+                \;=\;
+                \frac{3000~\text{rpm}}{15}
+                \;=\;
+                200~\text{rpm}
+            \end{equation}
+        
+        With this information, two factors are known, the input speed, and what is required for the output speed. 
+        The next phase of developing the gear train is keeping each gear as small as possible while still meeting 
+        the speed and strength requirements. This can be achieved for a gearbox by taking the cube root of the 
+        gear ratio as shown in \autoref{eq:ratioreductionformula}. The cube root is being used because this example 
+        is a three-stage gear reduction. 
+            \begin{equation}
+                \label{eq:ratioreductionformula}
+                m_{\text{ea}}
+                \;=\;
+                \sqrt[3]{m}
+                \;=\;
+                \sqrt[3]{15}
+                \;=\;
+                2.47
+                \;\approx\;
+                2.5
+            \end{equation}
+
+        The value produced by \autoref{eq:ratioreductionformula} should be the targeted gear ratio between each of the three stages. 
+        Given that it is not a whole number, the value may need to be rounded up or down depending upon the 
+        output speed requirements. If a specific stage must be adjusted to a larger or smaller ratio, 
+        that will be fine, but this serves as a good starting point in the development. Following this 
+        procedure will allow for having the same gears in each ratio, which will mean similar shafting, 
+        bearings and mounting methods.  
+
+    \subsection{Material and Component Selection}
+        The material selection for gearbox components is a critical engineering decision that must account 
+        for the distinct functional requirements of each element, ranging from aluminum housings and steel 
+        bearings to medium-carbon steel shafts and exposed gears. The applicability of a particular material 
+        type depends on load conditions, expected service life, cost constraints, and fabrication feasibility, 
+        necessitating meticulous evaluation of mechanical properties, corrosion resistance, and manufacturability 
+        for each part. Common gear materials include high-strength steel, which offers excellent durability 
+        for high-load applications; advanced alloys, which provide lightweight yet high-performance 
+        characteristics suitable for aerospace and other demanding sectors; bronze, whose inherent 
+        wear resistance makes it the material of choice in worm-gear configurations; and engineering plastics, 
+        which are often deployed in lower-load or noise-sensitive environments. Each material 
+        class must be carefully matched to its respective component to achieve optimal performance and 
+        longevity of the overall gearbox system.
+
+\section{Multi-stage Gear Transmission Design}
+    The objective functions considered in this work are geartrain efficiency and total weight, 
+    aiming to design a transmission that maximizes efficiency while minimizing mass.
+
+    \subsection{Geartrain Weight}
+        The overall volume of the system is approximated as the sum of the volumes of each gear. Rather than 
+        modeling each gear tooth explicitly, the gear is represented as a disk with an outer diameter equal 
+        to the pitch diameter and an inner diameter corresponding to the defined bore. In this simplified 
+        approach, the volume of each gear is computed as the product of its cross-sectional area and face width. 
+        The total weight of the transmission can be calculated as:
+            \begin{equation}
+                \label{eq:geartrainweight}
+                W \;=\; \rho_{\text{steel}}\;V
+                \;=\; 7.8\times10^{3}\;\text{kg/m}^{3}\;
+                \sum_{i=1}^{n}\pi\,b_{\text{i}}
+                \Bigg[\Big(\frac{m_{\text{i}}\,z_{\text{i}}}{2}\Big)^{2}
+                \;-\; r_{\text{bore}}^{2}\Bigg]
+            \end{equation}
+        This assumption approximates the bulk geometry while decreasing computational effort. 
+
+        Volumetric Approximation: In preliminary optimization, the total mass is estimated by summing the volumes 
+        of each gear, modeled as disks. The formula used is: \[\text{Total Weight} \;=\;\sum \bigl(\,\text{Cross-sectional Area}\;\times\;\text{Face Width}\;\times\;\text{Material Density}\,\bigr)\]
+        This approach approximates the bulk geometry to decrease computational effort during design iterations.
+
+    \subsection{Design Constraints}
+        The constraints applied in this study are divided into three categories: geometric, layout, and 
+        safety constraints. Geometric constraints relate to the dimensions, form of individual gears, 
+        and ensure the feasibility of each gear stage. Layout constraints address spatial and positional 
+        relationships between multiple gear stages, maintaining compatibility within the overall 
+        transmission architecture, and satisfying specific requirements. Safety constraints concern 
+        the strength of the gears and are assessed through ISO standardized safety factors.
+
+    \subsection{Safety Constraints}
+        The root and flank safety factors are the ratios between the modified value of 
+        allowable bending ($\sigma_{at}$) and contact ($\sigma_{ac}$), and the calculated bending ($\sigma_{t}$) and 
+        contact ($\sigma_{c}$) stress as shown in \autoref{eq:safetyconstraints1} and \autoref{eq:safetyconstraints2}. The modification or service factors 
+        are stress cycle factor ($Y_{N}$) for bending strength, which is imposed 0.7 for idler and 1 
+        for simple gears, temperature factor ($Y_{\sigma}$), reliability factor ($Y_{Z}$), stress cycle factor ($Z_{N}$)
+        for contact stress, and hardness ratio factor ($C_{H}$) for contact stress.
+            \begin{equation}
+                \label{eq:safetyconstraints1}
+                S_F \;=\;
+                \frac{\sigma_{\!at}\,Y_N}{\sigma_{\!t}\,Y_{\sigma}\,Y_Z}
+                \;\ge\;S_{F,\min}
+            \end{equation}
+
+            \begin{equation}
+                \label{eq:safetyconstraints2}
+                S_H \;=\;
+                \frac{\sigma_{\!ac}\,Z_N\,C_H}{\sigma_{\!c}\,Y_{\sigma}\,Y_Z}
+                \;\ge\;S_{H,\min}
+            \end{equation}
+        
+        The calculation of bending stress ($v_{t}$) and contact stress ($v_{c}$), as well as the corresponding 
+        unmodified allowable stress values, follow the procedures outlined in ISO 6336. 
+        These values are derived based on the applied tangential load, gear tooth geometry, 
+        and material properties.

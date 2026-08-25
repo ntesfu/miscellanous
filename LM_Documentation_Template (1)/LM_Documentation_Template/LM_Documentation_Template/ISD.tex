@@ -1,0 +1,60 @@
+\documentclass[12pt,a4paper,oneside]{TechnicalDocumentation}
+\usepackage{times}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage{tikz,lipsum,lmodern}
+\usepackage[most]{tcolorbox}
+\usepackage{hyperref}
+\usepackage{multirow}
+\usepackage{float}
+\usepackage{tabularx}
+\usepackage{listings}
+\usepackage{placeins}
+\usepackage{hyperref}
+\usepackage{multicol}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{geometry}
+\usepackage{lipsum}
+\usepackage[numbers]{natbib}
+
+
+\geometry{left=2cm,right=2cm,top=2cm,bottom=2.5cm}
+\graphicspath{{./Images/}}
+
+\tcbset{arc=0mm, colback=darkBlue!5!white, boxrule=0.3mm, colframe=black}
+
+% start document content
+\begin{document}
+	
+	% create coverpage
+	\coverpage
+	{Gearbox Artificial Intelligence Tool (GAIT)} % title
+	{ % member names
+		Alaa Bashir\\[5pt]
+		Maree Khrystin Charlize Pepa\\[5pt]
+		
+	}                            
+	{} % blank
+	{Summer} % internship session
+	{Images/LM-logo-Black.png} % picture 
+	
+	\tableofcontents % create table of contents
+	\input{chapters/Preface.tex}
+	\input{chapters/Introduction.tex}
+	\input{chapters/ART_program.tex}
+	\input{chapters/Gearbox.tex}
+	\input{chapters/Sizing_gearbox.tex}
+	\input{chapters/Romax.tex}
+	\input{chapters/Transitioning.tex}
+	\input{chapters/Project_development.tex}
+	\input{chapters/Results.tex}
+	\input{chapters/Conclusion.tex}
+	\input{chapters/NextStepsAndRecommendations.tex}
+
+	\nocite{*}
+	\bibliographystyle{plain}
+	\bibliography{references}
+	
+	
+\end{document}

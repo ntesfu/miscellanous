@@ -1,0 +1,206 @@
+\chapter{Project Development}
+\section{Introduction}
+    Gearbox layout generation is the process of determining the number of reduction stages, 
+    shaft locations, gear ratios per stage, housing dimensions, gear arrangement and positioning, 
+    and bearing placement. The objectives of this process include meeting speed-reduction 
+    requirements, maximizing efficiency, respecting packaging constraints, transmitting torque 
+    safely, and minimizing weight.
+
+    \begin{itemize}
+        \item \textbf{Given:}\par
+            P, $n_{in}$, $n_{out}$, $T_{req}$, Material specs
+            Operation condition, Material, Geometric input
+        \item \textbf{Determine:}\par
+            $N_{stages}$, $u_{i}$, $z_{in}$, $m_{i}$, $a_{i}$, $b_{i}$, $D_{shaft}$
+        \item \textbf{Subject to:}\par
+            $g(x) \le 0$
+        \item \textbf{Where constraints include:}\par
+            Fatigue Limit and Stress Limit
+        \item \textbf{Where constraints include:}\par
+            Layout generation is not a sizing problem and it is a coupled topology-selection problem.
+    \end{itemize}
+
+    Traditional gearbox design philosophy relies on engineering handbooks, designer experience, 
+    design standards (AGMA, ISO), and previous gearbox templates. The approach is characterized by 
+    proven methodology and easy validation, but it is also time-consuming, requires expert knowledge, 
+    and offers limited design exploration. So, the value of this project is to minimize those 
+    constraints—reducing time consumption, lessening the need for specialized expertise, and 
+    expanding design exploration—by developing an AI system as a proof-of-concept that will aid 
+    engineers in estimating the optimal weight and size of the gearbox layout.
+
+    The sizing of the helicopter main gearbox follows a reference architecture in which Stage 1 
+    consists of a spiral-bevel reduction that receives power from the engines and performs a ($90^\circ\text{C}$) 
+    axis redirection, while Stage 2 incorporates a five-planet planetary reduction that drives 
+    the rotor-mast epicyclic stage and a fixed ring gear.
+
+\section{Cohort Pipeline}
+    The pipeline for this cohort is stated in the image below. The process begins with Python input, 
+    comprising operational condition, material, and geometric data. This information is incorporated 
+    into a Python script, which generates outputs that become the parameters for Romax: geometry and 
+    location, number of teeth, reduction ratio, and face width. Romax then verifies whether these 
+    parameters satisfy weight and sizing constraints and whether the design achieves the required 
+    safety factor. The Romax output includes mass, stress analysis, the actual gear ratio, and the 
+    safety factor. If the design is valid, the team proceeds to AI model input; if not, the team 
+    updates and reconfigures the design script and re-runs the pipeline.
+        \begin{figure}[h]
+			\centering
+			\includegraphics[width=0.9\textwidth]{gearbox/gearbox9}
+			\caption{Cohort Pipeline}
+			\label{fig:gearbox9}
+		\end{figure}
+		\FloatBarrier
+
+    Following the cohort pipeline, the image below displays a screenshot from the Python script that 
+    produced the output parameters and sizing. The team then used these parameters to sketch and 
+    manually design the gearbox in Romax.
+        \begin{figure}[h]
+			\centering
+			\includegraphics[width=0.9\textwidth]{gearbox/gearbox10}
+			\caption{Python output to Romax input}
+			\label{fig:gearbox10}
+		\end{figure}
+		\FloatBarrier
+    
+    Then, the Python output was used as input to Romax to generate the gearbox design. 
+    
+\section{Romax Concept (Student Edition)}
+    Romax is the software used as a validation tool. During this time, the team used Romax Concept (Student Edition), 
+    the only Romax product that offers a student edition—a trial version of the product. This helped 
+    the team gain an understanding of Romax in general and facilitated progress on the project.
+
+    Romax Concept (Student Edition) is a powerful tool for students and educators in the field of 
+    machine design and power transmission systems. It offers a comprehensive suite of tools for 
+    designing power transmissions, including systems of gears, shafts, and rolling-element bearings.
+    
+    Take note that this version has limitations in features. The following features of 
+    Romax Concept are not available in the student edition:
+    \begin{itemize}
+        \item Importing or exporting of REXS model files into Concept
+        \item The exporting of the Concept model to Romax DT model files  
+        \item The New from Template and Save as Template option  
+        \item The Detailed Design option of the Gear Set editor  
+        \item No access to Helical Gear Design/Optimisation tools  
+    \end{itemize}
+
+    This version can specify, edit and model Gears using a Loading Design or Concept Design only. 
+    Also, it can load designs created with Romax Concept Student Edition only.
+
+    The \autoref{fig:gearbox11} shows the gearbox designs created as practice while the team was 
+    exploring the software.
+        \begin{figure}[h]
+			\centering
+			\includegraphics[width=0.9\textwidth]{gearbox/gearbox11}
+			\caption{Romax Concept (Student Edition) Practice}
+			\label{fig:gearbox11}
+		\end{figure}
+		\FloatBarrier
+
+    Following the cohort pipeline, the parameters that were given by Python were input into Romax. 
+    The following are the Romax input parameters, and the image below shows the window where 
+    the data were input.
+        \begin{itemize}
+            \item Face width (mm)
+            \item Number of teeth
+            \item Pressure angle
+            \item Helix angle
+            \item Number of planets
+            \item Material
+            \item Desired gear ratio
+            \item Mean pitch diameter (mm)
+            \item Duration (hrs)
+            \item Speed 1 (RPM)
+            \item Power 1 (kW)
+        \end{itemize}
+
+        \begin{figure}[h]
+			\centering
+			\includegraphics[width=0.8\textwidth]{gearbox/gearbox12}
+			\caption{Romax Concept (Student Edition) Input}
+			\label{fig:gearbox12}
+		\end{figure}
+		\FloatBarrier
+
+    After, the Romax gave the following output parameters:
+        \begin{itemize}
+            \item Actual gear ratio
+            \item Safety Factor
+            \item Contact fatigue
+            \item Bending fatigue
+            \item Torque 1 (Nm)
+            \item Speed 2 (RPM)
+            \item Torque 2 (Nm)
+            \item Power 2 (kW)
+        \end{itemize}
+
+    The \autoref{fig:gearbox13} shows the window where the output was displayed. While it was summarized in the 
+    screenshot, the actual output includes a design summary and rating results that contain a 
+    detailed report of the gears.
+        \begin{figure}[h]
+			\centering
+			\includegraphics[width=0.7\textwidth]{gearbox/gearbox13}
+			\caption{Romax Concept (Student Edition) Output}
+			\label{fig:gearbox13}
+		\end{figure}
+		\FloatBarrier
+
+    As part of the deliverables, the team needs to validate the gearbox weight and sizing layout. 
+    The image below shows the output, which includes Mass (kg) and size. The results are located 
+    under the Reporting tab in the Basic Geometry section of Romax and can also be exported to 
+    an Excel format. The image displays the following parameters: component, length (mm), mass (kg), 
+    volume (cc), and material for the shafts, and component, face width (mm), diameter (mm), mass (kg), 
+    volume (cc), material, and number of teeth for the gears.
+        \begin{figure}[h]
+			\centering
+			\includegraphics[width=0.9\textwidth]{gearbox/gearbox14}
+			\caption{Gearbox weight and sizing}
+			\label{fig:gearbox14}
+		\end{figure}
+		\FloatBarrier
+
+    During the first validation, the design rating result from Romax indicated design failure along 
+    with a safety-factor failure; consequently, the team updated and reconfigured the Python script 
+    to address the identified issues.
+        \begin{figure}[h]
+			\centering
+			\includegraphics[width=0.9\textwidth]{gearbox/gearbox15}
+			\caption{Gearbox Design Validation 1}
+			\label{fig:gearbox15}
+		\end{figure}
+		\FloatBarrier 
+
+    After reconfiguring the Python script and following the cohort pipeline, Python gave the team a 
+    second design to be validated. This time, the gearbox weight (1,038 kg) appears close to the 
+    weight result in Python, which is 1,300 kg, considering that the Python result includes the 
+    gearbox casing and bearing weight. The design rating result also indicates success, as does the 
+    safety factor.
+        \begin{figure}[h]
+			\centering
+			\includegraphics[width=0.9\textwidth]{gearbox/gearbox16}
+			\caption{Gearbox Design Validation 2}
+			\label{fig:gearbox16}
+		\end{figure}
+		\FloatBarrier 
+
+    After reviewing their initial results, the team redesigned the gearbox, basing the new arrangement 
+    on the A.R.T. paper that details split-torque gearbox types. They made the change because the older 
+    configuration could not efficiently transmit large amounts of power required.
+        \begin{figure}[h]
+			\centering
+			\includegraphics[width=0.9\textwidth]{gearbox/gearbox17}
+			\caption{Gearbox Design New Configuration}
+			\label{fig:gearbox17}
+		\end{figure}
+		\FloatBarrier 
+
+    In this new configuration, the gearbox weight is the closest result among all of the validations performed. 
+    The gearbox weight in the Romax Concept (Student Edition) is 357.8 kg, and the Python result for the 
+    gearbox—excluding the casing—is 364 kg, a difference of 6.2 kg. The design-rating result also indicates 
+    success, as is the safety factor shown in \autoref{fig:gearbox18}.
+        \begin{figure}[h]
+			\centering
+			\includegraphics[width=0.9\textwidth]{gearbox/gearbox18}
+			\caption{Gearbox weight and sizing, and safety factor result}
+			\label{fig:gearbox18}
+		\end{figure}
+		\FloatBarrier 
+

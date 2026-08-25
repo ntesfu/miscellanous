@@ -1,0 +1,45 @@
+\chapter{Conclusion}
+\section{Lessons Learnt}
+	\begin{itemize}
+		\item Studied helicopter gearbox topologies, including those used in the A.R.T. program, and 
+		compared stage-layout options, gear-pairing strategies, and certification constraints to see how 
+		design decisions shape overall geometry and mass.
+		\item Observed how varying single operational parameters causes complex changes across the entire gearbox design 
+		and that mass does not scale linearly with torque or input power.
+		\item Learnt that machine learning models designed for continuous spaces naturally fail to approximate step-functions.
+		\item Utilized model-agnostic feature evaluation to rank which operational parameters truly dominate final mass and size.
+		\item Learned Romax Concept (Student Edition) in depth: how it works, creating gearbox configurations manually, 
+		running simulations, and learning about safety factors and design capabilities.
+		\item Gained hands-on experience using Romax Concept (Student Edition) to build, simulate, and validate 
+		complex gear arrangements.
+		\item Learnt range of machine-learning models (linear regression, random forests, gradient-boosted trees, 
+		and neural networks) evaluating their strengths and limits for predicting size, weight, and performance.
+		\item Learnt how to distribute points in a N-dimensional space and why completely random sampling leaves blind spots 
+		for the AI, and how quasi-random Sobol Sequences solve this by spacing out training points uniformly.
+	\end{itemize}
+
+\section{Conclusion}
+	The workflow introduced in this work replaces the traditional, time-consuming, and skill-dependent gearbox design cycle 
+	with a repeatable, data-driven process that still respects every engineering constraint. The sizing engine, implemented 
+	in Python, accepts 31 design, material, and operating variables and returns the full geometric description of a 
+	dual-stage helicopter main gearbox (spiral-bevel input and planetary output).  
+
+	The design parameters produced by the Python design script were manually entered into the Romax Concept (Student Edition). 
+	The software then returned the gearbox weight, the stress-analysis results, the actual gear ratio, and the safety factor. 
+	The Python output predicts a gear mass of 364 kg (excluding the casing), which is within <2\% of the 357.8 kg mass reported by the 
+	Romax Concept (Student Edition). 
+	A sensitivity study identified gear modules, pressure and helix angles, and planetary configuration as the most influential 
+	parameters for weight. These results informed the sampling strategy for the training and highlighted the location of the 
+	dominant design trade-offs. 
+
+	A Sobol-sequence generated tens of thousands of distinct configurations to train two surrogate AI models. 
+	A first-stage “Sizer” (HistGradientBoosting) predicts the continuous gear module; the output is then snapped 
+	to the nearest ISO standard module. A second-stage “Weigher” (also HistGradientBoosting) predicts total mass 
+	and volume from the snapped module and the remaining design variables.  
+
+	The cascade approach eliminates the discontinuity that appears if a single model is trained on the 
+	raw, continuous outputs. The final surrogate achieves ($R^{2}=0.984$) and a mean absolute error of 15.36 kg. 
+
+	Future work will extend the database to cover a wider range of transmission configurations and 
+	validate the predicted designs through prototype testing. The framework presented here provides a 
+	scalable foundation for rapid, physics-based design of high-performance gearboxes in aerospace applications. 

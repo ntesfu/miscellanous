@@ -1,0 +1,18 @@
+\chapter{Recommendations}
+\section{Next Steps}
+	\begin{itemize}
+		\item \textbf{Integrate Shock Load limits:} The current physics solver only checks steady-state stress limits. 
+		The team recommend expanding the sizing equations to include transient shock loads. This will help the model 
+		to reject brittle materials early on.
+		\item \textbf{Physics Based ML model:} The traditional ML models only look at numeric correlations. 
+		If they extrapolate, they can predict impossible designs. So, the stress limit can be 
+		incorporated into the model to prevent impossible solutions.
+		\item \textbf{Shaft and Housing Deflection:} The analytical model assumes casing and shafts are rigid. 
+		However, shafts can deflect under heavy torque, causing the gear teeth to misalign. 
+		So, the team recommend exporting data from Romax to model shaft deflections and handle teeth misalignment.
+		\item \textbf{Romax Concept (Student Edition):} This version is the trial version of the software, 
+		so the '1 main bevel gear to 2 side bevel gears' is not possible; the team created a similar 
+		configuration with two main bevel gears stacked on top of each other to observe gearbox performance. 
+		The planetary gear modules in this edition have detailed design limitations, yet all tests have shown 
+		the system to operate without abnormal behaviour, making it suitable for preliminary validation studies.
+	\end{itemize}

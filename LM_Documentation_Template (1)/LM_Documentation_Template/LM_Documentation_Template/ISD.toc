@@ -1,0 +1,95 @@
+\changetocdepth {2}
+\babel@toc {english}{}\relax 
+\contentsline {chapter}{Contents}{1}{section*.2}%
+\contentsline {chapter}{\chapternumberline {1}Preface}{4}{chapter.1}%
+\contentsline {section}{\numberline {1.1}Project Description}{4}{section.1.1}%
+\contentsline {section}{\numberline {1.2}Project Value}{4}{section.1.2}%
+\contentsline {section}{\numberline {1.3}Internship Scope}{5}{section.1.3}%
+\contentsline {subsection}{\numberline {1.3.1}Internship Deliverables}{5}{subsection.1.3.1}%
+\contentsline {subsection}{\numberline {1.3.2}Current Project State}{5}{subsection.1.3.2}%
+\contentsline {chapter}{\chapternumberline {2}Introduction}{6}{chapter.2}%
+\contentsline {section}{\numberline {2.1}Introduction to Industrial Gearboxes}{6}{section.2.1}%
+\contentsline {section}{\numberline {2.2}Practical Challenges in Gearbox Engineering}{6}{section.2.2}%
+\contentsline {section}{\numberline {2.3}Traditional Gearbox Design}{6}{section.2.3}%
+\contentsline {subsection}{\numberline {2.3.1}System Input Metrics}{7}{subsection.2.3.1}%
+\contentsline {subsubsection}{\numberline {2.3.1.1}Input Kinetic and Operational Boundaries}{7}{subsubsection.2.3.1.1}%
+\contentsline {subsubsection}{\numberline {2.3.1.2}Material Mechanics Inputs}{7}{subsubsection.2.3.1.2}%
+\contentsline {subsubsection}{\numberline {2.3.1.3}Basic Geometric Setup Choices}{8}{subsubsection.2.3.1.3}%
+\contentsline {subsection}{\numberline {2.3.2}Kinematic Gear Ratio Determination}{8}{subsection.2.3.2}%
+\contentsline {subsection}{\numberline {2.3.3}Design Torque Calculation}{8}{subsection.2.3.3}%
+\contentsline {subsection}{\numberline {2.3.4}Preliminary Center Distance Estimation}{8}{subsection.2.3.4}%
+\contentsline {subsection}{\numberline {2.3.5}Reduction Stage Determination}{9}{subsection.2.3.5}%
+\contentsline {subsection}{\numberline {2.3.6}Pinion Tooth Selection and Undercutting Boundaries}{9}{subsection.2.3.6}%
+\contentsline {subsection}{\numberline {2.3.7}Parametric Module Trial and Standardization}{10}{subsection.2.3.7}%
+\contentsline {subsection}{\numberline {2.3.8}Spatial Boundary Audit and Interference Verification}{10}{subsection.2.3.8}%
+\contentsline {subsection}{\numberline {2.3.9}AGMA Gear Tooth Bending Failure Analysis}{10}{subsection.2.3.9}%
+\contentsline {subsection}{\numberline {2.3.10}AGMA Surface Compressive Contact Fatigue Analysis}{11}{subsection.2.3.10}%
+\contentsline {subsection}{\numberline {2.3.11}Dual-Shaft Fatigue Sizing via the ASME Elliptic Criterion}{11}{subsection.2.3.11}%
+\contentsline {subsection}{\numberline {2.3.12}Sizing Limitations and Analytical Realities}{12}{subsection.2.3.12}%
+\contentsline {chapter}{\chapternumberline {3}Advanced Rotorcraft Transmission (A.R.T.) program}{13}{chapter.3}%
+\contentsline {section}{\numberline {3.1}Introduction}{13}{section.3.1}%
+\contentsline {section}{\numberline {3.2}Program Objectives}{13}{section.3.2}%
+\contentsline {section}{\numberline {3.3}Advanced Structural Drivetrain Configurations}{14}{section.3.3}%
+\contentsline {section}{\numberline {3.4}Program Development-Sikorsky}{14}{section.3.4}%
+\contentsline {section}{\numberline {3.5}Approach and Methodology}{15}{section.3.5}%
+\contentsline {section}{\numberline {3.6}Trade Studies}{17}{section.3.6}%
+\contentsline {chapter}{\chapternumberline {4}Gearbox}{18}{chapter.4}%
+\contentsline {section}{\numberline {4.1}Introduction}{18}{section.4.1}%
+\contentsline {section}{\numberline {4.2}Gearbox Limitations}{18}{section.4.2}%
+\contentsline {section}{\numberline {4.3}Classification of Gearbox}{18}{section.4.3}%
+\contentsline {section}{\numberline {4.4}Fundamentals for Designing the Gearbox}{19}{section.4.4}%
+\contentsline {subsection}{\numberline {4.4.1}Choose the Gear Type}{19}{subsection.4.4.1}%
+\contentsline {subsection}{\numberline {4.4.2}Determine Gear Ratio}{20}{subsection.4.4.2}%
+\contentsline {subsection}{\numberline {4.4.3}Material and Component Selection}{20}{subsection.4.4.3}%
+\contentsline {section}{\numberline {4.5}Multi-stage Gear Transmission Design}{21}{section.4.5}%
+\contentsline {subsection}{\numberline {4.5.1}Geartrain Weight}{21}{subsection.4.5.1}%
+\contentsline {subsection}{\numberline {4.5.2}Design Constraints}{21}{subsection.4.5.2}%
+\contentsline {subsection}{\numberline {4.5.3}Safety Constraints}{21}{subsection.4.5.3}%
+\contentsline {chapter}{\chapternumberline {5}Sizing of an Aerospace Helicopter Main Gearbox}{23}{chapter.5}%
+\contentsline {section}{\numberline {5.1}Helicopter Transmission Architectures and the UH-60 Black Hawk MGB}{23}{section.5.1}%
+\contentsline {section}{\numberline {5.2}Sizing Input Parameters}{24}{section.5.2}%
+\contentsline {section}{\numberline {5.3}Kinematic Speed Mapping}{26}{section.5.3}%
+\contentsline {section}{\numberline {5.4}Mathematical Derivation of Component Weights}{26}{section.5.4}%
+\contentsline {subsection}{\numberline {5.4.1}Gears Mass}{26}{subsection.5.4.1}%
+\contentsline {subsection}{\numberline {5.4.2}Structural Transmission Shafts and Pins Mass}{28}{subsection.5.4.2}%
+\contentsline {subsection}{\numberline {5.4.3}Rigid Planet Carrier Mass}{29}{subsection.5.4.3}%
+\contentsline {subsection}{\numberline {5.4.4}Bearings Mass}{30}{subsection.5.4.4}%
+\contentsline {subsection}{\numberline {5.4.5}Structural Housing Casing Mass}{30}{subsection.5.4.5}%
+\contentsline {section}{\numberline {5.5}Global Multi-Stage Ratio Optimization Split}{31}{section.5.5}%
+\contentsline {section}{\numberline {5.6}Analytical Minimization and Derivation of the Master Quintic Polynomial}{32}{section.5.6}%
+\contentsline {section}{\numberline {5.7}Comprehensive Housing Size}{32}{section.5.7}%
+\contentsline {subsection}{\numberline {5.7.1}The Maximum System Outer Diameter}{32}{subsection.5.7.1}%
+\contentsline {subsection}{\numberline {5.7.2}The Total Housing Tower Height}{32}{subsection.5.7.2}%
+\contentsline {subsection}{\numberline {5.7.3}Total Volumetric Size}{33}{subsection.5.7.3}%
+\contentsline {chapter}{\chapternumberline {6}Romax}{34}{chapter.6}%
+\contentsline {section}{\numberline {6.1}Introduction}{34}{section.6.1}%
+\contentsline {section}{\numberline {6.2}Software Definition}{34}{section.6.2}%
+\contentsline {section}{\numberline {6.3}The Romax Hybrid System-Simulation Approach}{35}{section.6.3}%
+\contentsline {section}{\numberline {6.4}Features and Key Benefits}{35}{section.6.4}%
+\contentsline {section}{\numberline {6.5}Integrated Applications}{35}{section.6.5}%
+\contentsline {section}{\numberline {6.6}Automated System Sizing Interfaces}{36}{section.6.6}%
+\contentsline {subsection}{\numberline {6.6.1}Romax Primary System Inputs}{36}{subsection.6.6.1}%
+\contentsline {subsection}{\numberline {6.6.2}Romax Multi-Disciplinary Outputs}{37}{subsection.6.6.2}%
+\contentsline {section}{\numberline {6.7}Romax in AI/ML Based Transmission Design}{37}{section.6.7}%
+\contentsline {chapter}{\chapternumberline {7}Transitioning from Traditional Optimization to AI or ML Models}{39}{chapter.7}%
+\contentsline {section}{\numberline {7.1}The Classical Paradigm: Simulation Validated by Physical Test}{39}{section.7.1}%
+\contentsline {subsection}{\numberline {7.1.1}Systemic Constraints of the Classical Paradigm}{39}{subsection.7.1.1}%
+\contentsline {section}{\numberline {7.2}The Modern Frontier: DoE-Fed AI Models Validated by Simulation and Test}{39}{section.7.2}%
+\contentsline {section}{\numberline {7.3}Industrial Implications of the Paradigm Shift}{40}{section.7.3}%
+\contentsline {chapter}{\chapternumberline {8}Project Development}{42}{chapter.8}%
+\contentsline {section}{\numberline {8.1}Introduction}{42}{section.8.1}%
+\contentsline {section}{\numberline {8.2}Cohort Pipeline}{42}{section.8.2}%
+\contentsline {section}{\numberline {8.3}Romax Concept (Student Edition)}{43}{section.8.3}%
+\contentsline {chapter}{\chapternumberline {9}Results}{49}{chapter.9}%
+\contentsline {section}{\numberline {9.1}Physics-Based Weight Calculation}{49}{section.9.1}%
+\contentsline {section}{\numberline {9.2}Sensitivity Study}{49}{section.9.2}%
+\contentsline {section}{\numberline {9.3}Dataset Generation and Material Selection}{50}{section.9.3}%
+\contentsline {section}{\numberline {9.4}Machine Learning Models}{51}{section.9.4}%
+\contentsline {section}{\numberline {9.5}The Discontinuity Problem and Model Cascade Architecture}{52}{section.9.5}%
+\contentsline {section}{\numberline {9.6}Feature Importance (Permutation Importance)}{52}{section.9.6}%
+\contentsline {chapter}{\chapternumberline {10}Conclusion}{54}{chapter.10}%
+\contentsline {section}{\numberline {10.1}Lessons Learnt}{54}{section.10.1}%
+\contentsline {section}{\numberline {10.2}Conclusion}{54}{section.10.2}%
+\contentsline {chapter}{\chapternumberline {11}Recommendations}{56}{chapter.11}%
+\contentsline {section}{\numberline {11.1}Next Steps}{56}{section.11.1}%
+\contentsline {chapter}{Bibliography}{57}{chapter*.29}%

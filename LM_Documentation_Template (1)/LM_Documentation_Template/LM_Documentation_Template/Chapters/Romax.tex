@@ -1,0 +1,141 @@
+\chapter{Romax}
+\section{Introduction}
+    Romax Technology supplies comprehensive simulation software for designing, analyzing, and 
+    optimizing drivetrains and rotating machinery across automotive, wind energy, aerospace, and 
+    marine sectors. Its tool suite covers durability testing, gearbox and bearing design, structural 
+    analysis, and early stage performance rating, enabling rapid, intuitive modelling that improves 
+    efficiency, reliability and overall mechanical performance. Romax is recognized as a trusted 
+    partner for end-to-end drivetrain development, providing specialized capabilities for electric 
+    machine structural design and full powertrain optimization.
+    	\begin{figure}[h]
+			\centering
+			\includegraphics[width=0.6\textwidth]{gearbox/gearbox7}
+			\caption{Romax}
+			\label{fig:gearbox7}
+		\end{figure}
+		\FloatBarrier
+    
+\section{Software Definition}
+    The Romax Software Suite is a physics-based Computer-Aided Engineering (CAE) platform built 
+    for modeling, simulating, and optimizing rotating machinery and electrified powertrains. 
+    Moving away from traditional isolated component design, Romax uses a holistic system 
+    architecture. This methodology captures the cumulative, non-linear physical interactions 
+    across an entire transmission system under dynamic operational loads, considering the 
+    simultaneous effects of component deflections, gear misalignments, shifting contacts, 
+    housing flexibility, and non-linear bearing stiffness.
+
+\section{The Romax Hybrid System-Simulation Approach}
+    To accurately analyze these complex interactions, Romax software uses a hybrid modeling 
+    approach that integrates multiple computational methods into a single, coupled simulation, 
+    balancing calculation speed with high prediction accuracy:
+        \begin{itemize}
+			\item \textbf{Finite Element (FE) Method:} Condenses large structures, such as flexible gear housings or planet carriers, into reduced substructures to capture structural stiffness and mass distribution efficiently.
+			\item \textbf{Analytical Formulations:} Computes shaft bending lines and gear meshing mechanics using closed-form analytical equations and advanced gear/bearing contact models.
+			\item \textbf{Empirical Formulations:} Estimates bearing clearances and operational fatigue lives according to standard codes, such as international rolling bearing rating life methods.
+		\end{itemize}
+
+\section{Features and Key Benefits}
+    Romax offers a comprehensive CAE solution for drivetrain and powertrain engineering, 
+    delivering cutting-edge simulation and analysis capabilities that empower engineers to design, 
+    optimize, and validate complex systems with precision and speed.
+
+    The product delivers a holistic system view, capturing intricate component interactions and 
+    enabling design of the entire system from physics based, parametric definitions for every part; 
+    it relies on proven, proprietary technology that intelligently blends analytical, empirical, and 
+    finite element approaches, coupled with world-class gear and bearing contact models. By allowing 
+    models to be built and evaluated in minutes, it delivers speed and simplicity, providing rapid, 
+    actionable results that let engineers run “what if” scenarios and gain instant insight. 
+    It encourages CAE-driven design by merging easily editable models with repeatable, multi-fidelity 
+    analyses and multi-attribute optimisation, empowering better engineering decisions and reducing 
+    innovation risk. The flexible product suite streamlines processes with collaborative workflows, 
+    optimization, and automation that boost productivity. Integrated into the broader Hexagon 
+    ecosystem, the tool breaks organizational barriers through seamless connections between CAE, 
+    CAD, and FEA, specifically enhancing powertrain design and beyond.
+
+\section{Integrated Applications}
+    The platform architecture utilizes six distinct, interoperable modules engineered to support 
+    collaborative engineering workflows across cross-functional powertrain development teams:
+        \begin{itemize}
+			\item \textbf{Romax Enduro:} The primary structural durability interface used to perform fatigue evaluations, component structural safety factor checks, and system deflection analysis.
+			\item \textbf{Romax Spectrum:} A highly specialized vibration and acoustics module designed to model dynamic transmission error (TE), predict structural noise paths, and map housing acoustic radiation. Also, it facilitates the simulation of noise and vibration (NVH) in electro-mechanical powertrains.
+			\item \textbf{Romax Spin:} An advanced internal element modeling workspace allowing bearing specialists to map roller-edge stress concentrations, local contact footings, and internal contact geometry.
+			\item \textbf{Romax Concept:} A streamlined workspace optimized for clean-sheet structural layout definition and spatial envelope exploration. Also, it can help investigate EV drivetrain concepts in their early stages.
+			\item \textbf{Romax Energy:} A dedicated efficiency and fluid-loss solver that isolates and quantifies gear mesh friction, rolling element resistance, and hydrodynamic oil churning losses.
+			\item \textbf{Romax Evolve:} An electro-mechanical simulation module that couples stator and rotor structural dynamics with multi-phase electromagnetic forces in unified electric vehicle powertrains. Also, it allows for structural design and analysis of electrical machines.
+		\end{itemize}
+
+        \begin{figure}[h]
+			\centering
+			\includegraphics[width=0.9\textwidth]{gearbox/gearbox8}
+			\caption{Romax}
+			\label{fig:gearbox8}
+		\end{figure}
+		\FloatBarrier
+
+\section{Automated System Sizing Interfaces}
+    To transition a preliminary generative design into a validated powertrain, the structural 
+    boundaries established by the closed-form weight and sizing equations are translated directly 
+    into the physics-based environment of the Romax Concept. Rather than operating as an independent, 
+    isolated component model, the software uses a multi-layered parametric data pipeline.
+
+    \subsection{Romax Primary System Inputs}
+        The analytical model requires a rigorous data matrix defining the full macro-geometric, 
+        kinematic, and operational layout of the transmission before it can execute any non-linear 
+        structural sweeps:
+            \begin{itemize}
+                \item \textbf{Operational Conditions and Duty Cycles:} The software requires explicit multi-step loading profiles defining nominal input power, engine input velocity, and target main rotor mast velocity.
+                \item \textbf{Gear Macro-Geometry:} The system architecture requires the exact parameters derived from the optimization loop: standard metric module $m_{sta}$, pressure angle $\alpha_{n}$, helix angle $\beta$, and specialized spiral bevel tooth indices. Sizing profiles must contain explicit teeth counts—the sun teeth $z_{s}$, planet teeth $z_{p}$, and ring teeth $z_{r}$—along with the precise face widths $F_{b}$ and $F_{p}$.
+                \item \textbf{Planetary Gearbox Boundaries:} The spatial inputs include the precise number of active planet gears and the geometric layout positions of the planet pins relative to the vertical centre line.
+                \item \textbf{Shaft Geometry:} Shaft inputs discard one-dimensional line assumptions, requiring complete 2D/3D profile coordinate matrices. The pipeline defines explicit shaft length segments along with outer shaft step diameters, internal hollowing parameters for weight reduction, and the physical dimensions of the planet pins.
+                \item \textbf{Rolling Element Bearing Selection:} Sizing requires either direct lookup selection from integrated commercial manufacturer databases (e.g., SKF, NSK, Timken catalog lines) or explicit definition of internal rolling geometry. This includes roller/ball counts, raceway diameters, pitch circles, internal clearances, and the specific structural preload vectors acting on the input and output main line supports.
+                \item \textbf{Material Fatigue and Lubricant Limits:} Sizing require exact core and case material properties, including densities, Young's Modulus, Poisson's ratio, and specific allowable fatigue limits. Fluid mechanics constraints require the lubricant type, dynamic viscosity indices, operating temperatures, and oil-jet delivery pressures.
+            \end{itemize}
+
+    \subsection{Romax Multi-Disciplinary Outputs}
+        Once the parametric input is compiled, the solvers execute a whole-system structural study. 
+        The software returns four primary engineering evaluation modules:
+            \begin{itemize}
+                \item \textbf{Stress Analysis and Component Safety Factors:} The system outputs exact, code-validated safety margins. It logs individual safety factors for tooth root bending, surface contact pressure, and shaft torsional shear fatigue.
+                \item \textbf{Whole-System Mass Bookkeeping and Spatial Size:} Romax treats all gears, shafts, and casing components as true 3D solid geometries. It integrates the exact volume of the thin-walled housing and the webbed gear wheels to output the Total Assembled Weight.
+            \end{itemize}
+
+\section{Romax in AI/ML Based Transmission Design}
+    The paper shows how Romax's physics based; full system gearbox simulation platform can be combined 
+    with ODYSSEE's AI/ML tools to create a practical, high-performance optimization loop. It uses AI 
+    to accelerate and guide the traditional physics-based simulation workflow.
+
+    It isn't exactly what the project will do, but it gives an idea of how Romax will be used and how 
+    AI improves traditional calculations. The concept is like the GAIT project: instead of calculating 
+    gearbox weight and size one by one with many formulas, AI assists and replaces traditional hand 
+    calculations. With Romax, we can also verify the results.
+
+    It outlines a shift in transmission design driven by sustainability, electrification, and shorter 
+    development cycles. While conventional CAE is mature, AI/ML can accelerate the simulation of 
+    lifecycle, democratize advanced engineering, and reduce risk. The authors fuse physics-based 
+    CAE with AI/ML, moving from simulation test validation to Design-of-Experiments fed machine 
+    learning models verified by simulation and experiment. Two case studies illustrate this: 
+    a gear-micro-geometry optimization that reduces transmission error, and a larger study that 
+    iteratively optimizes numerous design parameters against broad performance criteria. The method 
+    applies beyond automotive—into aerospace and other sectors—enabling full design space exploration, 
+    stronger multiphysics optimization, and ensuring gearboxes match simulated behavior. The ultimate 
+    aim is faster, higher quality powertrain development with less reliance on specialist expertise.
+
+        \begin{itemize}
+            \item \textbf{Romax}\par
+                Parametric, hybrid FEM or empirical or analytical simulation of entire gearboxes 
+                (gears, shafts, bearings, CVT, etc.). Fast (<1s per run) and highly accurate for gearbox 
+                mechanics, durability, NVH, efficiency, weight plus packaging.
+            \item \textbf{ODYSSEE}\par
+                AI / ML platform that builds Reduced-Order Models (ROMs) from a handful of selected 
+                simulation runs and then performs design-of-experiments (DoE), sensitivity analysis, 
+                and optimisation on that ROM.
+            \item \textbf{Romax to ODYSSEE to Romax}\par
+                \begin{enumerate}
+                    \item Define the full system model in Romax (parametric).
+                    \item Use Romax batch-run to generate a small training data set.
+                    \item Train a ROM in ODYSSEE.
+                    \item Run millions of parametric evaluations on the ROM (but actually far fewer than would be needed in Romax).
+                    \item Identify the best parameter combinations.
+                    \item Re-run the selected candidates in full Romax to validate and finalize the design.
+                \end{enumerate}
+        \end{itemize}

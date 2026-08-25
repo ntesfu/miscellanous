@@ -1,0 +1,65 @@
+% start document content
+\chapter{Preface}
+\section{Project Description}
+	Designing aerospace gearboxes traditionally requires long hand calculations, trial-and-error assembly sketches, and 
+	several rounds of costly physical tests. The Gearbox Artificial Intelligence Tool (GAIT) project was created to show 
+	and prove how an automated workflow can replace most of that effort while still meeting the stringent 
+	weight and safety of rotorcraft transmissions. 
+	
+	A compact Python routine takes 31 engineering inputs—power, shaft speeds, material properties, and 
+	gear-geometry choices—and computes the initial 
+	dimensions of a two-stage helicopter gearbox (spiral-bevel input and planetary output).  
+
+	The resulting designs are then evaluated in the Romax Concept (Student Edition) software, which validates the 
+	weight and size of the Python output result. It delivers accurate mass, safety-factor, and kinematic data for 
+	each configuration. From these simulation results we build a fast “prediction engine” that, after a 
+	brief training phase, can estimate the total gearbox weight and size for any new set of design parameters 
+	in seconds. The prediction engine matches the full Romax Concept (Student Edition) results to within $2\%$ of weight 
+	(e.g., 364 kg predicted vs. 357.8 kg simulated) while cutting the evaluation time from hours to a few seconds.
+
+\section{Project Value}
+	The value of the Gearbox Artificial Intelligence Tool (GAIT) is to harnesses AI to automate the manual design generation and 
+	testing processes, creating an intelligent and repeatable workflow that accelerates 
+	design development and optimization system and frees engineers to focus on 
+	high-value engineering work.
+		\begin{figure}[h]
+			\centering
+			\includegraphics[width=0.9\textwidth]{gearbox/gearbox1}
+			\caption{GAIT}
+			\label{fig:gearbox1}
+		\end{figure}
+		\FloatBarrier
+		
+\section{Internship Scope}
+	The GAIT project's scope is the following: 
+		\begin{itemize}
+			\item Perform research into the engineering fundamentals and 
+			real-world applications of gearbox layout focusing on design 
+			and functionality. 
+			\item If feasible, evaluate and develop a P-O-C on gearbox 
+			parameter optimization using an AI-powered system on an existing 
+			gearbox layout. 
+			\item Explore the batch processing capabilities of Romax software
+			 and evaluate the feasibility of automating gearbox layout 
+			 validation workflows. 
+		\end{itemize}
+
+	\subsection{Internship Deliverables}
+		The first phase of the project is the Summer 2026 cohort, with the following deliverables: 
+		\begin{itemize}
+			\item Conduct research and create a detailed report based on the key takeaways.
+			\item Develop an AI system as a Proof of concept: \textit{With initial design parameters from provided resources to estimating optimal weight and size of the gearbox layout.}
+			\item Explore ROMAX and its feasibility for design validation workflow.   
+		\end{itemize}
+
+		\subsection{Current Project State}
+		The project has successfully established an analytical code parameterized by 31 key design variables, yielding to 
+		give the corresponding weight and size of the gearbox design. In this project, 30,000-point dataset was generated 
+		based on that code output and using quasi-random sampling to uniformly cover the N-dimensional design space. 
+
+		Using the generated dataset, HistGradientBoosting Cascade Model was trained successfully to predicts gearbox weight 
+		and volume with $R^2$ score of 0.987, bypassing standard gear snapping discontinuities.
+
+		
+
+

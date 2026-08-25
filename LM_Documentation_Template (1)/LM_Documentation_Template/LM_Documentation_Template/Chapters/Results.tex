@@ -1,0 +1,219 @@
+\chapter{Results}
+\section{Physics-Based Weight Calculation}
+    The foundational step of this project involved converting traditional analytical gearbox weight 
+    calculations into a robust Python script. The specific architecture studied in this project is a 
+    dual-stage helicopter main rotor gearbox. The powertrain consists of a high-speed input spiral 
+    bevel gear stage (which changes the axis of rotation from horizontal to vertical) followed by a 
+    low-speed, high-torque epicyclic planetary stage driving the main rotor mast.
+
+    To accurately model the complex physics of a helicopter main rotor gearbox, the script accepts 31 
+    independent input parameters. These inputs were chosen based on typical, realistic ranges utilized 
+    in the modern aerospace industry. Key inputs include:
+		\begin{itemize}
+			\item Fundamental gear geometry (helix angle $\beta$, normal pressure angle $\alpha_n$, face-width to diameter ratio $\lambda_d$)
+			\item Planetary configuration (number of planets $N_p$)
+			\item Casing clearances
+			\item Material properties
+		\end{itemize}
+
+    From these inputs, the script calculates the initial geometry of the entire gearbox assembly. 
+    It sequentially evaluates the required physical dimensions for the input bevel gears, the planetary gear 
+    stages, the shafts, and the outer housing required to safely and reliably transmit the power without yielding 
+    contact fatigue or bending stresses. 
+
+    A critical design parameter in dual-stage gearboxes is the intermediate shaft speed, which perfectly 
+    balances the torque and weight distribution between the high-speed input bevel gears and the low-speed, 
+    high-torque planetary stage. To find this optimum intermediate speed, a Sweep Search Algorithm was utilized.  
+
+    To ensure the physical validity of the initial sizing calculations, the foundational gearbox configuration 
+    was verified in Romax where the simplified analytical equations used in Python model accurately represent 
+    sound aerospace designs.
+
+\section{Sensitivity Study}
+    A sensitivity study is used to quantify the absolute importance of design variables and understand their direct, 
+    often non-linear, effect on system weight and physical size. The input variables were systematically varied to 
+    study their effect within practical, manufacturable ranges. Through this sensitivity study, the primary driving 
+    variables were identified that dictate most of the gearbox's mass as shown in \autoref{tab:Table2} and \autoref{tab:Table3}.
+
+        \begin{table}[ht]
+			\renewcommand{\arraystretch}{1.5}
+			\centering
+			\caption{Sensitivity Analysis Result for the weight}
+			\label{tab:Table2}
+			\small
+			\begin{tabular}{|c|c|c|}
+				\hline
+        		\textbf{Rank} & \textbf{Variables} & \textbf{Delta} \\					
+				\hline
+				\textbf{1} & $\alpha_{n}$ & 1.8405 \\
+				\hline
+				\textbf{2} & P & 0.8069 \\
+				\hline
+				\textbf{3} & $\lambda_{d}$ & 0.6802 \\
+				\hline
+				\textbf{4} & $\beta$ & 0.5392 \\
+				\hline
+				\textbf{5} & $\rho_{shaft}$ & 0.5344 \\
+				\hline
+				\textbf{6} & $\sigma_{shaft}$ & -0.4344 \\
+				\hline
+				\textbf{7} & $n_{rotor}$ & -0.4324 \\
+				\hline
+				\textbf{8} & $N_{p}$ & -0.4109 \\
+				\hline
+				\textbf{9} & $K_{a}$ & 0.4064 \\
+				\hline
+				\textbf{10} & $K_{t}$ & 0.4064 \\
+				\hline
+            \end{tabular}
+		\end{table}
+
+        \begin{table}[ht]
+			\renewcommand{\arraystretch}{1.5}
+			\centering
+			\caption{Sensitivity Analysis Result for the size}
+			\label{tab:Table3}
+			\small
+			\begin{tabular}{|c|c|c|}
+				\hline
+        		\textbf{Rank} & \textbf{Variables} & \textbf{Delta} \\					
+				\hline
+				\textbf{1} & $\alpha_{n}$ & 2.4391 \\
+				\hline
+				\textbf{2} & $N_{p}$ & -1.9291 \\
+				\hline
+				\textbf{3} & $\beta$ & 0.7988 \\
+				\hline
+				\textbf{4} & P & 0.6978 \\
+				\hline
+				\textbf{5} & $\lambda_{d}$ & 0.6178 \\
+				\hline
+				\textbf{6} & $\sigma_{shaft}$ & -0.3770 \\
+				\hline
+				\textbf{7} & $C_{t}$ & 0.3015 \\
+				\hline
+				\textbf{8} & $L_{clearance}$ & 0.2250 \\
+				\hline
+				\textbf{9} & $\sigma_{\text{allowable contact}}$ & -0.2219 \\
+				\hline
+				\textbf{10} & $Z_{E}$ & 0.2210 \\
+				\hline
+            \end{tabular}
+		\end{table}
+
+\section{Dataset Generation and Material Selection}
+    To train an Artificial Intelligence (AI) model capable of predicting complex physics, we require a 
+    massive dataset. The top driving variables identified in the sensitivity study were varied to generate 
+    tens of thousands of unique gearbox designs as shown in \autoref{fig:gearbox19}
+
+    The samples for data generation were generated using Sobol Sequence Sampling rather than 
+    traditional Monte Carlo random sampling. Monte Carlo methods tend to cluster data points randomly, 
+    leaving massive \text{'gaps'} or \text{'holes'} in the multi-dimensional parameter space. Sobol sequences are 
+    quasi-random, low-discrepancy sequences explicitly designed to distribute points as uniformly as 
+    mathematically possible across an N-dimensional space. This ensures the ML model receives a perfectly 
+    balanced learning of the edges of the design space just as well as the center. The dataset was generated 
+    using 11 distinct material profiles such as: AISI 9310 Steel, Nitrided Steels, Ferrium C61 and Titanium.
+        \begin{figure}[h]
+            \centering
+            \includegraphics[width=1\textwidth]{gearbox/gearbox19}
+            \caption{Generated Dataset}
+			\label{fig:gearbox19}
+        \end{figure}
+        \FloatBarrier 
+
+\section{Machine Learning Models}
+    With the data generated, multiple machine learning architectures were investigated to serve as 
+    the surrogate model. The goal of a surrogate model is to predict the true physics calculations in 
+    microseconds rather than seconds. Different models such as Random Forest, Multi-Layer Perceptron (MLP) 
+    and HistGradientBoosting (HGBT) were evaluated. Model performance was measured using the Coefficient of 
+    Determination ($R^2$). $R^2$ is a statistical measure that represents the proportion of the variance 
+    for a dependent variable that's explained by the independent variables. An $R^2$ of 1.0 indicates 
+    flawless, perfect prediction.
+
+    Based on benchmarking across various maximum tree depths as shown in \autoref{tab:Table4}, 
+    HistGradientBoosting consistently outperformed all other models, achieving a $R^2$ score of > 0.89 
+    with a Mean Absolute Error (MAE) of less than 42 kg on a 500+ kg gearbox. Therefore, HistGradientBoosting 
+    was selected as the core architecture.
+        \begin{table}[ht]
+			\renewcommand{\arraystretch}{1.5}
+			\centering
+			\caption{Different Model Performance Comparison}
+			\label{tab:Table4}
+			\small
+			\begin{tabular}{|c|c|c|c|c|}
+				\hline
+        		\textbf{Model Name} & \textbf{Depth} & \textbf{$R^2$} & \textbf{Mean Error (kg)} & \textbf{Time} \\					
+				\hline
+				\textbf{Random Forest} & 10 & 0.8721 & 46.66 & 23.0s \\
+				\hline
+				\textbf{XGBoost} & 10 & 0.8886 & 42.46 & 45.4s \\
+				\hline
+				\textbf{HistGradientBoosting} & 10 & 41.85 & 10 & 10.9s \\
+				\hline
+				\textbf{Random Forest} & 25 & 0.8823 & 44.18 & 9.7s \\
+				\hline
+				\textbf{XGBoost} & 25 & 0.8626 & 46.80 & 324.5s \\
+				\hline
+				\textbf{HistGradientBoosting} & 25 & 41.88 & 10 & 4.9s \\
+				\hline
+            \end{tabular}
+		\end{table}
+
+\section{The Discontinuity Problem and Model Cascade Architecture}
+    During initial training, a severe physical discontinuity problem was discovered. In real-world manufacturing, 
+    gear teeth cannot be cut to any arbitrary decimal size; they must conform to standard tooling sizes known as 
+    ISO Modules (e.g., 2.0 mm, 2.5 mm, 3.0 mm).  When the continuous physics math predicts a required gear module 
+    of 2.1 mm, it must artificially snap up to the 2.5 mm standard. This snapping behavior creates massive, sudden 
+    jumps in the final gearbox weight. Standard Machine Learning models fundamentally struggle to learn these 
+    sudden discontinuous step-functions, leading to high error rates.
+
+    Therefore, instead of training one model to do everything, the brain was splitted into two sequential models:
+        \begin{enumerate}
+            \item Model 1 (The Sizer): Predicts the continuous, exact mathematical module required by the physics formulas.
+            \item The Snapper: Python function intercepts Model 1's prediction and perfectly snaps it to the nearest standard ISO module.
+            \item Model 2 (The Weigher): Takes all the original geometric inputs plus the newly snapped module feature to predict the final Weight and Volume.
+        \end{enumerate}
+
+    This architecture bridges the gap between pure continuous mathematics and discrete manufacturing limitations, 
+    eliminating the discontinuity error. This results in improvement in the accuracy of the AI model as shown in \autoref{tab:Table5}.
+        \begin{table}[ht]
+			\renewcommand{\arraystretch}{1.5}
+			\centering
+			\caption{Model Cascade Performance}
+			\label{tab:Table5}
+			\small
+			\begin{tabular}{|l|c|c|}
+				\hline
+        		\textbf{Model Name} & \textbf{$R^2$} & \textbf{Mean Error} \\					
+				\hline
+				\textbf{Sizer} & 0.985 & 0.0003 mm \\
+				\hline
+				\textbf{Weigher} & 0.984 & 15.36 kg \\
+				\hline
+            \end{tabular}
+		\end{table}
+
+\section{Feature Importance (Permutation Importance)}
+    Permutation Importance physically breaks the relationship between a specific feature and the target variable 
+    by randomly shuffling that column's data. We then measure how severely the model's $R^2$ accuracy drops. 
+    A massive drop in accuracy indicates that the model relies heavily on that feature.
+
+    The results confirmed our physics models: the physical size of the gear teeth was the single most 
+    critical feature, followed closely by the geometric knobs ($\beta$, `$\alpha_n$`, $\lambda_d$) and the planetary 
+    configuration ($N_p$) as shown in \autoref{fig:gearbox20} and \autoref{fig:gearbox21}. These specific features therefore can be selected as the 
+    primary variables for the final optimization phase.
+        \begin{figure}[h]
+            \centering
+            \includegraphics[width=0.8\textwidth]{gearbox/gearbox20}
+            \caption{Feature importance of the sizer}
+			\label{fig:gearbox20}
+        \end{figure}
+        \FloatBarrier 
+
+        \begin{figure}[h]
+            \centering
+            \includegraphics[width=0.8\textwidth]{gearbox/gearbox21}
+            \caption{Feature importance of the weigher}
+            \label{fig:gearbox21}
+        \end{figure}
+        \FloatBarrier 

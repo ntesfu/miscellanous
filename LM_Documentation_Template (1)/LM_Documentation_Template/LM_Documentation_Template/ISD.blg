@@ -1,0 +1,70 @@
+This is BibTeX, Version 0.99d (TeX Live 2025)
+Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
+The top-level auxiliary file: ISD.aux
+The style file: plain.bst
+Database file #1: references.bib
+Warning--entry type for "admin2025" isn't style-file defined
+--line 1 of file references.bib
+Warning--entry type for "autore2026" isn't style-file defined
+--line 23 of file references.bib
+Warning--entry type for "eurostd2009" isn't style-file defined
+--line 71 of file references.bib
+Warning--entry type for "khai2016" isn't style-file defined
+--line 89 of file references.bib
+Warning--entry type for "hexagon2023" isn't style-file defined
+--line 125 of file references.bib
+Warning--entry type for "vardar2025" isn't style-file defined
+--line 179 of file references.bib
+Warning--entry type for "msc2026_1" isn't style-file defined
+--line 201 of file references.bib
+Warning--entry type for "msc2026_2" isn't style-file defined
+--line 217 of file references.bib
+Warning--entry type for "nexus2026" isn't style-file defined
+--line 253 of file references.bib
+Warning--entry type for "cadence2026" isn't style-file defined
+--line 269 of file references.bib
+Warning--entry type for "rotem2024" isn't style-file defined
+--line 285 of file references.bib
+Warning--to sort, need author or key in khai2016
+You've used 17 entries,
+            2118 wiz_defined-function locations,
+            576 strings with 6242 characters,
+and the built_in function-call counts, 3769 in all, are:
+= -- 351
+> -- 158
+< -- 0
++ -- 65
+- -- 48
+* -- 173
+:= -- 653
+add.period$ -- 43
+call.type$ -- 17
+change.case$ -- 77
+chr.to.int$ -- 0
+cite$ -- 18
+duplicate$ -- 131
+empty$ -- 349
+format.name$ -- 48
+if$ -- 789
+int.to.chr$ -- 0
+int.to.str$ -- 17
+missing$ -- 2
+newline$ -- 80
+num.names$ -- 32
+pop$ -- 121
+preamble$ -- 1
+purify$ -- 58
+quote$ -- 0
+skip$ -- 124
+stack$ -- 0
+substring$ -- 116
+swap$ -- 14
+text.length$ -- 0
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 68
+warning$ -- 1
+while$ -- 34
+width$ -- 19
+write$ -- 162
+(There were 12 warnings)
