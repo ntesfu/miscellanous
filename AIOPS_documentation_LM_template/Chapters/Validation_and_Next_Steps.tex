@@ -1,0 +1,65 @@
+\chapter{Validation, Limitations, and Next Steps}
+
+\section{What Has Been Demonstrated}
+
+The project has progressed beyond a model-only experiment. The completed chain
+includes a repeatable egocentric recording workflow, a browser-based labeling
+application with structured exports, a curated engine-model dataset and
+generated stress variants, controlled IndustReal and engine-model evaluation, a
+causal live inference service with fixed-lag step commitment, and replay, live,
+and HoloLens presentation paths.
+
+The strongest supplied engine-model offline result is 96.21\% accuracy,
+97.33 edit score, and 97.51 F1@50. The final online result is 94.12\%,
+84.45 edit score, and 89.50 F1@50. The deployed robustness checkpoint reaches
+90.57\% on the scrambled-order stress condition and starts producing output
+after approximately 0.2 seconds in the reported gate.
+
+\section{Current Limitations}
+
+\begin{enumerate}
+    \item The current held-out split is recording-disjoint but not
+    subject-disjoint; performance on new operators is not yet isolated.
+    \item The model recognizes procedure-step evidence. It is not a complete
+    visual inspection system and should not be interpreted as proof that a
+    part is installed correctly.
+    \item The live output has a deliberate delay from clip context and decoder
+    stabilization.
+    \item The wearable client currently presents a screen-space overlay rather
+    than a spatially anchored instruction at the physical part.
+    \item The learned vocabulary covers ten modeled parts, while a presentation
+    or overlay may show additional workflow or verification states. These
+    should not be confused with learned recognition classes.
+    \item The feature encoders are computationally substantial. A production
+    deployment would need a defined edge, workstation, or network-inference
+    architecture and an operational monitoring plan.
+\end{enumerate}
+
+\section{Recommended Next Steps}
+
+\begin{enumerate}
+    \item Collect more operators, lighting conditions, camera placements, and
+    procedure variations; introduce a subject-disjoint evaluation split.
+    \item Expand labels beyond completion events to include wrong part, omitted
+    step, rework, hesitation, and verification outcomes.
+    \item Improve the live path by measuring per-stage latency, testing
+    hardware-aware optimization, and defining an acceptable alert-delay
+    envelope with end users.
+    \item Add spatial registration and part localization only where the
+    operator workflow benefits from an anchored visual cue.
+    \item Establish a production evaluation protocol with confidence
+    thresholds, false-alert review, model/version traceability, and approved
+    human decision points.
+\end{enumerate}
+
+\section{Reproducibility and Dependencies}
+
+The repository contains the model code, dataset preparation scripts, recorded
+assets, checkpoint, and the replay/live services. The software path is based on
+Python and PyTorch, with FastAPI/Uvicorn for the services and standard video
+processing utilities for frame handling. CUDA is used when available; CPU
+execution is supported for inspection but is not the intended performance
+configuration for the full encoder path. The HoloLens presentation is a
+separate Unity UWP project using MRTK/OpenXR. The reproducibility guide in the
+project defines the staged sequence: prepare features and labels, generate
+stress data, train, run the acceptance gate, and launch the served applications.

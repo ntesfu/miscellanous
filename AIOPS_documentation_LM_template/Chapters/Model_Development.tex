@@ -1,0 +1,227 @@
+\chapter{Model Development and Results}
+
+\section{Research Progression on IndustReal}
+
+IndustReal was used as the controlled research setting for comparing temporal
+heads, backbones, decoding, and feature fusion. The progression below records
+the measured recognition results. Acc is frame accuracy, Edit is edit score,
+and F1@50 is segmental F1 at an overlap threshold of 50 percent.
+
+\begin{table}[H]
+\centering
+\scriptsize
+\begin{tabularx}{\textwidth}{@{}Xrrr@{}}
+\toprule
+\textbf{Configuration} & \textbf{Acc} & \textbf{Edit} & \textbf{F1@50} \\
+\midrule
+v1 Huge-K710 + ASFormer (baseline) & 73.3 & 68.8 & 56.3 \\
+v1 + Viterbi & 73.4 & 74.2 & 62.2 \\
+v2 SSv2-giant + ASFormer + Viterbi & 74.0 & 77.3 & 66.5 \\
+v2 SSv2-giant + DiffAct & 74.4 & 79.6 & 68.9 \\
+Fusion (giant + IV2-B14) + ASFormer + Viterbi & 75.7 & 77.6 & 68.2 \\
+\textbf{v4 Fusion + DiffAct --- best} & \textbf{84.21} & \textbf{87.19} & \textbf{79.50} \\
+v4 + SAM3 enrichment & 74.9 & 79.5 & 70.1 \\
+\bottomrule
+\end{tabularx}
+\caption{IndustReal research progression.}
+\label{tab:industreal-results}
+\end{table}
+
+\section{Iteration-by-Iteration Interpretation}
+
+The table is a development sequence rather than a list of unrelated
+experiments. Each iteration answered a specific question about the system.
+
+\begin{enumerate}
+    \item \textbf{v1: VideoMAEv2-Huge with ASFormer.} This established the
+    baseline for frame recognition and temporal segmentation. Its accuracy was
+    usable, but the lower Edit and F1@50 scores showed that the predicted
+    segments were not yet sufficiently aligned or stable at procedure
+    boundaries.
+    \item \textbf{v1 with Viterbi decoding.} The visual representation was
+    unchanged; only the sequence decoding was improved. Edit increased from
+    68.8 to 74.2 and F1@50 from 56.3 to 62.2. This demonstrated that temporal
+    consistency was an important source of improvement, not just a larger
+    backbone.
+    \item \textbf{v2: SSv2-giant features.} Moving to the stronger giant
+    representation raised accuracy and improved the overall feature quality.
+    With ASFormer and Viterbi, the system reached 74.0 accuracy, 77.3 Edit,
+    and 66.5 F1@50.
+    \item \textbf{v2 with DiffAct.} Replacing the temporal head produced a
+    further improvement in segment quality: F1@50 increased to 68.9 and Edit
+    to 79.6. This identified DiffAct as the strongest offline temporal head in
+    the tested progression.
+    \item \textbf{Fusion of motion and appearance.} VideoMAEv2-giant and
+    InternVideo2-B14 contributed different evidence. The fused representation
+    with ASFormer and Viterbi reached 75.7 accuracy and 77.6 Edit, although its
+    F1@50 did not exceed the v2 DiffAct result. This showed that feature fusion
+    and temporal modeling had to be selected together.
+    \item \textbf{v4: Fusion with DiffAct.} Combining the best representation
+    with the strongest tested offline temporal head produced the clear best
+    result: 84.21 accuracy, 87.19 Edit, and 79.50 F1@50. This became the
+    reference architecture and feature recipe before the project moved to its
+    own engine-model recordings.
+    \item \textbf{SAM3 enrichment.} Adding segmentation-based enrichment did
+    not improve the recognition result; the measured configuration fell to
+    74.9 accuracy, 79.5 Edit, and 70.1 F1@50. SAM3 therefore remained an
+    exploratory object/mask branch rather than a replacement for the temporal
+    recognition path.
+\end{enumerate}
+
+\section{What the IndustReal Results Established}
+
+The experiments established three practical conclusions. First, motion and
+appearance information were complementary: motion described how the operator
+was acting, while appearance helped distinguish visually similar parts and
+contexts. Second, temporal decoding materially affected the quality of
+procedure boundaries; a frame-accurate classifier was not sufficient by
+itself. Third, the strongest offline result was not automatically the correct
+deployment model. DiffAct benefited from sequence context that is unavailable
+at the moment a live decision is required.
+
+The research also exposed the limits of using a recognition model as a
+correctness inspector. In the reported ablation, VideoMAE-only configurations
+had 0\% incorrect-install recall, while the giant plus InternVideo2-B14 fusion
+produced the first non-zero recall at 10.1\%. That improvement was useful
+evidence that appearance fusion could help identify abnormal actions, but it
+was not sufficient to claim reliable visual verification. The live
+demonstrator therefore focuses on procedure-step recognition and flags
+sequence deviations for review rather than certifying installation quality.
+
+\section{Decision Before Moving to the Own Dataset}
+
+\begin{table}[H]
+\centering
+\small
+\begin{tabularx}{\textwidth}{@{}p{0.34\textwidth}X@{}}
+\toprule
+\textbf{Research decision} & \textbf{How it shaped the next phase} \\
+\midrule
+Retain dual-stream features & The engine-model pipeline used the complementary
+motion and appearance encoders rather than reverting to a single backbone. \\
+Use v4 as the offline reference & The fused representation plus DiffAct
+provided the upper-bound reference for the in-house dataset. \\
+Do not deploy DiffAct unchanged & Its offline context requirement led to a
+causal temporal head for live inference. \\
+Keep decoding explicit & Fixed-lag sequence commitment was retained so that
+the interface would report stable steps rather than every transient class
+change. \\
+Treat correctness as a separate problem & The first deployment target remained
+step recognition, out-of-order detection, and procedure-state presentation. \\
+\bottomrule
+\end{tabularx}
+\caption{Research decisions carried into the engine-model development phase.}
+\label{tab:research-decisions}
+\end{table}
+
+\section{Evaluation Metrics and Selection Logic}
+
+Accuracy measures the proportion of correctly classified frame positions. Edit
+score measures the similarity of the predicted and reference action order after
+collapsing repeated labels, so it is sensitive to extra, missing, or misplaced
+segments. F1@50 measures whether predicted action segments overlap reference
+segments by at least 50\%. The progression was selected using all three: a
+model was not considered better merely because it improved frame accuracy if
+its procedure boundaries became less reliable.
+
+\section{Engine-Model Dataset Results}
+
+\begin{table}[H]
+\centering
+\small
+\begin{tabularx}{\textwidth}{@{}Xrrr@{}}
+\toprule
+\textbf{Configuration} & \textbf{Acc} & \textbf{Edit} & \textbf{F1@50} \\
+\midrule
+v4 Fusion + DiffAct (offline) & 96.21 & 97.33 & 97.51 \\
+Baseline (online) & 92.96 & 75.65 & 81.36 \\
+\textbf{Final Online V1} & \textbf{94.12} & \textbf{84.45} & \textbf{89.50} \\
+\bottomrule
+\end{tabularx}
+\caption{Engine-model dataset results supplied for the project evaluation.}
+\label{tab:engine-results}
+\end{table}
+
+The offline result is a useful upper-bound reference: it benefits from
+sequence context that is unavailable at deployment time. Final Online V1
+improves substantially over the online baseline in temporal quality while
+retaining strong frame accuracy. The gap between offline and online results is
+expected and is the reason the deployment metrics are reported separately.
+
+\section{From Offline Models to Causal Inference}
+
+The causal temporal convolutional network uses nine dilated blocks with 128
+feature maps and approximately 875 thousand trainable parameters. Its
+receptive field is approximately 205 seconds, but its computation is causal:
+the output at time $t$ depends on the current and previous feature sequence,
+not on future frames. This gives the model enough history to understand
+procedure context while preserving the online constraint.
+
+The final class set contains eleven classes: the ten modeled parts and a
+background state. The network generates class scores for each feature update.
+The fixed-lag decoder then converts those scores into stable committed steps for
+the application.
+
+\section{Robustness Iteration and Acceptance Gate}
+
+The deployed checkpoint, \texttt{robust\_v1}, was trained with normal recordings,
+mid-start crops, and scrambled-order variants. The project acceptance gate
+measured both normal behavior and the harder scrambled-order behavior.
+
+\begin{table}[H]
+\centering
+\small
+\begin{tabularx}{\textwidth}{@{}p{0.34\textwidth}rrrX@{}}
+\toprule
+\textbf{Checkpoint / run} & \textbf{Normal} & \textbf{Scrambled} &
+\textbf{Cold start} & \textbf{Decision} \\
+\midrule
+Previous baseline & 93.45\% & 72.58\% & 19.2 s & Reference only \\
+Fine-tune A & 92.39\% & 91.40\% & --- & Rejected: normal floor \\
+Fine-tune A2 & 92.95\% & 88.84\% & --- & Passed interim check; not selected \\
+\texttt{robust\_v1} & 93.06\% & 90.57\% & 0.2 s & Deployed checkpoint \\
+\bottomrule
+\end{tabularx}
+\caption{Robustness iteration and deployment selection.}
+\label{tab:robustness-gate}
+\end{table}
+
+\section{Checkpoint-to-Application Handoff}
+
+Once the checkpoint passed the gate, the model was not treated as an isolated
+file. The feature-extraction path, class vocabulary, decoder lag, and service
+state all had to remain aligned. The replay service loads the checkpoint and
+runs it over a complete recording; the live service loads the same checkpoint
+and updates it incrementally as new clips arrive. The shared state contract
+then allows the browser and HoloLens clients to present the result without
+duplicating model logic.
+
+\begin{table}[H]
+\centering
+\small
+\begin{tabularx}{\textwidth}{@{}p{0.33\textwidth}X@{}}
+\toprule
+\textbf{Handoff step} & \textbf{Engineering purpose} \\
+\midrule
+Prepare or compute fused features & Guarantee the same clip length, sampling
+rate, normalization, and feature ordering used during training. \\
+Load the causal checkpoint & Use the selected temporal head and class order
+consistently in replay and live services. \\
+Run fixed-lag commitment & Convert repeated model scores into stable step
+transitions and measurable delay. \\
+Publish procedure state & Give presentation clients current step, progress,
+and attention information through one interface. \\
+\bottomrule
+\end{tabularx}
+\caption{The engineering handoff from a trained checkpoint to the
+demonstration.}
+\label{tab:checkpoint-handoff}
+\end{table}
+
+\section{Optional Visual Enrichment}
+
+SAM3-based enrichment was explored as a supporting visual branch for masks and
+part inventory. It was useful for investigating object-level cues, but it did
+not replace the temporal recognition path and did not become the basis of the
+deployed live checkpoint. The separation keeps the demonstrated system focused:
+the primary model recognizes procedure state from the egocentric sequence.

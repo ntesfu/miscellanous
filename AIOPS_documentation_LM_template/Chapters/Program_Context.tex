@@ -1,0 +1,125 @@
+\chapter{Program Context and Objective}
+
+\section{Operational Problem}
+
+Assembly is a time-dependent process. The operator may hold a part out of view,
+repeat a motion, pause, or perform a valid operation in a different order from
+another operator. A useful vision system therefore has to interpret a sequence
+of observations rather than classify isolated images. It must also make a
+decision from the video available so far; using future frames would make an
+offline result look stronger than a real deployment can be.
+
+The project objective was to build that complete chain: capture representative
+egocentric video, label the procedure, evaluate candidate recognition approaches,
+adapt the strongest feature representation to causal inference, and expose the
+result through interfaces suitable for demonstration.
+
+\section{Development Objectives}
+
+\begin{enumerate}
+    \item Establish a repeatable procedure-step recognition workflow using the
+    IndustReal research setting.
+    \item Collect and label an in-house egocentric dataset on the turbofan
+    engine model.
+    \item Compare model architectures, visual representations, temporal
+    modeling, and decoding choices using consistent metrics.
+    \item Train and validate a streaming model that does not inspect future
+    frames.
+    \item Demonstrate the result through replay, live video, and a wearable
+    HoloLens interface.
+\end{enumerate}
+
+\section{Scope Boundaries and Success Criteria}
+
+The project was scoped as a procedure-state assistant, not as a complete
+factory inspection system. The target behavior was to identify the part or
+procedure state visible in the egocentric stream, preserve the order and
+duration of the recognized steps, and expose a stable result with enough
+latency and robustness for a live demonstration. It was not intended to
+replace an approved work instruction, determine torque or fit, certify a
+completed installation, or independently authorize an operator to continue.
+
+Progress was evaluated at three levels. Research experiments had to show a
+measurable improvement in temporal recognition quality. The own-dataset phase
+had to produce repeatable labels, held-out evaluation, and stress cases that
+challenged memorized procedure order. The final demonstration had to connect
+the model to a functioning replay path, a live stream, and a wearable
+presentation. This staged definition prevented a high offline score from being
+treated as sufficient evidence of operational readiness.
+
+\section{Development Path}
+
+\begin{table}[H]
+\centering
+\small
+\begin{tabularx}{\textwidth}{@{}p{0.22\textwidth}X@{}}
+\toprule
+\textbf{Stage} & \textbf{Outcome} \\
+\midrule
+PSR research & Baselines and controlled experiments on IndustReal established
+the useful combination of motion and appearance information. \\
+Own data collection & Forty curated egocentric recordings were captured on a
+ten-part engine model, covering assembly and disassembly. \\
+Annotation and stress testing & Dense completion labels were produced and
+additional recordings were generated for scrambled, reversed, partial, and
+wrong-step behavior. \\
+Streaming conversion & Offline sequence modeling was converted to a causal
+temporal model with a fixed-lag decoder. \\
+Operational demonstration & Replay and live services were connected to a
+browser interface and a HoloLens overlay. \\
+\bottomrule
+\end{tabularx}
+\caption{Project progression from research to demonstration.}
+\label{tab:development-path}
+\end{table}
+
+\section{Transition from Research to the Own Dataset}
+
+The IndustReal experiments selected the feature and temporal-modeling direction;
+they did not replace the need for an internal dataset. The engine-model
+recordings were collected to test the selected approach under the camera
+perspective, part vocabulary, lighting, operator behavior, and procedure
+variability relevant to the intended demonstration. This transition is
+important: the project moved from comparing architectures on a benchmark to
+building a complete data-to-deployment loop in which recording, annotation,
+training, evaluation, replay, and live presentation could all be controlled by
+the project team.
+
+\section{Assembly Object}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.72\textwidth]{engine_model_reference.png}
+\caption{The turbofan engine model used for the project dataset and
+demonstration.}
+\label{fig:engine-model}
+\end{figure}
+
+The model provides ten named parts and supports both installation and removal
+procedures. The visual appearance of a part is only one cue: the system must
+also use motion, temporal context, and the state of the procedure to determine
+which step is taking place.
+
+\section{System Boundary at the Demonstration Handoff}
+
+\begin{table}[H]
+\centering
+\small
+\begin{tabularx}{\textwidth}{@{}X X@{}}
+\toprule
+\textbf{Within the demonstrated scope} & \textbf{Outside the demonstrated
+scope} \\
+\midrule
+Recognizing a procedure state from egocentric video. &
+Certifying torque, fit, or final installation quality. \\
+Committing stable steps and showing procedure progress. &
+Replacing approved work instructions or human sign-off. \\
+Flagging out-of-order or attention-requiring activity. &
+Providing a complete fault taxonomy for every assembly failure. \\
+Delivering state to replay, live, and wearable interfaces. &
+Spatially anchoring every instruction to a physical part. \\
+\bottomrule
+\end{tabularx}
+\caption{Capability boundary used to interpret the current demonstration.}
+\label{tab:scope-boundary}
+\end{table}

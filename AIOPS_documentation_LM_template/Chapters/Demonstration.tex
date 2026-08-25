@@ -1,0 +1,71 @@
+\chapter{Applications and Demonstration}
+\section{Replay Inference}
+The replay application provides a repeatable way to inspect the system. A recorded
+video is submitted to the service, processed through the same causal model and
+decoder used by the live path, and displayed with the predicted current step.
+The interface also shows the procedure list and a human-versus-AI timeline so
+that a reviewer can compare recognition quality, transition timing, and
+out-of-order behavior on the same recording.
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.94\textwidth]{replay_inference_loaded.png}
+\caption{Replay inference interface with a project recording loaded.}
+\label{fig:replay}
+\end{figure}
+\section{Live Inference Path}
+The live demonstration receives camera frames over the recording/WebRTC path.
+The service derives the model's 10 fps input, maintains a rolling clip buffer,
+computes features, updates the causal model, and publishes the current state.
+This path exercises transport, frame sampling, feature extraction, temporal
+state, decoding, and presentation simultaneously. The measured implementation
+runs at approximately 1.14 times playback speed, with an end-to-end
+announcement delay of approximately 2.84 seconds.
+
+\section{Live State and Step Progression}
+
+The live service publishes the current committed label, procedure direction,
+step progress, and attention status. A prediction that changes for one update
+does not immediately change the displayed step; the fixed-lag decoder must
+first commit the transition. This is why the interface can update frequently
+without making the operator watch a flickering sequence of competing labels.
+
+\section{HoloLens Overlay}
+The wearable presentation is implemented as a separate Unity Universal Windows
+Platform application for HoloLens. The current project uses Unity 2020.3.28f1
+with Microsoft Mixed Reality Toolkit/OpenXR components. The trained model
+remains on the inference service; the Unity client polls the service state and
+renders the result as a movable, resizable 2D overlay.
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.94\textwidth]{hololens_overlay.jpg}
+\caption{HoloLens overlay demonstration showing procedure guidance and current state.}
+\label{fig:hololens}
+\end{figure}
+
+The HoloLens project is a separate Unity Universal Windows Platform client
+using Unity 2020.3.28f1 with Microsoft Mixed Reality Toolkit/OpenXR components.
+The trained model remains on the inference service. The Unity client polls the
+service state and renders it as a movable, resizable 2D overlay. The current
+implementation is screen-space rather than spatially anchored to a physical
+part; spatial anchors, part localization, and reference-based geometry checks
+are future extensions.
+
+\section{Presentation of the Result}
+The user-facing state includes:
+\begin{itemize}
+    \item the current or most recently committed step;
+    \item the ordered procedure list and completion status;
+    \item an indication when observed activity is out of order or requires
+    attention;
+    \item a timeline for comparing human labels with AI commitments.
+\end{itemize}
+
+\section{What the Demonstration Proves}
+
+The demonstration proves that the research result has been connected to a
+complete application path. It does not prove that every assembly fault can be
+detected or that the current screen-space overlay is ready for production use.
+The evidence is strongest for the following claims: the system can process
+egocentric recordings, maintain a causal running estimate, stabilize its
+announcements, display procedure progress, and expose a usable interface for
+review or wearable presentation.

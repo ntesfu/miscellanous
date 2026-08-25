@@ -1,0 +1,57 @@
+\chapter{Preface}
+
+\section{Project Description}
+
+Assembly Copilot is a computer-vision system that observes an operator's
+egocentric video while an assembly procedure is being performed. It estimates
+which procedure step is currently in progress, announces completed steps, and
+surfaces out-of-order activity for review. The project connects procedure-step
+recognition research with a working demonstration that can be replayed in a
+browser, served through a live video path, and displayed on a HoloLens overlay.
+
+The demonstrator uses a ten-part turbofan engine model as the assembly object.
+The model is deliberately small enough to support rapid experimentation while
+retaining the practical characteristics of a production task: hand-object
+occlusion, similar-looking parts, variable step duration, incomplete views, and
+operators who do not follow exactly the same order.
+
+\section{Project Value}
+
+The intended value is an additional source of situational awareness for an
+operator or supervisor. A live system can reduce the need to manually track
+procedure progress, make deviations visible earlier, and provide a consistent
+record for post-task review. The system is an assistive demonstrator; it is not
+a replacement for approved work instructions, inspection, or human sign-off.
+
+\section{Documentation Scope}
+
+This document records the development path from preliminary procedure-step
+recognition experiments to the current live inference demonstration. It covers
+the project objective, data collection and labeling tools, model development,
+streaming inference, application presentation, HoloLens integration, measured
+results, limitations, and recommended next steps. Proprietary internal model
+implementation details are described at the level needed to understand the
+system behavior and engineering decisions.
+
+\section{Key Outcomes}
+
+\begin{table}[H]
+\centering
+\small
+\begin{tabularx}{\textwidth}{@{}p{0.22\textwidth}X@{}}
+\toprule
+\textbf{Area} & \textbf{Documented outcome} \\
+\midrule
+Research & Controlled progression from a VideoMAEv2 baseline to a fused
+motion-and-appearance model with the best IndustReal result. \\
+Data & Own egocentric engine-model recordings, dense labels, and stress
+variants for normal and non-nominal procedure behavior. \\
+Deployment & Causal temporal inference with fixed-lag commitment, replay and
+live services, and a HoloLens presentation path. \\
+Evidence & Separate offline, online, robustness, latency, and interface
+evidence so the demonstrator is not represented by one number alone. \\
+\bottomrule
+\end{tabularx}
+\caption{Summary of the project outcomes covered in this document.}
+\label{tab:key-outcomes}
+\end{table}

@@ -1,0 +1,48 @@
+\documentclass[12pt,a4paper,oneside]{TechnicalDocumentation}
+
+\usepackage{times}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{tabularx}
+\usepackage{placeins}
+\usepackage{caption}
+\usepackage{geometry}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage[most]{tcolorbox}
+
+\geometry{left=2cm,right=2cm,top=2cm,bottom=2.5cm}
+\graphicspath{{./Images/}{./Images/assembly_copilot/}}
+\tcbset{arc=0mm, colback=darkBlue!5!white, boxrule=0.3mm, colframe=black}
+\setlist{itemsep=2pt, topsep=3pt}
+\renewcommand{\arraystretch}{1.18}
+
+\hypersetup{
+    hidelinks,
+    pdftitle={Assembly Copilot: Procedure Step Recognition from Research to Operational Demonstration},
+    pdfauthor={AIOPS Team}
+}
+
+\begin{document}
+
+\coverpage
+{Assembly Copilot: Procedure Step Recognition from Research to Operational Demonstration}
+{}
+{Technical Documentation}
+{2026}
+{Images/LM-logo-Black.png}
+
+\tableofcontents
+
+\input{Chapters/Preface.tex}
+\input{Chapters/Program_Context.tex}
+\input{Chapters/Architecture.tex}
+\input{Chapters/System_Architecture.tex}
+\input{Chapters/Data_and_Labeling.tex}
+\input{Chapters/Model_Development.tex}
+\input{Chapters/Demonstration.tex}
+\input{Chapters/Validation_and_Next_Steps.tex}
+\input{Chapters/Conclusion.tex}
+\input{Chapters/References.tex}
+
+\end{document}

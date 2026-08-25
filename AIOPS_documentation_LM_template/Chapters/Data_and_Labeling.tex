@@ -1,0 +1,131 @@
+\chapter{Dataset, Data Collection, and Labeling}
+
+\section{Engine-Model Dataset}
+
+The project moved from public benchmark experimentation to an internally
+collected egocentric dataset. The active corpus contains 40 curated recordings:
+30 for training and 10 for held-out testing. It includes 22 assembly recordings
+and 18 disassembly recordings from three operators. The operator split is not
+subject-disjoint, so the results measure generalization to held-out recordings
+within the collected operating population rather than generalization to wholly
+new operators.
+
+\begin{table}[H]
+\centering
+\small
+\begin{tabularx}{\textwidth}{@{}p{0.42\textwidth}X@{}}
+\toprule
+\textbf{Dataset characteristic} & \textbf{Value} \\
+\midrule
+Curated recordings & 40 \\
+Train / test split & 30 / 10 recordings \\
+Procedure direction & 22 assembly / 18 disassembly recordings \\
+Operators & 3; not subject-disjoint between train and test \\
+Source video & 1920$\times$1080 at 30 fps \\
+Modeled parts & 10 named parts plus background \\
+Dense label count & 386,529 labeled frame positions \\
+Playable library after stress generation & 46 assets \\
+\bottomrule
+\end{tabularx}
+\caption{Summary of the active engine-model dataset.}
+\label{tab:dataset-summary}
+\end{table}
+
+\section{Recording Workflow}
+
+The recording tool uses a phone as the egocentric camera and a local browser
+page for monitoring. The host provides an HTTPS page with a WebRTC live preview;
+the recording is saved locally as an MP4 and then transferred into the project
+library. This made it practical to collect repeated takes while preserving the
+camera perspective that an eventual wearable system would receive.
+
+\section{Labeling Workflow}
+
+The labeling application is a FastAPI browser tool for reviewing a recording,
+scrubbing through the video, and marking the frame at which a part installation
+or removal is complete. Number keys provide a fast labeling path, while the
+interface records whether the procedure is assembly or disassembly. Claims,
+proxies, and resumable writes allow several people to work through a library
+without overwriting one another.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.94\textwidth]{labeler_loaded.png}
+\caption{Labeling application with a recording loaded. The operator can review
+the video and mark procedure completion events against the part list.}
+\label{fig:labeler}
+\end{figure}
+
+The tool produces a completion-label CSV, a segment CSV, and a JSON
+representation. These artifacts are converted into the frame-wise labels used
+for feature extraction, training, and replay visualization. Labeling the
+completion event rather than only naming a clip makes the data useful for
+temporal segmentation and step-transition evaluation.
+
+\section{Label Semantics and Derived Training Data}
+
+Each completion mark represents the point at which the annotator judged that a
+part installation or removal had finished. The downstream preparation scripts
+turn these sparse transition events into dense frame-wise targets: frames before
+and after a transition receive the corresponding procedure-state label, and
+frames in which no modeled action is active receive the background label. This
+conversion is what allows the temporal model to learn both the action interval
+and the boundary between adjacent steps.
+
+The project retained the raw completion labels, the derived segments, and the
+model-ready labels as separate artifacts. Keeping these levels distinct made it
+possible to correct an annotation without losing the source decision, compare
+different boundary interpretations, and reproduce the same feature/label
+alignment during offline and online evaluation.
+
+\section{Dataset Preparation and Split Discipline}
+
+The production library was organized by recording rather than by randomly
+sampling individual frames. Feature extraction created one fused feature
+sequence per recording, and the train/test split was applied at the recording
+level. This avoids placing neighboring frames from the same take in both
+partitions. The current operator population is not subject-disjoint, which is
+recorded as a limitation rather than hidden by a random frame split.
+
+\section{Assembly Step Vocabulary}
+
+\begin{table}[H]
+\centering
+\small
+\begin{tabularx}{\textwidth}{@{}p{0.10\textwidth}p{0.43\textwidth}X@{}}
+\toprule
+\textbf{Key} & \textbf{Part} & \textbf{Assembly / disassembly label IDs} \\
+\midrule
+1 & Main Drive Planet Gear & Install 3 / remove 5 \\
+2 & Pop Control Ring Gear & Install 6 / remove 8 \\
+3 & Pop Control Sun Gear & Install 9 / remove 11 \\
+4 & Compressor Casing & Install 12 / remove 14 \\
+5 & Exhaust & Install 15 / remove 17 \\
+6 & Exhaust Casing & Install 18 / remove 20 \\
+7 & Cowling Bracket & Install 21 / remove 23 \\
+8 & Frame Subassembly & Install 24 / remove 26 \\
+9 & Propeller Cone plate & Install 27 / remove 29 \\
+0 & Propeller Cone Tip & Install 30 / remove 32 \\
+\bottomrule
+\end{tabularx}
+\caption{Procedure vocabulary used by the labeling application and model
+dataset.}
+\label{tab:step-vocabulary}
+\end{table}
+
+\section{Stress Variants}
+
+Normal recordings alone do not test whether the system has learned the
+procedure or has memorized a familiar order. The project therefore created
+stress variants including scrambled order, reversed procedure, partial
+recordings, and wrong-step cases. These assets support controlled checks for
+order robustness, cold starts, and behavior when the observed action is
+inconsistent with the expected sequence.
+
+The scrambled condition is particularly important because it breaks the
+assumption that the next part can be inferred from a fixed nominal order. A
+reversed recording tests directionality, a partial recording tests initialization
+away from the beginning of a procedure, and a wrong-step recording tests how
+the application communicates activity that conflicts with the expected state.
+Together these variants distinguish visual recognition from simple procedure
+position tracking.

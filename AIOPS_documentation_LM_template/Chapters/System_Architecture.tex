@@ -1,0 +1,127 @@
+\chapter{System Overview and Architecture}
+
+\section{End-to-End Workflow}
+
+The deployed path is organized as a sequence of separable stages:
+
+\begin{enumerate}
+    \item A wearable or phone camera supplies an egocentric video stream.
+    \item Frames are sampled and grouped into short overlapping clips.
+    \item Two frozen video encoders convert each clip into complementary
+    motion and appearance features.
+    \item The fused features are processed by a causal temporal model.
+    \item A fixed-lag decoder stabilizes the sequence and commits a step only
+    when sufficient evidence has accumulated.
+    \item The current step, completed steps, and procedure state are exposed
+    through an API and rendered by the replay, live, or HoloLens client.
+\end{enumerate}
+
+\section{Streaming Model Path}
+
+The live path samples the source at approximately 10 frames per second. Sixteen
+sampled frames form a 1.6-second clip. A new clip is evaluated every 0.2
+seconds, so predictions are refreshed frequently while each prediction still
+contains motion context. The two feature streams are normalized and
+concatenated into one 2,176-dimensional vector:
+
+\begin{center}
+\begin{tcolorbox}[colback=darkBlue!5!white,colframe=darkBlue,width=0.94\textwidth]
+\centering
+\textbf{10 fps frames}
+\ $\rightarrow$\ 
+\textbf{16-frame / 1.6 s clips}
+\ $\rightarrow$\ 
+\textbf{frozen motion + appearance encoders}
+\ $\rightarrow$\ 
+\textbf{2,176-d fusion}
+\ $\rightarrow$\ 
+\textbf{causal TCN}
+\ $\rightarrow$\ 
+\textbf{fixed-lag Viterbi}
+\ $\rightarrow$\ 
+\textbf{committed step}
+\end{tcolorbox}
+\end{center}
+
+The motion stream is produced by VideoMAEv2-giant and has 1,408 dimensions.
+The appearance stream is produced by InternVideo2-B14 and has 768 dimensions.
+The encoders are frozen during the final temporal-model training; the temporal
+head learns how the fused evidence evolves over the procedure. The two model
+configurations are documented as dedicated views in Chapter~\ref{ch:model-architecture};
+this chapter focuses on the surrounding system and application interfaces.
+
+\section{How a New Step Is Committed}
+
+The classifier produces a prediction at every 0.2-second update, but the
+interface does not treat every changing prediction as a new step. The decoder
+keeps a short history of recent class scores and applies a fixed lag of ten
+updates, approximately two seconds. It selects a temporally consistent path
+through that history and commits the oldest stable decision. A new step is
+therefore known when the committed label changes, not merely when the
+instantaneous classifier output changes.
+
+This design reduces flicker caused by hand occlusion or ambiguous frames. The
+trade-off is intentional: the demonstrator reports a step after a short
+evidence-collection delay. The measured end-to-end announcement delay on the
+live path is approximately 2.84 seconds.
+
+\section{Implementation Map}
+
+\begin{table}[H]
+\centering
+\small
+\begin{tabularx}{\textwidth}{@{}p{0.31\textwidth}X@{}}
+\toprule
+\textbf{Project file or area} & \textbf{Higher-level responsibility} \\
+\midrule
+\texttt{copilot\_model/config.py} & Central paths, class names, feature and
+checkpoint configuration. \\
+\texttt{copilot\_model/encoders.py} & Loads the two pretrained encoders,
+preprocesses clips, and creates the 2,176-dimensional fusion feature. \\
+\texttt{copilot\_model/nets/causal\_tcn.py} & Defines the causal temporal
+convolutional network used for online classification. \\
+\texttt{copilot\_model/causal\_decode.py} & Runs causal scoring and fixed-lag
+sequence decoding for evaluation or replay. \\
+\texttt{training/train.py} and \texttt{training/augment.py} & Trains the
+temporal head and creates training variations for robustness. \\
+\texttt{training/eval\_gate.py} & Applies the normal, scrambled, and cold-start
+acceptance checks. \\
+\texttt{replay-demo/serve\_demo.py} & Provides browser replay and visualization
+of the inference timeline. \\
+\texttt{holo-lens-api-app/server.py} & Receives live frames, performs
+inference, and publishes state to clients. \\
+\bottomrule
+\end{tabularx}
+\caption{Functional map of the main model and application files.}
+\label{tab:file-map}
+\end{table}
+
+\section{Application Services}
+
+The project separates inference from presentation. The replay service runs on
+port 8099 and allows a recorded asset to be processed and inspected. The live
+service uses the camera/WebRTC path and exposes state through the API, with the
+inference applications using ports 8555 and 8556 in the current setup. The
+Unity HoloLens application consumes the state and renders the operator-facing
+overlay; it does not contain the trained model.
+
+\section{State Delivered to the Interfaces}
+
+The inference service publishes a compact procedure state rather than exposing
+raw model tensors to the clients. The state contains the current committed
+label, the recognized procedure direction, the progress of the step list, and
+status information used to distinguish normal progress from out-of-order
+activity. The replay dashboard uses this state to draw the current-step panel
+and the human-versus-AI timeline. The live and HoloLens clients use the same
+conceptual state, which keeps presentation changes independent from model
+changes.
+
+\section{Operational Data Path}
+
+The phone or camera is responsible for publishing the video. The server
+receives frames, performs the sampling and buffering required by the model,
+maintains the temporal state, and returns the latest committed result. This
+separation is useful for the demonstration because the same trained checkpoint
+can be tested in replay and live modes. It also makes the eventual deployment
+choices explicit: inference can remain on a workstation or server while the
+wearable device is used primarily for capture and display.
